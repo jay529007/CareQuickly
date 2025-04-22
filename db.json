@@ -1,0 +1,171 @@
+{
+  "doctors": [
+    {
+      "id": 1,
+      "name": "Dr. Aarti Sharma",
+      "specialty": "Dermatologist",
+      "experience": 10,
+      "availableSlots": [
+        "09:30 AM",
+        "12:00 PM",
+        "03:00 PM"
+      ],
+      "image": "src/assets/docter4.png"
+    },
+    {
+      "id": 2,
+      "name": "Dr. Rohan Mehta",
+      "specialty": "Dentist",
+      "experience": 7,
+      "availableSlots": [
+        "10:00 AM",
+        "01:00 PM",
+        "04:30 PM"
+      ],
+      "image": "src/assets/docter3.png"
+    },
+    {
+      "id": 3,
+      "name": "Dr. Sneha Patil",
+      "specialty": "General Physician",
+      "experience": 12,
+      "availableSlots": [
+        "08:00 AM",
+        "11:30 AM",
+        "02:00 PM"
+      ],
+      "image": "src/assets/docter2.png"
+    },
+    {
+      "id": 4,
+      "name": "Dr. Arvind Nair",
+      "specialty": "Cardiologist",
+      "experience": 15,
+      "availableSlots": [
+        "09:00 AM",
+        "01:00 PM",
+        "05:00 PM"
+      ],
+      "image": "src/assets/docter1.png"
+    }
+  ],
+  "users": [
+    {
+      "id": 201,
+      "name": "Priya Verma",
+      "email": "priya.verma@gmail.com",
+      "role": "user",
+      "service": "Dermatologist",
+      "slot": "12:00 PM",
+      "notes": "Skin allergy treatment, Developed a rash due to change in soap.",
+      "password": "password123",
+      "number": "9876543210",
+      "dob": "1990-05-21",
+      "gender": "Female",
+      "emergency_contact": {
+        "name": "Rahul Verma",
+        "phone": "9876543211"
+      },
+      "address": "123, Main Street, City, Country",
+      "medical_history": "Allergic to certain soaps and lotions."
+    },
+    {
+      "id": 202,
+      "name": "Rahul Desai",
+      "email": "rahul.desai@yahoo.com",
+      "role": "user",
+      "service": "Dentist",
+      "slot": "01:00 PM",
+      "notes": "Scheduled routine cleaning. No issues.",
+      "password": "password456",
+      "number": "9998887776",
+      "dob": "1985-02-15",
+      "gender": "Male",
+      "emergency_contact": {
+        "name": "Rita Desai",
+        "phone": "9998887777"
+      },
+      "address": "456, Elm Street, City, Country",
+      "medical_history": "No known allergies."
+    },
+    {
+      "id": 203,
+      "name": "Neha Kulkarni",
+      "email": "neha.kulkarni@hotmail.com",
+      "role": "user",
+      "service": "General Physician",
+      "slot": "11:30 AM",
+      "notes": "Annual health check-up required for work.",
+      "password": "password789",
+      "number": "8765432109",
+      "dob": "1992-08-25",
+      "gender": "Female",
+      "emergency_contact": {
+        "name": "Sushant Kulkarni",
+        "phone": "8765432110"
+      },
+      "address": "789, Oak Road, City, Country",
+      "medical_history": "No significant medical history."
+    },
+    {
+      "id": 204,
+      "name": "Aditya Singh",
+      "email": "aditya.singh@outlook.com",
+      "role": "user",
+      "service": "Cardiologist",
+      "slot": "05:00 PM",
+      "notes": "Occasional chest discomfort when climbing stairs.",
+      "password": "password012",
+      "number": "9933221100",
+      "dob": "1988-11-10",
+      "gender": "Male",
+      "emergency_contact": {
+        "name": "Anita Singh",
+        "phone": "9933221101"
+      },
+      "address": "1010, Rose Boulevard, City, Country",
+      "medical_history": "Mild chest discomfort during physical exertion."
+    },
+    {
+      "id": 205,
+      "name": "Drishti Shah",
+      "email": "drishti.shah@admin.com",
+      "role": "admin",
+      "service": "",
+      "doctorId": null,
+      "slot": "",
+      "notes": ""
+    },
+    {
+      "id": "7cc1",
+      "name": "admin",
+      "email": "admin@test.com",
+      "number": "9384483933",
+      "role": "admin",
+      "password": "$2b$10$/nPMnB3eVQc4aDWq6oJsnOsmRUns.9eLwACQ4Wz2dCiEbelOW2dDu",
+      "dob": "2025-04-03",
+      "gender": "Male",
+      "emergency_contact": {
+        "name": "",
+        "phone": ""
+      },
+      "address": "",
+      "medical_history": ""
+    },
+    {
+      "id": "f5fd",
+      "name": "notAdmin",
+      "email": "admin.not@test.com",
+      "number": "9384833044",
+      "password": "$2b$10$frL5KIpi01uuCkuXqf8XkemoJSaIpxaPjVX88qboMNMn/1iKGoho6",
+      "dob": "2025-04-12",
+      "gender": "Male",
+      "emergency_contact": {
+        "name": "",
+        "phone": ""
+      },
+      "address": "",
+      "medical_history": ""
+    }
+  ]
+}
