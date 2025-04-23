@@ -8,6 +8,8 @@ import LoginPage from "./pages/login";
 import Register from "./pages/register";
 import Home from "./pages/home";
 import { Notfound } from "./pages/error/notfound";
+import Contect from "./pages/contect";
+import Appointment from "./pages/Appointment";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +39,14 @@ const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: <UserDashboard />,
+      },
+      {
+        path: "/contect",
+        element: <Contect />,
+      },
+      {
+        path: "/appointment",
+        element: <Appointment />,
       },
     ],
   },

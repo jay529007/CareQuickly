@@ -3,9 +3,11 @@ import { useForm } from "react-hook-form";
 import Input from "../components/re-usablecomponets/InputFeild";
 import { Link } from "react-router-dom";
 import bcrypt from "bcryptjs";
-import { addUser, updateUser } from "../functions/userAPI";
+import { addUser } from "../functions/userAPI";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -20,6 +22,9 @@ const Register = () => {
     const hash = bcrypt.hashSync(safeData.password, salt);
     safeData.password = hash;
     addUser(safeData);
+    console.log("Sucessfull-added");
+    window.location.reload();
+    navigate("/login");
   };
 
   const errorClass =

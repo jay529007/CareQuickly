@@ -1,19 +1,48 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 const AdminHome = () => {
   const [filter, setFilter] = useState({ user: "", date: "", status: "" });
   const [blockedSlots, setBlockedSlots] = useState(["10:00", "15:30"]);
-  const [slots, setSlots] = useState(["09:00", "10:00", "11:30", "13:00", "15:30", "17:00"]);
+  const [slots, setSlots] = useState([
+    "09:00",
+    "10:00",
+    "11:00",
+    "13:00",
+    "15:00",
+    "17:00",
+  ]);
 
   const bookings = [
-    { id: 1, user: "Jay", date: "2025-04-22", time: "10:00", status: "Confirmed" },
-    { id: 2, user: "Aarav", date: "2025-04-22", time: "15:30", status: "Pending" },
-    { id: 3, user: "Pooja", date: "2025-04-23", time: "09:00", status: "Cancelled" },
+    {
+      id: 1,
+      user: "Jay",
+      date: "2025-04-22",
+      time: "10:00",
+      duration: "1hour",
+      status: "Confirmed",
+    },
+    {
+      id: 2,
+      user: "Aarav",
+      date: "2025-04-22",
+      time: "15:00",
+      duration: "2hour",
+      status: "Pending",
+    },
+    {
+      id: 3,
+      user: "Pooja",
+      date: "2025-04-23",
+      time: "09:00",
+      duration: "4hour",
+      status: "Cancelled",
+    },
   ];
 
   const filteredBookings = bookings.filter(
     (b) =>
-      (!filter.user || b.user.toLowerCase().includes(filter.user.toLowerCase())) &&
+      (!filter.user ||
+        b.user.toLowerCase().includes(filter.user.toLowerCase())) &&
       (!filter.date || b.date === filter.date) &&
       (!filter.status || b.status === filter.status)
   );
@@ -63,6 +92,7 @@ const AdminHome = () => {
                 <th className="p-2">User</th>
                 <th className="p-2">Date</th>
                 <th className="p-2">Time</th>
+                <th className="p-2">duration</th>
                 <th className="p-2">Status</th>
               </tr>
             </thead>
@@ -73,6 +103,7 @@ const AdminHome = () => {
                   <td className="p-2">{b.user}</td>
                   <td className="p-2">{b.date}</td>
                   <td className="p-2">{b.time}</td>
+                  <td className="p-2">{b.duration}</td>
                   <td className="p-2">{b.status}</td>
                 </tr>
               ))}

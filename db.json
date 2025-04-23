@@ -5,11 +5,7 @@
       "name": "Dr. Aarti Sharma",
       "specialty": "Dermatologist",
       "experience": 10,
-      "availableSlots": [
-        "09:30 AM",
-        "12:00 PM",
-        "03:00 PM"
-      ],
+      "availableSlots": ["09:30 AM", "12:00 PM", "03:00 PM"],
       "image": "src/assets/docter4.png"
     },
     {
@@ -17,11 +13,7 @@
       "name": "Dr. Rohan Mehta",
       "specialty": "Dentist",
       "experience": 7,
-      "availableSlots": [
-        "10:00 AM",
-        "01:00 PM",
-        "04:30 PM"
-      ],
+      "availableSlots": ["10:00 AM", "01:00 PM", "04:30 PM"],
       "image": "src/assets/docter3.png"
     },
     {
@@ -29,11 +21,7 @@
       "name": "Dr. Sneha Patil",
       "specialty": "General Physician",
       "experience": 12,
-      "availableSlots": [
-        "08:00 AM",
-        "11:30 AM",
-        "02:00 PM"
-      ],
+      "availableSlots": ["08:00 AM", "11:30 AM", "02:00 PM"],
       "image": "src/assets/docter2.png"
     },
     {
@@ -41,11 +29,7 @@
       "name": "Dr. Arvind Nair",
       "specialty": "Cardiologist",
       "experience": 15,
-      "availableSlots": [
-        "09:00 AM",
-        "01:00 PM",
-        "05:00 PM"
-      ],
+      "availableSlots": ["09:00 AM", "01:00 PM", "05:00 PM"],
       "image": "src/assets/docter1.png"
     }
   ],
@@ -67,7 +51,18 @@
         "phone": "9876543211"
       },
       "address": "123, Main Street, City, Country",
-      "medical_history": "Allergic to certain soaps and lotions."
+      "medical_history": "Allergic to certain soaps and lotions.",
+      "appointments": [
+        {
+          "id": "4df",
+          "service": "Dentist",
+          "notes": "2025-04-01",
+          "slot": {
+            "start": "9 AM",
+            "end": "10 AM"
+          }
+        }
+      ]
     },
     {
       "id": 202,
@@ -86,7 +81,18 @@
         "phone": "9998887777"
       },
       "address": "456, Elm Street, City, Country",
-      "medical_history": "No known allergies."
+      "medical_history": "No known allergies.",
+      "appointments": [
+        {
+          "id": "j5o",
+          "service": "Cardiologist",
+          "notes": "2025-04-05",
+          "slot": {
+            "start": "10 AM",
+            "end": "1 PM"
+          }
+        }
+      ]
     },
     {
       "id": 203,
@@ -105,7 +111,18 @@
         "phone": "8765432110"
       },
       "address": "789, Oak Road, City, Country",
-      "medical_history": "No significant medical history."
+      "medical_history": "No significant medical history.",
+      "appointments": [
+        {
+          "id": "9dd",
+          "service": "Dentist",
+          "notes": "2025-04-15",
+          "slot": {
+            "start": "9 AM",
+            "end": "10 AM"
+          }
+        }
+      ]
     },
     {
       "id": 204,
@@ -124,17 +141,18 @@
         "phone": "9933221101"
       },
       "address": "1010, Rose Boulevard, City, Country",
-      "medical_history": "Mild chest discomfort during physical exertion."
-    },
-    {
-      "id": 205,
-      "name": "Drishti Shah",
-      "email": "drishti.shah@admin.com",
-      "role": "admin",
-      "service": "",
-      "doctorId": null,
-      "slot": "",
-      "notes": ""
+      "medical_history": "Mild chest discomfort during physical exertion.",
+      "appointments": [
+        {
+          "id": "1sgd",
+          "service": "General Physician",
+          "notes": "2025-04-25",
+          "slot": {
+            "start": "3 AM",
+            "end": "5 AM"
+          }
+        }
+      ]
     },
     {
       "id": "7cc1",
@@ -146,11 +164,22 @@
       "dob": "2025-04-03",
       "gender": "Male",
       "emergency_contact": {
-        "name": "s",
+        "name": "sds",
         "phone": ""
       },
       "address": "",
-      "medical_history": ""
+      "medical_history": "",
+      "appointments": [
+        {
+          "id": "fs2",
+          "service": "Dermatologist",
+          "notes": "2025-04-25",
+          "slot": {
+            "start": "9 AM",
+            "end": "10 AM"
+          }
+        }
+      ]
     },
     {
       "id": "f5fd",
@@ -165,7 +194,27 @@
         "phone": ""
       },
       "address": "",
-      "medical_history": ""
+      "medical_history": "",
+      "appointments": [
+        {
+          "id": "5efd",
+          "service": "Dermatologist",
+          "notes": "2025-04-25",
+          "slot": {
+            "start": "1 AM",
+            "end": "10 AM"
+          }
+        },
+        {
+          "id": "efd",
+          "service": "Dentist",
+          "notes": "2025-04-25",
+          "slot": {
+            "start": "10 AM",
+            "end": "11 AM"
+          }
+        }
+      ]
     }
   ]
 }

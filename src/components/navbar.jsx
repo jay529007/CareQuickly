@@ -30,6 +30,12 @@ const Navbar = () => {
                 Home
               </Link>
               <Link
+                to="/appointment"
+                className="hover:text-indigo-600 cursor-pointer"
+              >
+                Appointment
+              </Link>
+              <Link
                 to="/dashboard"
                 className="hover:text-indigo-600 cursor-pointer"
               >
