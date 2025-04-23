@@ -7,9 +7,9 @@ import getDay from "date-fns/getDay";
 import enUS from "date-fns/locale/en-US";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useDispatch, useSelector } from "react-redux";
-import Input from "../re-usablecomponets/InputFeild";
-import { fetchUsers } from "../../functions/userSlice";
-import { loadState } from "../../store/localstorage";
+import Input from "./re-usablecomponets/InputFeild";
+import { fetchUsers } from "../functions/userSlice";
+import { loadState } from "../store/localstorage";
 
 const locales = { "en-US": enUS };
 const localizer = dateFnsLocalizer({

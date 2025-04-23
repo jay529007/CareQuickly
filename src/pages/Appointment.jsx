@@ -1,5 +1,5 @@
 import { useState } from "react";
-import MyCalendar from "../components/test/calander";
+import MyCalendar from "../components/calander";
 
 const Appointment = () => {
   return (
