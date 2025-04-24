@@ -203,17 +203,9 @@
       "medical_history": "",
       "appointments": [
         {
-          "service": "Dermatologist",
-          "notes": "",
-          "slot": {
-            "date": "2025-04-24",
-            "start": "11:00",
-            "end": "13:00"
-          }
-        },
-        {
           "id": "43fbdfda-1e08-4037-8ccc-e6b128a17053",
           "service": "Dentist",
+          "status": "Confirmed",
           "notes": "",
           "slot": {
             "date": "2025-04-10",
@@ -223,6 +215,7 @@
         },
         {
           "id": "a380a169-38ef-4c87-b814-62e6fce4b1fa",
+          "status": "Cancelled",
           "service": "Dentist",
           "notes": "",
           "slot": {
@@ -234,10 +227,33 @@
         {
           "id": "6e644c5b-bdb7-4535-9e15-50039a1ae388",
           "service": "Dentist",
+          "status": "Confirmed",
           "notes": "",
           "slot": {
             "date": "2025-04-11",
             "start": "10:00",
+            "end": "13:00"
+          }
+        },
+        {
+          "id": "cd485c24-247a-447d-bcc2-f8ede39683ae",
+          "service": "General-Physician",
+          "status": "Confirmed",
+          "notes": "",
+          "slot": {
+            "date": "2025-04-23",
+            "start": "10:00",
+            "end": "13:00"
+          }
+        },
+        {
+          "id": "fdcb74b5-0ee5-403f-82f9-8e57636122b4",
+          "service": "Dermatologist",
+          "status": "Pending",
+          "notes": "",
+          "slot": {
+            "date": "2025-04-24",
+            "start": "11:00",
             "end": "13:00"
           }
         }

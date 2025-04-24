@@ -1,61 +1,68 @@
-import React, { useState } from "react";
-
-const dummyAppointments = [
-  {
-    id: 1,
-    doctor: "Dr. Sarah Connor",
-    date: "2025-04-25",
-    time: "10:00 AM",
-    status: "Confirmed",
-    notes: "General checkup",
-  },
-  {
-    id: 2,
-    doctor: "Dr. Alan Grant",
-    date: "2025-04-28",
-    time: "03:30 PM",
-    status: "Pending",
-    notes: "Follow-up",
-  },
-  {
-    id: 3,
-    doctor: "Dr. Ellie Sattler",
-    date: "2025-05-01",
-    time: "01:00 PM",
-    status: "Cancelled",
-    notes: "Consultation",
-  },
-];
+import React, { useEffect, useState } from "react";
+import { loadState } from "../store/localstorage";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUsers } from "../functions/userSlice";
+import { updateUser } from "../functions/userAPI";
 
 const UserDashboard = () => {
-  const [filter, setFilter] = useState("");
+  // fetchUsers
+  const id = loadState();
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.users.users);
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, []);
+  const currentUser = users.find((user) => user.id === id);
+  const allAppointments = currentUser?.appointments;
+
+  const [filter, setFilter] = useState({ status: "", date: "" });
+
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const todayFormatted = new Date().toISOString().split("T")[0];
+  const filteredBookings = allAppointments?.filter(
+    (b) =>
+      (!filter.date || b.slot.date === filter.date) &&
+      (!filter.status || b.status === filter.status)
+  );
+  // canceling booking
+  const cancelBooking = async (data) => {
+    const updatedAppointments = allAppointments.filter(
+      (app) => app.id !== data.id
+    );
 
-  const filteredAppointments = dummyAppointments.filter((app) => {
-    return filter === "" || app.status.toLowerCase() === filter.toLowerCase();
-  });
-
-  const cancelBooking = (id) => {
-    alert(`Booking with ID ${id} cancelled.`);
-    // Update state or trigger API here
+    const updatedUser = {
+      ...currentUser,
+      appointments: updatedAppointments,
+    };
+    updateUser(currentUser.id, updatedUser);
+    window.location.reload();
   };
-
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <h2 className="text-3xl font-bold mb-4">My Appointments</h2>
+      <div className="flex gap-3">
+        <div className="mb-4 flex gap-4">
+          <select
+            value={filter.status}
+            onChange={(e) => setFilter({ ...filter, status: e.target.value })}
+            className="px-4 py-2 border rounded shadow"
+          >
+            <option value="">All Status</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Pending">Pending</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
 
-      <div className="mb-4 flex gap-4">
-        <select
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="px-4 py-2 border rounded shadow"
-        >
-          <option value="">All Status</option>
-          <option value="Confirmed">Confirmed</option>
-          <option value="Pending">Pending</option>
-          <option value="Cancelled">Cancelled</option>
-        </select>
+        <div>
+          <input
+            type="date"
+            value={filter.date}
+            className="p-2 border rounded"
+            onChange={(e) => setFilter({ ...filter, date: e.target.value })}
+          />
+        </div>
       </div>
 
       <div className="bg-white shadow rounded p-4">
@@ -70,11 +77,13 @@ const UserDashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredAppointments.map((app) => (
+            {filteredBookings?.map((app) => (
               <tr key={app.id} className="hover:bg-gray-50">
-                <td className="p-2">{app.doctor}</td>
-                <td className="p-2">{app.date}</td>
-                <td className="p-2">{app.time}</td>
+                <td className="p-2">{app.service}</td>
+                <td className="p-2">{app.slot.date}</td>
+                <td className="p-2">
+                  {app.slot.start} - {app.slot.end}
+                </td>
                 <td className="p-2">{app.status}</td>
                 <td className="p-2 space-x-2">
                   <button
@@ -87,11 +96,12 @@ const UserDashboard = () => {
                     View
                   </button>
                   <button
-                    className="px-3 py-1 bg-red-500 text-white rounded disabled:opacity-50"
-                    onClick={() => cancelBooking(app.id)}
+                    onClick={() => cancelBooking(app)}
                     disabled={
-                      app.status !== "Confirmed" && app.status !== "Pending"
+                      app.status == "Cancelled" ||
+                      app.slot.date === todayFormatted
                     }
+                    className="px-3 py-1 bg-red-500 text-white rounded disabled:opacity-50 "
                   >
                     Cancel
                   </button>
@@ -101,6 +111,81 @@ const UserDashboard = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Selected Appoinment Details */}
+      {isOpen && selectedBooking && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-xl">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-2xl font-semibold text-gray-800">
+                Appointment Details
+              </h3>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="text-gray-500 hover:text-red-500 transition"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4 text-gray-700">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Doctor</p>
+                  <p className="text-lg font-semibold">
+                    {selectedBooking.service}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Status</p>
+                  <span
+                    className={`text-sm font-bold inline-block px-3 py-1 rounded-full ${
+                      selectedBooking.status === "Confirmed"
+                        ? "bg-green-100 text-green-700"
+                        : selectedBooking.status === "Pending"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {selectedBooking.status}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Date</p>
+                  <p className="text-lg">{selectedBooking.slot.date}</p>
+                </div>
+
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Time</p>
+                  <p className="text-lg">
+                    {selectedBooking.slot.start} - {selectedBooking.slot.end}
+                  </p>
+                </div>
+              </div>
+
+              {selectedBooking.notes && (
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Notes</p>
+                  <p className="text-base">{selectedBooking.notes}</p>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-6 flex justify-end">
+              <button
+                onClick={() => setIsOpen(false)}
+                className="px-5 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -131,6 +131,7 @@ const MyCalendar = () => {
     const newAppointment = {
       id: crypto.randomUUID(),
       service: formdata.appointments.service,
+      status: "",
       notes: formdata.appointments.notes,
       slot: {
         date: format(selectedDate, "yyyy-MM-dd"),
@@ -158,7 +159,6 @@ const MyCalendar = () => {
 
   return (
     <div className="p-4">
-      <h2 className="text-2xl font-semibold mb-4">My Calendar</h2>
       {/* Displaying the Calendar */}
       <Calendar
         localizer={localizer}

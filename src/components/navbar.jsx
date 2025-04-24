@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { clearState, loadState } from "../store/localstorage";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../functions/userSlice";
@@ -18,6 +18,12 @@ const Navbar = () => {
     console.log("logout");
     window.location.reload();
   };
+
+  const Linkclass = ({ isActive }) =>
+    isActive
+      ? "hover:text-indigo-600 cursor-pointer text-indigo-600 transition-all duration-150 "
+      : "hover:text-indigo-600 transition-all duration-150 ";
+
   return (
     <>
       {/* Navbar */}
@@ -26,26 +32,20 @@ const Navbar = () => {
         <ul className="flex space-x-6 text-gray-700 font-medium">
           {!isAdmin && (
             <div className="space-x-6">
-              <Link to="/" className="hover:text-indigo-600 cursor-pointer">
+              <NavLink to="/" className={Linkclass}>
                 Home
-              </Link>
-              <Link
-                to="/appointment"
-                className="hover:text-indigo-600 cursor-pointer"
-              >
+              </NavLink>
+              <NavLink to="/appointment" className={Linkclass}>
                 Appointment
-              </Link>
-              <Link
-                to="/dashboard"
-                className="hover:text-indigo-600 cursor-pointer"
-              >
-                UserDashboard
-              </Link>
+              </NavLink>
+              <NavLink to="/dashboard" className={Linkclass}>
+                Dashboard
+              </NavLink>
               <Link
                 to="/contect"
                 className="hover:text-indigo-600 cursor-pointer"
               >
-                Contact
+                test
               </Link>
             </div>
           )}
