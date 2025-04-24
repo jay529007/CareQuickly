@@ -72,7 +72,7 @@ const Contect = () => {
   useEffect(() => {
     if (allAppointments) {
       const formatted = allAppointments.map((appt, index) => {
-        const dateStr = appt.notes; // assuming 'notes' is the date like "2025-04-15"
+        const dateStr = appt.notes; 
         const [startHour, startMin, startPeriod] =
           appt.slot.start.split(/[:\s]/);
         const [endHour, endMin, endPeriod] = appt.slot.end.split(/[:\s]/);

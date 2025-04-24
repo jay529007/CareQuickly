@@ -1,7 +1,7 @@
 {
   "doctors": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Dr. Aarti Sharma",
       "specialty": "Dermatologist",
       "experience": 10,
@@ -9,7 +9,7 @@
       "image": "src/assets/docter4.png"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Dr. Rohan Mehta",
       "specialty": "Dentist",
       "experience": 7,
@@ -17,7 +17,7 @@
       "image": "src/assets/docter3.png"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Dr. Sneha Patil",
       "specialty": "General Physician",
       "experience": 12,
@@ -25,7 +25,7 @@
       "image": "src/assets/docter2.png"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Dr. Arvind Nair",
       "specialty": "Cardiologist",
       "experience": 15,
@@ -35,7 +35,7 @@
   ],
   "users": [
     {
-      "id": 201,
+      "id": "201",
       "name": "Priya Verma",
       "email": "priya.verma@gmail.com",
       "role": "user",
@@ -56,8 +56,9 @@
         {
           "id": "4df",
           "service": "Dentist",
-          "notes": "2025-04-01",
+          "notes": "",
           "slot": {
+            "date": "2025-04-02",
             "start": "9 AM",
             "end": "10 AM"
           }
@@ -65,7 +66,7 @@
       ]
     },
     {
-      "id": 202,
+      "id": "202",
       "name": "Rahul Desai",
       "email": "rahul.desai@yahoo.com",
       "role": "user",
@@ -86,8 +87,9 @@
         {
           "id": "j5o",
           "service": "Cardiologist",
-          "notes": "2025-04-05",
+          "notes": "",
           "slot": {
+            "date": "2025-04-29",
             "start": "10 AM",
             "end": "1 PM"
           }
@@ -95,7 +97,7 @@
       ]
     },
     {
-      "id": 203,
+      "id": "203",
       "name": "Neha Kulkarni",
       "email": "neha.kulkarni@hotmail.com",
       "role": "user",
@@ -116,8 +118,9 @@
         {
           "id": "9dd",
           "service": "Dentist",
-          "notes": "2025-04-15",
+          "notes": "",
           "slot": {
+            "date": "2025-04-13",
             "start": "9 AM",
             "end": "10 AM"
           }
@@ -125,7 +128,7 @@
       ]
     },
     {
-      "id": 204,
+      "id": "204",
       "name": "Aditya Singh",
       "email": "aditya.singh@outlook.com",
       "role": "user",
@@ -146,8 +149,9 @@
         {
           "id": "1sgd",
           "service": "General Physician",
-          "notes": "2025-04-25",
+          "notes": "",
           "slot": {
+            "date": "2025-04-23",
             "start": "3 AM",
             "end": "5 AM"
           }
@@ -173,45 +177,68 @@
         {
           "id": "fs2",
           "service": "Dermatologist",
-          "notes": "2025-04-25",
+          "notes": "",
           "slot": {
-            "start": "9 AM",
-            "end": "10 AM"
+            "date": "2025-04-24",
+            "start": "9",
+            "end": "10"
           }
         }
       ]
     },
     {
       "id": "f5fd",
-      "name": "notAdmin",
-      "email": "admin.not@test.com",
-      "number": "9384833044",
-      "password": "$2b$10$frL5KIpi01uuCkuXqf8XkemoJSaIpxaPjVX88qboMNMn/1iKGoho6",
-      "dob": "2025-04-12",
+      "name": "user",
+      "email": "user@test.com",
+      "number": "9384483933",
+      "role": "user",
+      "password": "$2b$10$/nPMnB3eVQc4aDWq6oJsnOsmRUns.9eLwACQ4Wz2dCiEbelOW2dDu",
+      "dob": "2025-04-03",
       "gender": "Male",
       "emergency_contact": {
-        "name": "",
+        "name": "sds",
         "phone": ""
       },
       "address": "",
       "medical_history": "",
       "appointments": [
         {
-          "id": "5efd",
           "service": "Dermatologist",
-          "notes": "2025-04-25",
+          "notes": "",
           "slot": {
-            "start": "1 AM",
-            "end": "10 AM"
+            "date": "2025-04-24",
+            "start": "11:00",
+            "end": "13:00"
           }
         },
         {
-          "id": "efd",
+          "id": "43fbdfda-1e08-4037-8ccc-e6b128a17053",
           "service": "Dentist",
-          "notes": "2025-04-25",
+          "notes": "",
           "slot": {
-            "start": "10 AM",
-            "end": "11 AM"
+            "date": "2025-04-10",
+            "start": "11:00",
+            "end": "13:00"
+          }
+        },
+        {
+          "id": "a380a169-38ef-4c87-b814-62e6fce4b1fa",
+          "service": "Dentist",
+          "notes": "",
+          "slot": {
+            "date": "2025-04-11",
+            "start": "11:00",
+            "end": "12:00"
+          }
+        },
+        {
+          "id": "6e644c5b-bdb7-4535-9e15-50039a1ae388",
+          "service": "Dentist",
+          "notes": "",
+          "slot": {
+            "date": "2025-04-11",
+            "start": "10:00",
+            "end": "13:00"
           }
         }
       ]
