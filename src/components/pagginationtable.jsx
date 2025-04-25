@@ -13,7 +13,7 @@ const PaginatedAppointmentTable = ({
   const currentRows = appointments.slice(startIndex, startIndex + rowsPerPage);
 
   return (
-    <div className="relative max-w-full overflow-x-auto bg-white rounded-lg shadow">
+    <div className="relative max-w-full  overflow-x-auto bg-white rounded-lg shadow">
       <table className="w-full table-auto border border-gray-200">
         <thead className="bg-gray-100 text-gray-700 text-sm font-semibold sticky top-0 z-10">
           <tr>
@@ -66,7 +66,7 @@ const PaginatedAppointmentTable = ({
       </table>
 
       {/* Pagination Controls */}
-      <div className="flex justify-center items-center gap-4 mt-4">
+      <div className="flex py-3 justify-center items-center gap-4 mt-4">
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           className="px-4 py-1 bg-gray-200 hover:bg-gray-300 rounded disabled:opacity-50"

@@ -7,14 +7,10 @@ const AdminHome = () => {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [blockedSlots, setBlockedSlots] = useState(["10:00", "15:30"]);
-  const [slots, setSlots] = useState([
-    "09:00",
-    "10:00",
-    "11:00",
-    "13:00",
-    "15:00",
-    "17:00",
-  ]);
+  const [slots, setSlots] = useState({
+    start: ["10:00", "11:00", "12:00", "13:00"],
+    end: ["11:00", "12:00", "13:00", "14:00"],
+  });
 
   // fetching appointment
   const dispatch = useDispatch();
@@ -41,12 +37,6 @@ const AdminHome = () => {
       (!filter.status || apt.status === filter.status)
   );
 
-  const toggleBlockSlot = (time) => {
-    setBlockedSlots((prev) =>
-      prev.includes(time) ? prev.filter((t) => t !== time) : [...prev, time]
-    );
-  };
-
   return (
     <>
       <div className="min-h-[100dvh] h-fit p-6 bg-gray-100">
@@ -54,12 +44,24 @@ const AdminHome = () => {
 
         {/* Filters */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <input
-            type="text"
-            placeholder="Search by user"
-            className="p-2 border rounded"
-            onChange={(e) => setFilter({ ...filter, name: e.target.value })}
-          />
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search by user"
+              className="block w-full p-4 border rounded"
+              onChange={(e) => setFilter({ ...filter, name: e.target.value })}
+            />
+            <button
+              type="submit"
+              className="text-black absolute end-2.5 bottom-2.5 bg-gray-300/50  font-medium rounded-lg text-sm px-2 py-1 "
+              onClick={() => window.location.reload()}
+              //   onClick={(e) => {
+              // setFilter({ ...filter, name: "" });
+              //   }}
+            >
+              ✕
+            </button>
+          </div>
           <input
             type="date"
             className="p-2 border rounded"
@@ -146,22 +148,7 @@ const AdminHome = () => {
         {/* Slot Management */}
         <div className="bg-white p-4 rounded shadow">
           <h2 className="text-xl font-semibold mb-4">Manage Time Slots</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {allAppointments.slot?.start?.map((slot) => (
-              <button
-                key={slot}
-                onClick={() => toggleBlockSlot(slot)}
-                className={`p-2 rounded text-sm font-medium border ${
-                  blockedSlots.includes(slot)
-                    ? "bg-red-100 text-red-600 border-red-400"
-                    : "bg-green-100 text-green-600 border-green-400"
-                }`}
-              >
-                {slot} -{" "}
-                {blockedSlots.includes(slot) ? "Unavailable" : "Available"}
-              </button>
-            ))}
-          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
         </div>
         {/* Selected Appoinment Details */}
         {isOpen && selectedBooking && (

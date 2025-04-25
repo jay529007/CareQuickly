@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../functions/userSlice";
 import PaginatedAppointmentTable from "../components/pagginationtable";
+import Input from "../components/re-usablecomponets/InputFeild";
 
 const AdminHome = () => {
   const [filter, setFilter] = useState({ user: "", date: "", status: "" });
@@ -55,19 +56,32 @@ const AdminHome = () => {
 
         {/* Filters */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <input
-            type="text"
-            placeholder="Search by user"
-            className="p-2 border rounded"
-            onChange={(e) => setFilter({ ...filter, name: e.target.value })}
-          />
-          <input
+          <div class="relative">
+            <Input
+              type="text"
+              placeholder="Search by user"
+              className="py-3 "
+              onChange={(e) => setFilter({ ...filter, name: e.target.value })}
+            />
+            <button
+              type="submit"
+              class="text-black absolute end-2.5 bottom-2.5 bg-gray-300/50  font-medium rounded-lg text-sm px-2 py-1 "
+              onClick={() => window.location.reload()}
+              //   onClick={(e) => {
+              // setFilter({ ...filter, name: "" });
+              //   }}
+            >
+              ✕
+            </button>
+          </div>
+
+          <Input
             type="date"
-            className="p-2 border rounded"
+            className="py-3 border rounded"
             onChange={(e) => setFilter({ ...filter, date: e.target.value })}
           />
           <select
-            className="p-2 border rounded"
+            className="w-full p-3 mt-1 bg-gray-50 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
             onChange={(e) => setFilter({ ...filter, status: e.target.value })}
           >
             <option value="">All Status</option>
