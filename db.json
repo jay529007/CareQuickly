@@ -5,7 +5,27 @@
       "name": "Dr. Aarti Sharma",
       "specialty": "Dermatologist",
       "experience": 10,
-      "availableSlots": ["09:30 AM", "12:00 PM", "03:00 PM"],
+      "availableslots": [
+        {
+          "date": "2025-04-26",
+          "start": "10:00",
+          "end": "19:00"
+        }
+      ],
+      "image": "src/assets/docter4.png"
+    },
+    {
+      "id": "7",
+      "name": "Dr. Astha Sharma",
+      "specialty": "Dermatologist",
+      "experience": 5,
+      "availableslots": [
+        {
+          "date": "2025-04-26",
+          "start": "10:00",
+          "end": "19:00"
+        }
+      ],
       "image": "src/assets/docter4.png"
     },
     {
@@ -13,7 +33,13 @@
       "name": "Dr. Rohan Mehta",
       "specialty": "Dentist",
       "experience": 7,
-      "availableSlots": ["10:00 AM", "01:00 PM", "04:30 PM"],
+      "availableslots": [
+        {
+          "date": "2025-04-26",
+          "start": "10:00",
+          "end": "19:00"
+        }
+      ],
       "image": "src/assets/docter3.png"
     },
     {
@@ -21,7 +47,13 @@
       "name": "Dr. Sneha Patil",
       "specialty": "General Physician",
       "experience": 12,
-      "availableSlots": ["08:00 AM", "11:30 AM", "02:00 PM"],
+      "availableslots": [
+        {
+          "date": "2025-04-26",
+          "start": "10:00",
+          "end": "19:00"
+        }
+      ],
       "image": "src/assets/docter2.png"
     },
     {
@@ -29,7 +61,13 @@
       "name": "Dr. Arvind Nair",
       "specialty": "Cardiologist",
       "experience": 15,
-      "availableSlots": ["09:00 AM", "01:00 PM", "05:00 PM"],
+      "availableslots": [
+        {
+          "date": "2025-04-26",
+          "start": "10:00",
+          "end": "19:00"
+        }
+      ],
       "image": "src/assets/docter1.png"
     },
     {
@@ -37,7 +75,13 @@
       "name": "Dr. Mahek",
       "specialty": "Surgeons",
       "experience": 3,
-      "availableSlots": ["09:00 AM", "01:00 PM", "05:00 PM"],
+      "availableslots": [
+        {
+          "date": "2025-04-26",
+          "start": "10:00",
+          "end": "19:00"
+        }
+      ],
       "image": "src/assets/docter5.png"
     },
     {
@@ -45,7 +89,13 @@
       "name": "Dr. Yash",
       "specialty": "Neurologists",
       "experience": 5,
-      "availableSlots": ["09:00 AM", "01:00 PM", "05:00 PM"],
+      "availableslots": [
+        {
+          "date": "2025-04-26",
+          "start": "10:00",
+          "end": "19:00"
+        }
+      ],
       "image": "src/assets/docter6.png"
     }
   ],
@@ -174,9 +224,6 @@
       "name": "Aditya Singh",
       "email": "aditya.singh@outlook.com",
       "role": "user",
-      "service": "Cardiologist",
-      "slot": "05:00 PM",
-      "notes": "Occasional chest discomfort when climbing stairs.",
       "password": "password012",
       "number": "9933221100",
       "dob": "1988-11-10",
@@ -230,9 +277,9 @@
       "appointments": [
         {
           "id": "43fbdgfdfda-gdg-4037-8ccc-vcx",
-          "service": "Dentist",
+          "service": "Cardiologist",
           "status": "Confirmed",
-          "notes": "Scheduled routine cleaning. No issues.",
+          "notes": "Occasional chest discomfort when climbing stairs.",
           "slot": {
             "date": "2025-04-10",
             "start": "11:00",
@@ -242,8 +289,8 @@
         {
           "id": "a380a169-das-b814-dsa",
           "status": "Cancelled",
-          "service": "Dentist",
-          "notes": "Scheduled routine cleaning. No issues.",
+          "service": "General-Physician",
+          "notes": "Annual health check-up required for work.",
           "slot": {
             "date": "2025-04-30",
             "start": "11:00",
@@ -314,9 +361,9 @@
         },
         {
           "id": "6e644c5b-bdb7-4535-9e15-50039a1ae388",
-          "service": "Dentist",
+          "service": "Cardiologist",
           "status": "Confirmed",
-          "notes": "Scheduled routine cleaning. No issues.",
+          "notes": "Occasional chest discomfort when climbing stairs.",
           "slot": {
             "date": "2025-04-11",
             "start": "10:00",
@@ -347,8 +394,8 @@
         },
         {
           "id": "20f851f2-0c9c-4e1d-98bf-4aa55ab9d872",
-          "service": "Dentist",
-          "notes": "Scheduled routine cleaning. No issues.",
+          "service": "Dermatologist",
+          "notes": "Skin allergy treatment, Developed a rash due to change in soap.",
           "slot": {
             "date": "2025-04-25",
             "start": "11:00",

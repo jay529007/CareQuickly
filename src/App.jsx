@@ -12,6 +12,7 @@ import Contect from "./pages/contect";
 import Appointment from "./pages/Appointment";
 import AdminHome from "./pages/adminHome";
 import Admintest from "./pages/admintest";
+import UserDetails from "./pages/userDetails";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "/admindashboard",
         element: <AdminHome />,
+      },
+      {
+        path: "/userdetails",
+        element: <UserDetails/>
       },
       {
         path: "/admintest",

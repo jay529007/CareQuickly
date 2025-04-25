@@ -13,7 +13,7 @@ const PaginatedAppointmentTable = ({
   const currentRows = appointments.slice(startIndex, startIndex + rowsPerPage);
 
   return (
-    <div className="relative max-w-full  overflow-x-auto bg-white rounded-lg shadow">
+    <div className="relative max-w-full overflow-x-auto bg-white rounded-2xl border-1 border-gray-300 shadow-lg">
       <table className="w-full table-auto border border-gray-200">
         <thead className="bg-gray-100 text-gray-700 text-sm font-semibold sticky top-0 z-10">
           <tr>
@@ -49,15 +49,15 @@ const PaginatedAppointmentTable = ({
                   {user.status || "N/A"}
                 </span>
               </td>
-              <td className="p-3 text-center">
+              <td className="py-2 text-center">
                 <button
-                  className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                  className="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
                   onClick={() => {
                     setSelectedBooking(user);
                     setIsOpen(true);
                   }}
                 >
-                  View
+                  Details
                 </button>
               </td>
             </tr>

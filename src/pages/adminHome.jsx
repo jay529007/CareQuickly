@@ -1,13 +1,29 @@
-import React, { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers } from "../functions/userSlice";
-import PaginatedAppointmentTable from "../components/pagginationtable";
-import Input from "../components/re-usablecomponets/InputFeild";
+import { fetchDoctor } from "../functions/doctorSlice";
+import { useForm } from "react-hook-form";
+import DocterCard from "../components/docterCard";
 
 const AdminHome = () => {
-  const [filter, setFilter] = useState({ user: "", date: "", status: "" });
-  const [selectedBooking, setSelectedBooking] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const [selectedSpecialty, setselectedSpecialty] = useState("");
+  const [selectedDocter, setselectedDocter] = useState(null); // Use a single doctor object
+  const dispatch = useDispatch();
+  const doctors = useSelector((state) => state.doctors.doctors);
+
+  useEffect(() => {
+    dispatch(fetchDoctor());
+  }, [dispatch]);
+
+  const FilterdDoctersbySpecialty = doctors.filter(
+    (doctor) => doctor.specialty === selectedSpecialty
+  );
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   const [blockedSlots, setBlockedSlots] = useState(["10:00", "15:30"]);
   const [slots, setSlots] = useState([
     "09:00",
@@ -18,204 +34,162 @@ const AdminHome = () => {
     "17:00",
   ]);
 
-  // fetching appointment
-  const dispatch = useDispatch();
-  const users = useSelector((state) => state.users?.users);
-  useEffect(() => {
-    dispatch(fetchUsers());
-  }, []);
-
-  const allAppointments = users.flatMap(
-    (user) =>
-      user.appointments?.map((appointment) => ({
-        ...appointment,
-        name: user.name,
-        userEmail: user.email,
-        userId: user.id,
-      })) || []
-  );
-
-  const filteredallAppointments = allAppointments.filter(
-    (apt) =>
-      (!filter.name ||
-        apt.name.toLowerCase().includes(filter.name.toLowerCase())) &&
-      (!filter.date || apt.slot?.date === filter.date) &&
-      (!filter.status || apt.status === filter.status)
-  );
-
   const toggleBlockSlot = (time) => {
     setBlockedSlots((prev) =>
       prev.includes(time) ? prev.filter((t) => t !== time) : [...prev, time]
     );
   };
 
+  const handleDoctorChange = (e) => {
+    const doctor = FilterdDoctersbySpecialty.find(
+      (doctor) => doctor.name === e.target.value
+    );
+    setselectedDocter(doctor); // Update selected doctor object
+  };
+
   return (
-    <>
-      <div className="min-h-[100dvh] h-fit p-6 bg-gray-100">
-        <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
-
-        {/* Filters */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div class="relative">
-            <Input
-              type="text"
-              placeholder="Search by user"
-              className="py-3 "
-              onChange={(e) => setFilter({ ...filter, name: e.target.value })}
-            />
-            <button
-              type="submit"
-              class="text-black absolute end-2.5 bottom-2.5 bg-gray-300/50  font-medium rounded-lg text-sm px-2 py-1 "
-              onClick={() => window.location.reload()}
-              //   onClick={(e) => {
-              // setFilter({ ...filter, name: "" });
-              //   }}
-            >
-              ✕
-            </button>
-          </div>
-
-          <Input
-            type="date"
-            className="py-3 border rounded"
-            onChange={(e) => setFilter({ ...filter, date: e.target.value })}
-          />
+    <div className="px-4 py-10 flex flex-col justify-between">
+      <div>
+        <form className="my-3 border border-gray-300 bg-white p-4 rounded shadow-sm">
+          {/* Doctor Specialty filter */}
           <select
-            className="w-full p-3 mt-1 bg-gray-50 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-            onChange={(e) => setFilter({ ...filter, status: e.target.value })}
+            className="w-full my-4 py-3 px-4 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+            onChange={(e) => setselectedSpecialty(e.target.value)}
           >
-            <option value="">All Status</option>
-            <option value="Confirmed">Confirmed</option>
-            <option value="Pending">Pending</option>
-            <option value="Cancelled">Cancelled</option>
+            <option value="">All doctors</option>
+            <option value="Dentist">Dentist</option>
+            <option value="Dermatologist">Dermatologist</option>
+            <option value="General Physician">General Physician</option>
+            <option value="Cardiologist">Cardiologist</option>
+            <option value="Surgeons">Surgeons</option>
+            <option value="Neurologists">Neurologists</option>
           </select>
-          <button></button>
-        </div>
 
-        {/* Booking Table */}
-        <div className="bg-indigo-200 p-4 rounded shadow mb-10">
-          <h2 className="text-xl font-semibold mb-4">All Bookings</h2>
-          {filteredallAppointments.length > 0 ? (
-            <PaginatedAppointmentTable
-              appointments={filteredallAppointments}
-              setSelectedBooking={setSelectedBooking}
-              setIsOpen={setIsOpen}
-            />
-          ) : (
-            <p className="text-center p-4 bg-white rounded">
-              No bookings found
-            </p>
-          )}
-        </div>
+          {/* Doctor filter */}
+          <select
+            className="w-full my-4 py-3 px-4 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+            disabled={!selectedSpecialty}
+            onChange={handleDoctorChange}
+          >
+            <option hidden value="">
+              All doctors
+            </option>
 
-        {/* Slot Management */}
-        <div className="bg-white p-4 rounded shadow">
-          <h2 className="text-xl font-semibold mb-4">Manage Time Slots</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {allAppointments.slot?.start?.map((slot) => (
-              <button
-                key={slot}
-                onClick={() => toggleBlockSlot(slot)}
-                className={`p-2 rounded text-sm font-medium border ${
-                  blockedSlots.includes(slot)
-                    ? "bg-red-100 text-red-600 border-red-400"
-                    : "bg-green-100 text-green-600 border-green-400"
-                }`}
-              >
-                {slot} -{" "}
-                {blockedSlots.includes(slot) ? "Unavailable" : "Available"}
-              </button>
+            {FilterdDoctersbySpecialty.map((doctor, index) => (
+              <option key={index} value={doctor.name}>
+                {doctor.name}
+              </option>
             ))}
-          </div>
-        </div>
-        {/* Selected Appoinment Details */}
-        {isOpen && selectedBooking && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-            <div className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-xl">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-2xl font-semibold text-gray-800">
-                  Appointment Details
-                </h3>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="text-gray-500 hover:text-red-500 transition"
-                >
-                  ✕
-                </button>
-              </div>
+          </select>
 
-              <div className="space-y-4 text-gray-700">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Name</p>
-                    <p className="text-lg font-semibold">
-                      {selectedBooking.name}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Email</p>
-                    <p className="text-lg font-semibold">
-                      {selectedBooking.userEmail}
-                    </p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Doctor</p>
-                    <p className="text-lg font-semibold">
-                      {selectedBooking.service}
-                    </p>
-                  </div>
+          {/* Time Selection */}
+          <div className="flex flex-col sm:flex-row gap-4">
+            {/* Starting Time */}
+            <div className="flex-1">
+              <label className="block text-md font-sm text-black">
+                Select Starting Time
+              </label>
+              <select
+                disabled={!selectedDocter}
+                className="mt-2.5 block w-full bg-white p-2 border rounded-md"
+                {...register("availableslots.start", {
+                  required: "Select the Service",
+                })}
+              >
+                <option hidden value="">
+                  Select Time
+                </option>
+                <option value="10:00">10:00 AM</option>
+                <option value="11:00">11:00 AM</option>
+                <option value="12:00">12:00 AM</option>
+                <option value="13:00">01:00 PM</option>
+                <option value="14:00">02:00 PM</option>
+                <option value="15:00">03:00 PM</option>
+                <option value="16:00">04:00 PM</option>
+                <option value="17:00">05:00 PM</option>
+                <option value="18:00">06:00 PM</option>
+              </select>
+              {errors.availableslots?.start && (
+                <p className="text-red-500">
+                  {errors.availableslots?.start.message}
+                </p>
+              )}
+            </div>
 
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Status</p>
-                    <span
-                      className={`text-sm font-bold inline-block px-3 py-1 rounded-full ${
-                        selectedBooking.status === "Confirmed"
-                          ? "bg-green-100 text-green-700"
-                          : selectedBooking.status === "Pending"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : "bg-red-100 text-red-700"
-                      }`}
-                    >
-                      {selectedBooking.status}
-                    </span>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Date</p>
-                    <p className="text-lg">{selectedBooking.slot.date}</p>
-                  </div>
-
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Time</p>
-                    <p className="text-lg">
-                      {selectedBooking.slot.start} - {selectedBooking.slot.end}
-                    </p>
-                  </div>
-                </div>
-                {selectedBooking.notes && (
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Notes</p>
-                    <p className="text-base">{selectedBooking.notes}</p>
-                  </div>
-                )}
-              </div>
-
-              <div className="mt-6 flex justify-end">
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="px-5 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition"
-                >
-                  Close
-                </button>
-              </div>
+            {/* Ending Time */}
+            <div className="flex-1">
+              <label className="block text-md font-sm text-black">
+                Select Ending Time
+              </label>
+              <select
+                disabled={!selectedDocter}
+                className="mt-2.5 block w-full bg-white p-2 border rounded-md"
+                {...register("availableslots.end", {
+                  required: "Select the time",
+                })}
+              >
+                <option hidden value="">
+                  Select Time
+                </option>
+                <option value="11:00">11:00 AM</option>
+                <option value="12:00">12:00 AM</option>
+                <option value="13:00">01:00 PM</option>
+                <option value="14:00">02:00 PM</option>
+                <option value="15:00">03:00 PM</option>
+                <option value="16:00">04:00 PM</option>
+                <option value="17:00">05:00 PM</option>
+                <option value="18:00">06:00 PM</option>
+                <option value="19:00">07:00 PM</option>
+              </select>
+              {errors.end && (
+                <p className="text-red-500">
+                  {errors.availableslots?.end.message}
+                </p>
+              )}
             </div>
           </div>
-        )}
+
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-3 py-1 rounded mt-4 sm:mt-6"
+          >
+            Add
+          </button>
+        </form>
       </div>
-    </>
+
+      {/* Slot Management */}
+      <div className="bg-white p-4 border border-gray-300 rounded shadow-sm mt-6">
+        <h2 className="text-xl font-semibold mb-4">Manage Time Slots</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {slots.map((slot) => (
+            <button
+              key={slot}
+              onClick={() => toggleBlockSlot(slot)}
+              className={`p-2 rounded text-sm font-medium border ${
+                blockedSlots.includes(slot)
+                  ? "bg-red-100 text-red-600 border-red-400"
+                  : "bg-green-100 text-green-600 border-green-400"
+              }`}
+            >
+              {slot} -{" "}
+              {blockedSlots.includes(slot) ? "Unavailable" : "Available"}
+            </button>
+          ))}
+        </div>
+      </div>
+      {Array.isArray(FilterdDoctersbySpecialty) &&
+        FilterdDoctersbySpecialty.length > 0 && (
+          <div className="bg-white p-4 border border-gray-300 rounded shadow-sm mt-6">
+            <h2 className="text-xl font-semibold mb-4">All Docters</h2>
+            <section className="max-w-6xl  px-4 py-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+              {FilterdDoctersbySpecialty.map((doctor) => (
+                <DocterCard key={doctor.id} doctor={doctor} />
+              ))}
+            </section>
+          </div>
+        )}
+    </div>
   );
 };
 

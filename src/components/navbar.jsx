@@ -50,6 +50,9 @@ const Navbar = () => {
             </div>
           ) : (
             <div className="space-x-6">
+              <NavLink to="/userdetails" className={Linkclass}>
+                Appointments
+              </NavLink>
               <NavLink to="/admindashboard" className={Linkclass}>
                 Dashboard
               </NavLink>
