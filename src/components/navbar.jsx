@@ -30,7 +30,7 @@ const Navbar = () => {
       <nav className="bg-white shadow-md px-6 py-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold text-indigo-700">DocBook</h1>
         <ul className="flex space-x-6 text-gray-700 font-medium">
-          {!isAdmin && (
+          {!isAdmin ? (
             <div className="space-x-6">
               <NavLink to="/" className={Linkclass}>
                 Home
@@ -43,6 +43,18 @@ const Navbar = () => {
               </NavLink>
               <Link
                 to="/contect"
+                className="hover:text-indigo-600 cursor-pointer"
+              >
+                test
+              </Link>
+            </div>
+          ) : (
+            <div className="space-x-6">
+              <NavLink to="/admindashboard" className={Linkclass}>
+                Dashboard
+              </NavLink>
+              <Link
+                to="/admintest"
                 className="hover:text-indigo-600 cursor-pointer"
               >
                 test

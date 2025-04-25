@@ -10,6 +10,8 @@ import Home from "./pages/home";
 import { Notfound } from "./pages/error/notfound";
 import Contect from "./pages/contect";
 import Appointment from "./pages/Appointment";
+import AdminHome from "./pages/adminHome";
+import Admintest from "./pages/admintest";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +41,14 @@ const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: <UserDashboard />,
+      },
+      {
+        path: "/admindashboard",
+        element: <AdminHome />,
+      },
+      {
+        path: "/admintest",
+        element: <Admintest />,
       },
       {
         path: "/contect",

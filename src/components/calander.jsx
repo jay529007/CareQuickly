@@ -71,24 +71,24 @@ const MyCalendar = () => {
 
   // toolbar
   const CustomToolbar = ({ label, onNavigate, onView }) => (
-    <div className="flex justify-between items-center mb-2">
+    <div className="flex justify-between items-center mb-3">
       <div className="flex gap-2 items-center">
         <>
           <button
-            className="px-2 py-1 bg-gray-200 rounded cursor-pointer"
+            className="px-3 py-2 bg-gray-200 rounded cursor-pointer"
             onClick={() => onNavigate("PREV")}
           >
-            ←
+            Back
           </button>
           <button
-            className="px-2 py-1 bg-gray-200 rounded cursor-pointer"
+            className="px-3 py-2 bg-gray-200 rounded cursor-pointer"
             onClick={() => onNavigate("NEXT")}
           >
-            →
+            Next
           </button>
         </>
-        <h3 className="text-lg font-bold">{label}</h3>
       </div>
+        <h3 className="text-lg font-bold">{label}</h3>
 
       <div className="space-x-2">
         <button
@@ -131,7 +131,7 @@ const MyCalendar = () => {
     const newAppointment = {
       id: crypto.randomUUID(),
       service: formdata.appointments.service,
-      status: "",
+      status: "Pending",
       notes: formdata.appointments.notes,
       slot: {
         date: format(selectedDate, "yyyy-MM-dd"),

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../functions/userSlice";
-import PaginatedAppointmentTable from "../components/pagginationtable";
 
 const AdminHome = () => {
   const [filter, setFilter] = useState({ user: "", date: "", status: "" });
@@ -82,11 +81,61 @@ const AdminHome = () => {
         <div className="bg-indigo-200 p-4 rounded shadow mb-10">
           <h2 className="text-xl font-semibold mb-4">All Bookings</h2>
           {filteredallAppointments.length > 0 ? (
-            <PaginatedAppointmentTable
-              appointments={filteredallAppointments}
-              setSelectedBooking={setSelectedBooking}
-              setIsOpen={setIsOpen}
-            />
+            <table className="w-full table-auto border border-gray-200 shadow-sm rounded-lg overflow-hidden">
+              <thead className="bg-gray-100 text-gray-700 text-sm font-semibold">
+                <tr>
+                  <th className="p-3 text-center">User</th>
+                  <th className="p-3 text-center">Date</th>
+                  <th className="p-3 text-center">Service</th>
+                  <th className="p-3 text-center">Time</th>
+                  <th className="p-3 text-center">Status</th>
+                  <th className="p-3 text-center">View</th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-800 text-sm">
+                {filteredallAppointments.map((user) => (
+                  <tr
+                    key={user.id}
+                    className="bg-white border-t hover:bg-gray-50 transition"
+                  >
+                    <td className="p-3 text-center">{user.name || "N/A"}</td>
+                    <td className="p-3 text-center">
+                      {user.slot?.date || "N/A"}
+                    </td>
+                    <td className="p-3 text-center">{user.service}</td>
+                    <td className="p-3 text-center">
+                      {user.slot.start || "N/A"} - {user.slot.end || "N/A"}
+                    </td>
+                    <td className="p-3 text-center">
+                      <span
+                        className={`px-3 py-1 rounded-full font-medium text-xs ${
+                          user.status === "Confirmed"
+                            ? "bg-green-100 text-green-700"
+                            : user.status === "Pending"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : user.status === "Cancelled"
+                            ? "bg-red-100 text-red-700"
+                            : "bg-gray-100 text-gray-700"
+                        }`}
+                      >
+                        {user.status || "N/A"}
+                      </span>
+                    </td>
+                    <td className="p-3 text-center">
+                      <button
+                        className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                        onClick={() => {
+                          setSelectedBooking(user);
+                          setIsOpen(true);
+                        }}
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           ) : (
             <p className="text-center p-4 bg-white rounded">
               No bookings found

@@ -31,6 +31,22 @@
       "experience": 15,
       "availableSlots": ["09:00 AM", "01:00 PM", "05:00 PM"],
       "image": "src/assets/docter1.png"
+    },
+    {
+      "id": "5",
+      "name": "Dr. Mahek",
+      "specialty": "Surgeons",
+      "experience": 3,
+      "availableSlots": ["09:00 AM", "01:00 PM", "05:00 PM"],
+      "image": "src/assets/docter5.png"
+    },
+    {
+      "id": "6",
+      "name": "Dr. Yash",
+      "specialty": "Neurologists",
+      "experience": 5,
+      "availableSlots": ["09:00 AM", "01:00 PM", "05:00 PM"],
+      "image": "src/assets/docter6.png"
     }
   ],
   "users": [
@@ -39,9 +55,6 @@
       "name": "Priya Verma",
       "email": "priya.verma@gmail.com",
       "role": "user",
-      "service": "Dermatologist",
-      "slot": "12:00 PM",
-      "notes": "Skin allergy treatment, Developed a rash due to change in soap.",
       "password": "password123",
       "number": "9876543210",
       "dob": "1990-05-21",
@@ -54,13 +67,36 @@
       "medical_history": "Allergic to certain soaps and lotions.",
       "appointments": [
         {
-          "id": "4df",
+          "id": "a380a169-dasads-b81SAF46hgr4-dsafwe43",
+          "status": "Cancelled",
           "service": "Dentist",
-          "notes": "",
+          "notes": "Scheduled routine cleaning. No issues.",
           "slot": {
-            "date": "2025-04-02",
-            "start": "9 AM",
-            "end": "10 AM"
+            "date": "2025-04-20",
+            "start": "11:00",
+            "end": "12:00"
+          }
+        },
+        {
+          "id": "asd-dsfds324a-453FDS5-9e15-as223",
+          "service": "Dentist",
+          "status": "Confirmed",
+          "notes": "Scheduled routine cleaning. No issues.",
+          "slot": {
+            "date": "2025-04-21",
+            "start": "10:00",
+            "end": "13:00"
+          }
+        },
+        {
+          "id": "asddas-dsa-4535-9e15-as223",
+          "service": "Dentist",
+          "status": "Confirmed",
+          "notes": "Scheduled routine cleaning. No issues.",
+          "slot": {
+            "date": "2025-04-11",
+            "start": "10:00",
+            "end": "13:00"
           }
         }
       ]
@@ -70,9 +106,6 @@
       "name": "Rahul Desai",
       "email": "rahul.desai@yahoo.com",
       "role": "user",
-      "service": "Dentist",
-      "slot": "01:00 PM",
-      "notes": "Scheduled routine cleaning. No issues.",
       "password": "password456",
       "number": "9998887776",
       "dob": "1985-02-15",
@@ -82,16 +115,27 @@
         "phone": "9998887777"
       },
       "address": "456, Elm Street, City, Country",
-      "medical_history": "No known allergies.",
       "appointments": [
         {
-          "id": "j5o",
-          "service": "Cardiologist",
-          "notes": "",
+          "id": "a380a169-dasads-b843efsdf146hgr4-dsafwe43",
+          "status": "Cancelled",
+          "service": "Dentist",
+          "notes": "Scheduled routine cleaning. No issues.",
           "slot": {
-            "date": "2025-04-29",
-            "start": "10 AM",
-            "end": "1 PM"
+            "date": "2025-04-22",
+            "start": "11:00",
+            "end": "12:00"
+          }
+        },
+        {
+          "id": "asd-dsa-4535-9e15-adsfs223",
+          "service": "Dentist",
+          "status": "Confirmed",
+          "notes": "Scheduled routine cleaning. No issues.",
+          "slot": {
+            "date": "2025-04-23",
+            "start": "10:00",
+            "end": "13:00"
           }
         }
       ]
@@ -101,9 +145,6 @@
       "name": "Neha Kulkarni",
       "email": "neha.kulkarni@hotmail.com",
       "role": "user",
-      "service": "General Physician",
-      "slot": "11:30 AM",
-      "notes": "Annual health check-up required for work.",
       "password": "password789",
       "number": "8765432109",
       "dob": "1992-08-25",
@@ -116,13 +157,14 @@
       "medical_history": "No significant medical history.",
       "appointments": [
         {
-          "id": "9dd",
+          "id": "vwer34-dasads-b8146hgr4-dsafwe43",
+          "status": "Cancelled",
           "service": "Dentist",
-          "notes": "",
+          "notes": "Scheduled routine cleaning. No issues.",
           "slot": {
-            "date": "2025-04-13",
-            "start": "9 AM",
-            "end": "10 AM"
+            "date": "2025-04-10",
+            "start": "11:00",
+            "end": "12:00"
           }
         }
       ]
@@ -147,13 +189,25 @@
       "medical_history": "Mild chest discomfort during physical exertion.",
       "appointments": [
         {
-          "id": "1sgd",
-          "service": "General Physician",
-          "notes": "",
+          "id": "a380a169-dasads-b8146hgr4-dsafwe43",
+          "status": "Cancelled",
+          "service": "Dentist",
+          "notes": "Scheduled routine cleaning. No issues.",
           "slot": {
-            "date": "2025-04-23",
-            "start": "3 AM",
-            "end": "5 AM"
+            "date": "2025-04-20",
+            "start": "11:00",
+            "end": "12:00"
+          }
+        },
+        {
+          "id": "asd-dsa-4535-9e15-as223",
+          "service": "Dentist",
+          "status": "Confirmed",
+          "notes": "Scheduled routine cleaning. No issues.",
+          "slot": {
+            "date": "2025-04-21",
+            "start": "10:00",
+            "end": "13:00"
           }
         }
       ]
@@ -175,13 +229,47 @@
       "medical_history": "",
       "appointments": [
         {
-          "id": "fs2",
-          "service": "Dermatologist",
-          "notes": "",
+          "id": "43fbdgfdfda-gdg-4037-8ccc-vcx",
+          "service": "Dentist",
+          "status": "Confirmed",
+          "notes": "Scheduled routine cleaning. No issues.",
           "slot": {
-            "date": "2025-04-24",
-            "start": "9",
-            "end": "10"
+            "date": "2025-04-10",
+            "start": "11:00",
+            "end": "13:00"
+          }
+        },
+        {
+          "id": "a380a169-das-b814-dsa",
+          "status": "Cancelled",
+          "service": "Dentist",
+          "notes": "Scheduled routine cleaning. No issues.",
+          "slot": {
+            "date": "2025-04-30",
+            "start": "11:00",
+            "end": "12:00"
+          }
+        },
+        {
+          "id": "asd-dsa-4535-9e15-50039a1ae388",
+          "service": "Dentist",
+          "status": "Confirmed",
+          "notes": "Scheduled routine cleaning. No issues.",
+          "slot": {
+            "date": "2025-04-21",
+            "start": "10:00",
+            "end": "13:00"
+          }
+        },
+        {
+          "id": "cd485c24-247a-447d-sd2-aa",
+          "service": "General-Physician",
+          "status": "Confirmed",
+          "notes": "Annual health check-up required for work.",
+          "slot": {
+            "date": "2025-04-20",
+            "start": "10:00",
+            "end": "13:00"
           }
         }
       ]
@@ -206,7 +294,7 @@
           "id": "43fbdfda-1e08-4037-8ccc-e6b128a17053",
           "service": "Dentist",
           "status": "Confirmed",
-          "notes": "",
+          "notes": "Scheduled routine cleaning. No issues.",
           "slot": {
             "date": "2025-04-10",
             "start": "11:00",
@@ -217,7 +305,7 @@
           "id": "a380a169-38ef-4c87-b814-62e6fce4b1fa",
           "status": "Cancelled",
           "service": "Dentist",
-          "notes": "",
+          "notes": "Scheduled routine cleaning. No issues.",
           "slot": {
             "date": "2025-04-11",
             "start": "11:00",
@@ -228,7 +316,7 @@
           "id": "6e644c5b-bdb7-4535-9e15-50039a1ae388",
           "service": "Dentist",
           "status": "Confirmed",
-          "notes": "",
+          "notes": "Scheduled routine cleaning. No issues.",
           "slot": {
             "date": "2025-04-11",
             "start": "10:00",
@@ -239,7 +327,7 @@
           "id": "cd485c24-247a-447d-bcc2-f8ede39683ae",
           "service": "General-Physician",
           "status": "Confirmed",
-          "notes": "",
+          "notes": "Annual health check-up required for work.",
           "slot": {
             "date": "2025-04-23",
             "start": "10:00",
@@ -250,11 +338,32 @@
           "id": "fdcb74b5-0ee5-403f-82f9-8e57636122b4",
           "service": "Dermatologist",
           "status": "Pending",
-          "notes": "",
+          "notes": "Skin allergy treatment, Developed a rash due to change in soap.",
           "slot": {
             "date": "2025-04-24",
             "start": "11:00",
             "end": "13:00"
+          }
+        },
+        {
+          "id": "20f851f2-0c9c-4e1d-98bf-4aa55ab9d872",
+          "service": "Dentist",
+          "notes": "Scheduled routine cleaning. No issues.",
+          "slot": {
+            "date": "2025-04-25",
+            "start": "11:00",
+            "end": "13:00"
+          }
+        },
+        {
+          "id": "0310e5ce-9c56-4ce3-aa5d-d0a1b4bf2e62",
+          "service": "General-Physician",
+          "status": "Pending",
+          "notes": "Annual health check-up required for work.",
+          "slot": {
+            "date": "2025-04-25",
+            "start": "13:00",
+            "end": "14:00"
           }
         }
       ]
