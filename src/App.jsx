@@ -6,7 +6,7 @@ import GuestUserHome from "./pages/guestUserHome";
 import UserDashboard from "./pages/userDashboard";
 import LoginPage from "./pages/login";
 import Register from "./pages/register";
-import Home from "./pages/home";
+import Home from "./pages/Home";
 import { Notfound } from "./pages/error/notfound";
 import Contect from "./pages/contect";
 import Appointment from "./pages/Appointment";
