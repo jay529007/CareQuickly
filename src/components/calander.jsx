@@ -13,6 +13,7 @@ import { loadState } from "../store/localstorage";
 import { fetchUsers } from "../functions/userSlice";
 import { useForm } from "react-hook-form";
 import { updateUser } from "../functions/userAPI";
+import { fetchDoctor } from "../functions/doctorSlice";
 
 const locales = { "en-US": enUS };
 const localizer = dateFnsLocalizer({
@@ -29,6 +30,8 @@ const MyCalendar = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [events, setEvents] = useState([]);
+  const [selectedSpecialty, setselectedSpecialty] = useState("");
+  const [selectedDocter, setselectedDocter] = useState(null);
 
   // fetching currentusers  Appointments
   const id = loadState();
@@ -88,7 +91,7 @@ const MyCalendar = () => {
           </button>
         </>
       </div>
-        <h3 className="text-lg font-bold">{label}</h3>
+      <h3 className="text-lg font-bold">{label}</h3>
 
       <div className="space-x-2">
         <button
@@ -119,18 +122,47 @@ const MyCalendar = () => {
   const errorClass =
     "text-red-500 text-sm w-fit p-1 font-medium uppercase mt-2 bg-gray-200/50";
 
+  const doctors = useSelector((state) => state.doctors.doctors);
+
+  useEffect(() => {
+    dispatch(fetchDoctor());
+  }, [dispatch]);
+  const FilterdDoctersbySpecialty = doctors.filter(
+    (doctor) => doctor.specialty === selectedSpecialty
+  );
+
+  const handleDoctorChange = (e) => {
+    const doctor = FilterdDoctersbySpecialty.find(
+      (doctor) => doctor.name === e.target.value
+    );
+    setselectedDocter(doctor);
+  };
+
+  const selectedslot = selectedDocter?.availableslots?.find(
+    (slots) => slots.date === format(selectedDate, "yyyy-MM-dd")
+  );
+
+  // Function to check if requested slot fits inside available slot
+  const isSlotAvailable = (requestedSlot) => {
+    const availableStart = parseInt(selectedslot?.start.slice(0, 2));
+    const availableEnd = parseInt(selectedslot?.end.slice(0, 2));
+    const requestedStart = parseInt(requestedSlot?.start.slice(0, 2));
+    const requestedEnd = parseInt(requestedSlot?.end.slice(0, 2));
+    // console.log(availableStart, availableEnd, requestedStart, requestedEnd);
+
+    return availableStart <= requestedStart && availableEnd >= requestedEnd;
+  };
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const onSubmit = (formdata) => {
-    // const newAppointment = formdata.appointments;
-    // newAppointment.id = crypto.randomUUID();
-    // newAppointment.slot.date = format(selectedDate, "yyyy-MM-dd");
     const newAppointment = {
       id: crypto.randomUUID(),
       service: formdata.appointments.service,
+      doctor: formdata.appointments.doctor,
       status: "Pending",
       notes: formdata.appointments.notes,
       slot: {
@@ -139,6 +171,8 @@ const MyCalendar = () => {
         end: formdata.appointments.slot.end,
       },
     };
+    const isSlot = isSlotAvailable(formdata.appointments.slot);
+    console.log(isSlot);
 
     const updatedAppointments = [
       ...(currentUser.appointments || []),
@@ -150,11 +184,15 @@ const MyCalendar = () => {
       appointments: updatedAppointments,
     };
 
-    updateUser(currentUser.id, updatedUserData);
-    console.log("Updated User:", updatedUserData);
+    if (isSlot) {
+      updateUser(currentUser.id, updatedUserData);
+      console.log("Updated User:", updatedUserData);
 
-    // Optional: Close modal
-    setShowModal(false);
+      // Optional: Close modal
+      setShowModal(false);
+    } else {
+      alert("doctor not available");
+    }
   };
 
   return (
@@ -207,35 +245,64 @@ const MyCalendar = () => {
                 />
               </div>
 
-              {/* services */}
-              <div>
-                <label
-                  htmlFor="Service"
-                  className="block text-md font-sm text-black"
-                >
-                  Service
-                </label>
-                <select
-                  className="mt-2.5 block  bg-white w-full p-2  border rounded-md"
-                  {...register("appointments.service", {
-                    required: "Select the Service",
-                  })}
-                >
-                  <option hidden value="">
-                    Select Service
-                  </option>
-                  <option value="Dermatologist">Dermatologist</option>
-                  <option value="Dentist">Dentist</option>
-                  <option value="General-Physician">General Physician</option>
-                  <option value="Cardiologist">Cardiologist</option>
-                </select>
-                {errors.appointments?.service && (
-                  <p className={errorClass}>
-                    {errors.appointments?.service.message}
-                  </p>
-                )}
+              {/* filter */}
+              <div className="flex gap-4">
+                {/* Doctor Specialty filter */}
+                <div className="flex-1">
+                  <select
+                    className="w-full my-3 py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    {...register("appointments.service", {
+                      required: "Select the Service",
+                      onChange: (e) => {
+                        setselectedSpecialty(e.target.value),
+                          setselectedDocter("");
+                      },
+                    })}
+                  >
+                    <option hidden value="">
+                      Select Specialist
+                    </option>
+                    <option value="Dermatologist">Dermatologist</option>
+                    <option value="Dentist">Dentist</option>
+                    <option value="General Physician">General Physician</option>
+                    <option value="Cardiologist">Cardiologist</option>
+                    <option value="Neurologists">Neurologists</option>
+                    <option value="Surgeons">Surgeons</option>
+                  </select>
+                  {errors.appointments?.service && (
+                    <p className={errorClass}>
+                      {errors.appointments?.service.message}
+                    </p>
+                  )}
+                </div>
+                {/* Doctors Filter */}
+                <div className="flex-1">
+                  <select
+                    className="w-full my-3 py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    disabled={!selectedSpecialty}
+                    // onChange={handleDoctorChange}
+                    {...register("appointments.doctor", {
+                      required: "Select the Doctor",
+                      onChange: handleDoctorChange,
+                    })}
+                  >
+                    <option hidden value="">
+                      All doctors
+                    </option>
+                    {FilterdDoctersbySpecialty.map((doctor, index) => (
+                      <option key={index} value={doctor.name}>
+                        {doctor.name}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.appointments?.doctor && (
+                    <p className={errorClass}>
+                      {errors.appointments?.doctor.message}
+                    </p>
+                  )}
+                </div>
               </div>
-              <br />
+
               {/* Notes */}
               <div>
                 <label className="inline-block mb-1 text-black pl-1">

@@ -22,7 +22,7 @@ const AdminHome = () => {
     (doctor) => doctor.specialty === selectedSpecialty
   );
 
-  // today date
+ 
 
   const {
     register,
@@ -97,7 +97,7 @@ const AdminHome = () => {
                 className="w-full my-4 py-3 px-4 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
                 onChange={(e) => setselectedSpecialty(e.target.value)}
               >
-                <option value="">All Services</option>
+                <option value="">All Specialist</option>
                 <option value="Dentist">Dentist</option>
                 <option value="Dermatologist">Dermatologist</option>
                 <option value="General Physician">General Physician</option>
@@ -109,7 +109,7 @@ const AdminHome = () => {
             {/* Doctor filter */}
             <div className="flex-1">
               <select
-                className="w-full my-4 py-3 px-4 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full my-4 py-3 px-4 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 defocus:ring-blue-400"
                 disabled={!selectedSpecialty}
                 onChange={handleDoctorChange}
               >

@@ -26,7 +26,7 @@
           "end": "19:00"
         }
       ],
-      "image": "src/assets/docter7.png" 
+      "image": "src/assets/docter7.png"
     },
     {
       "id": "2",
@@ -353,28 +353,6 @@
       "medical_history": "",
       "appointments": [
         {
-          "id": "43fbdfda-1e08-4037-8ccc-e6b128a17053",
-          "service": "Dentist",
-          "status": "Confirmed",
-          "notes": "Scheduled routine cleaning. No issues.",
-          "slot": {
-            "date": "2025-04-10",
-            "start": "11:00",
-            "end": "13:00"
-          }
-        },
-        {
-          "id": "a380a169-38ef-4c87-b814-62e6fce4b1fa",
-          "status": "Cancelled",
-          "service": "Dentist",
-          "notes": "Scheduled routine cleaning. No issues.",
-          "slot": {
-            "date": "2025-04-11",
-            "start": "11:00",
-            "end": "12:00"
-          }
-        },
-        {
           "id": "6e644c5b-bdb7-4535-9e15-50039a1ae388",
           "service": "Cardiologist",
           "status": "Confirmed",
@@ -405,27 +383,6 @@
             "date": "2025-04-24",
             "start": "11:00",
             "end": "13:00"
-          }
-        },
-        {
-          "id": "20f851f2-0c9c-4e1d-98bf-4aa55ab9d872",
-          "service": "Dermatologist",
-          "notes": "Skin allergy treatment, Developed a rash due to change in soap.",
-          "slot": {
-            "date": "2025-04-25",
-            "start": "11:00",
-            "end": "13:00"
-          }
-        },
-        {
-          "id": "0310e5ce-9c56-4ce3-aa5d-d0a1b4bf2e62",
-          "service": "General-Physician",
-          "status": "Pending",
-          "notes": "Annual health check-up required for work.",
-          "slot": {
-            "date": "2025-04-25",
-            "start": "13:00",
-            "end": "14:00"
           }
         }
       ]
