@@ -9,3 +9,13 @@ export const getDoctor = async () => {
     throw error;
   }
 };
+
+export const updateDoctorSlot = async (doctorId, updatedData) => {
+  try {
+    const res = await api.put(`/doctors/${doctorId}`, updatedData);
+    return res.data;
+  } catch (error) {
+    console.error("Error updating slot", error);
+    throw error;
+  }
+};

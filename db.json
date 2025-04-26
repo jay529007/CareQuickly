@@ -16,7 +16,7 @@
     },
     {
       "id": "7",
-      "name": "Dr. Astha Sharma",
+      "name": "Dr. K. Sharma",
       "specialty": "Dermatologist",
       "experience": 5,
       "availableslots": [
@@ -26,7 +26,7 @@
           "end": "19:00"
         }
       ],
-      "image": "src/assets/docter4.png"
+      "image": "src/assets/docter7.png" 
     },
     {
       "id": "2",
@@ -36,6 +36,21 @@
       "availableslots": [
         {
           "date": "2025-04-26",
+          "start": "11:00",
+          "end": "13:00"
+        },
+        {
+          "date": "2025-04-25",
+          "start": "10:00",
+          "end": "19:00"
+        },
+        {
+          "date": "2025-04-24",
+          "start": "10:00",
+          "end": "19:00"
+        },
+        {
+          "date": "2025-04-27",
           "start": "10:00",
           "end": "19:00"
         }
