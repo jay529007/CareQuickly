@@ -39,10 +39,10 @@ const UserDashboard = () => {
     window.location.reload();
   };
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <h2 className="text-3xl font-bold mb-4">My Appointments</h2>
+    <div className="max-h-screen px-[15%]  p-6">
+      <h2 className="text-3xl text-gray-800 font-bold mb-4">My Appointments</h2>
       <div className="flex gap-3">
-        <div className="mb-4 flex gap-4">
+        <div className="mb-4  flex gap-4">
           <select
             value={filter.status}
             onChange={(e) => setFilter({ ...filter, status: e.target.value })}
@@ -65,27 +65,27 @@ const UserDashboard = () => {
         </div>
       </div>
 
-      <div className="bg-white shadow rounded p-4">
-        <table className="w-full text-left border-collapse">
-          <thead>
+      <div className="overflow-x-auto  shadow rounded-lg">
+        <table className="min-w-full bg-white">
+          <thead className="bg-sky-200 text-gray-800">
             <tr>
-              <th className="border-b p-2">Doctor</th>
-              <th className="border-b p-2">Date</th>
-              <th className="border-b p-2">Time</th>
-              <th className="border-b p-2">Status</th>
-              <th className="border-b p-2">Actions</th>
+              <th className=" py-3 px-6">Doctor</th>
+              <th className=" py-3 px-6">Date</th>
+              <th className=" py-3 px-6">Time</th>
+              <th className=" py-3 px-6">Status</th>
+              <th className=" py-3 px-6">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-gray-700 text-center">
             {filteredBookings?.map((app) => (
-              <tr key={app.id} className="hover:bg-gray-50">
-                <td className="p-2">{app.service}</td>
-                <td className="p-2">{app.slot.date}</td>
-                <td className="p-2">
+              <tr key={app.id} className="hover:bg-gray-50 border-b">
+                <td className="py-3 px-6">{app.service}</td>
+                <td className="py-3 px-6">{app.slot.date}</td>
+                <td className="py-3 px-6">
                   {app.slot.start} - {app.slot.end}
                 </td>
-                <td className="p-2">{app.status}</td>
-                <td className="p-2 space-x-2">
+                <td className="py-3 px-6">{app.status}</td>
+                <td className="py-3 px-6 space-x-2">
                   <button
                     className="px-3 py-1 bg-blue-600 text-white rounded"
                     onClick={() => {
@@ -131,7 +131,9 @@ const UserDashboard = () => {
             <div className="space-y-4 text-gray-700">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm font-medium text-gray-500">Spacialist</p>
+                  <p className="text-sm font-medium text-gray-500">
+                    Spacialist
+                  </p>
                   <p className="text-lg font-semibold">
                     {selectedBooking.service}
                   </p>
