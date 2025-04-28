@@ -128,9 +128,9 @@ const AdminHome = () => {
             <tbody className="text-gray-600 text-center">
               {doctors.map((slot) => (
                 <tr key={slot.id} className="border-b">
-                  <td className="py-3 px-6">{slot.name}</td>
-                  <td className="py-3 px-6">{slot.specialty}</td>
-                  <td className="py-3 px-6">{slot.experience}</td>
+                  <td className="py-3 px-6">{slot.name || "N/A"}</td>
+                  <td className="py-3 px-6">{slot.specialty || "N/A"}</td>
+                  <td className="py-3 px-6">{slot.experience || "N/A"}</td>
                   <td className="py-3 px-6">
                     {slot.availableslots.some(
                       (s) => s.date === todayFormatted
@@ -209,7 +209,7 @@ const AdminHome = () => {
                     </option>
 
                     {FilterdDoctersbySpecialty.map((doctor) => (
-                      <option key={doctor.id}>{doctor.name}</option>
+                      <option key={doctor.id}>{doctor.name || "N/A"}</option>
                     ))}
                   </select>
                 </div>
@@ -337,13 +337,13 @@ const AdminHome = () => {
                 />
                 <div>
                   <h3 className="text-2xl font-semibold text-gray-800">
-                    {selectedDocter.name}
+                    {selectedDocter.name || "N/A"}
                   </h3>
                   <p className="text-md text-gray-500">
-                    {selectedDocter.specialty}
+                    {selectedDocter.specialty || "N/A"}
                   </p>
                   <p className="text-md text-gray-600">
-                    {selectedDocter.experience} years of experience
+                    {selectedDocter.experience || "N/A"} years of experience
                   </p>
                 </div>
               </div>
@@ -368,9 +368,9 @@ const AdminHome = () => {
                       key={index}
                       className="border-t text-center border-b text-sm text-gray-600"
                     >
-                      <td className="px-6 py-4">{slot.date}</td>
+                      <td className="px-6 py-4">{slot.date || "N/A"}</td>
                       <td className="px-6 py-4">
-                        {slot.start} - {slot.end}
+                        {slot.start || "N/A"} - {slot.end || "N/A"}
                       </td>
                       <td className="justify-center my-3 items-center flex gap-3">
                         <button

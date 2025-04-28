@@ -13,30 +13,30 @@ const PaginatedAppointmentTable = ({
   const currentRows = appointments.slice(startIndex, startIndex + rowsPerPage);
 
   return (
-    <div className="relative max-w-full overflow-x-auto bg-white rounded-2xl border-1 border-gray-300 shadow-lg">
+    <div className="relative max-w-full overflow-x-auto bg-white rounded-2xl shadow-lg">
       <table className="w-full table-auto border border-gray-200">
-        <thead className="bg-gray-100 text-gray-700 text-sm font-semibold sticky top-0 z-10">
+        <thead className="bg-sky-200 text-gray-700 text-sm font-semibold sticky top-0 z-10">
           <tr>
-            <th className="p-3 text-center">User</th>
-            <th className="p-3 text-center">Date</th>
-            <th className="p-3 text-center">Service</th>
-            <th className="p-3 text-center">Time</th>
-            <th className="p-3 text-center">Status</th>
-            <th className="p-3 text-center">View</th>
+            <th className="py-3 px-6 text-center">User</th>
+            <th className="py-3 px-6 text-center">Date</th>
+            <th className="py-3 px-6 text-center">Service</th>
+            <th className="py-3 px-6 text-center">Time</th>
+            <th className="py-3 px-6 text-center">Status</th>
+            <th className="py-3 px-6 text-center">View</th>
           </tr>
         </thead>
-        <tbody className="text-sm text-gray-800">
+        <tbody className="text-sm text-black">
           {currentRows.map((user) => (
-            <tr key={user.id} className="hover:bg-gray-50 border-t transition">
-              <td className="p-3 text-center">{user.name || "N/A"}</td>
-              <td className="p-3 text-center">{user.slot?.date || "N/A"}</td>
-              <td className="p-3 text-center">{user.service}</td>
-              <td className="p-3 text-center">
+            <tr key={user.id} className="hover:bg-gray-50 border-b transition">
+              <td className="py-3 px-6 text-center">{user.name || "N/A"}</td>
+              <td className="py-3 px-6 text-center">{user.slot?.date || "N/A"}</td>
+              <td className="py-3 px-6 text-center">{user.service}</td>
+              <td className="py-3 px-6 text-center">
                 {user.slot?.start || "N/A"} - {user.slot?.end || "N/A"}
               </td>
-              <td className="p-3 text-center">
+              <td className="py-3 px-6 text-center">
                 <span
-                  className={`px-3 py-1 rounded-full font-medium text-xs ${
+                  className={`py-2.5 px-4 rounded-full font-medium text-xs ${
                     user.status === "Confirmed"
                       ? "bg-green-100 text-green-700"
                       : user.status === "Pending"
@@ -49,7 +49,7 @@ const PaginatedAppointmentTable = ({
                   {user.status || "N/A"}
                 </span>
               </td>
-              <td className="py-2 text-center">
+              <td className="py-3 px-6 text-center">
                 <button
                   className="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
                   onClick={() => {

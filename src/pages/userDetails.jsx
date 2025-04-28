@@ -33,13 +33,13 @@ const UserDetails = () => {
       (!filter.status || apt.status === filter.status)
   );
   return (
-    <div className="p-6 bg-gray-200">
+    <div className="p-6">
       <h1 className="text-3xl font-bold mb-6">User Details</h1>
 
       {/* Filters */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1   md:grid-cols-4 gap-4 mb-6">
         {/* Search by user */}
-        <div className="relative">
+        <div className=" relative">
           <Input
             type="text"
             placeholder="Search by user"
@@ -61,26 +61,26 @@ const UserDetails = () => {
         <Input
           type="date"
           value={filter.date}
-          className="w-full py-3 px-4 rounded-lg shadow-sm"
+          className="w-full py-3 px-4 rounded-lg text-gray-500 shadow-sm"
           onChange={(e) => setFilter({ ...filter, date: e.target.value })}
         />
 
         {/* Status filter */}
         <select
           value={filter.status}
-          className="w-full py-3 px-4 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full pl-4 border my-0.5 text-gray-500 border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
           onChange={(e) => setFilter({ ...filter, status: e.target.value })}
         >
-          <option value="">All Status</option>
-          <option value="Confirmed">Confirmed</option>
-          <option value="Pending">Pending</option>
-          <option value="Cancelled">Cancelled</option>
+          <option className="text-black" value="">All Status</option>
+          <option className="text-black" value="Confirmed">Confirmed</option>
+          <option className="text-black" value="Pending">Pending</option>
+          <option className="text-black" value="Cancelled">Cancelled</option>
         </select>
 
         {/* Reset Button */}
         <button
           onClick={() => setFilter({ name: "", date: "", status: "" })}
-          className="w-[25%] h-[80%] my-1 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-red-500 text-white hover:text-black rounded-lg font-medium hover:bg-gray-300 transition"
+          className="w-[25%] h-[80%] my-1 bg-red-500 text-white hover:text-black rounded-lg font-medium hover:bg-gray-200 transition"
         >
           Clean
         </button>
@@ -119,13 +119,13 @@ const UserDetails = () => {
                 <div>
                   <p className="text-sm font-medium text-gray-500">Name</p>
                   <p className="text-lg font-semibold">
-                    {selectedBooking.name}
+                    {selectedBooking.name || "N/A"}
                   </p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-500">Email</p>
                   <p className="text-lg font-semibold">
-                    {selectedBooking.userEmail}
+                    {selectedBooking.userEmail || "N/A"}
                   </p>
                 </div>
               </div>
@@ -135,7 +135,7 @@ const UserDetails = () => {
                     Specialist
                   </p>
                   <p className="text-lg font-semibold">
-                    {selectedBooking.service}
+                    {selectedBooking.service || "N/A"}
                   </p>
                   <br />
                   <p className="text-sm font-medium text-gray-500">Status</p>
@@ -157,27 +157,27 @@ const UserDetails = () => {
                 <div>
                   <p className="text-sm font-medium text-gray-500">Doctor</p>
                   <p className="text-lg font-semibold">
-                    {selectedBooking.doctor}
+                    {selectedBooking.doctor || "N/A"}
                   </p>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm font-medium text-gray-500">Date</p>
-                  <p className="text-lg">{selectedBooking.slot.date}</p>
+                  <p className="text-lg">{selectedBooking.slot.date || "N/A"}</p>
                 </div>
 
                 <div>
                   <p className="text-sm font-medium text-gray-500">Time</p>
                   <p className="text-lg">
-                    {selectedBooking.slot.start} - {selectedBooking.slot.end}
+                    {selectedBooking.slot.start || "N/A"} - {selectedBooking.slot.end || "N/A"}
                   </p>
                 </div>
               </div>
               {selectedBooking.notes && (
                 <div>
                   <p className="text-sm font-medium text-gray-500">Notes</p>
-                  <p className="text-base">{selectedBooking.notes}</p>
+                  <p className="text-base">{selectedBooking.notes || "N/A"}</p>
                 </div>
               )}
             </div>

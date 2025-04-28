@@ -79,12 +79,12 @@ const UserDashboard = () => {
           <tbody className="text-gray-700 text-center">
             {filteredBookings?.map((app) => (
               <tr key={app.id} className="hover:bg-gray-50 border-b">
-                <td className="py-3 px-6">{app.service}</td>
-                <td className="py-3 px-6">{app.slot.date}</td>
+                <td className="py-3 px-6">{app.service || "N/A"}</td>
+                <td className="py-3 px-6">{app.slot.date || "N/A"}</td>
                 <td className="py-3 px-6">
-                  {app.slot.start} - {app.slot.end}
+                  {app.slot.start || "N/A"} - {app.slot.end || "N/A"}
                 </td>
-                <td className="py-3 px-6">{app.status}</td>
+                <td className="py-3 px-6">{app.status || "N/A"}</td>
                 <td className="py-3 px-6 space-x-2">
                   <button
                     className="px-3 py-1 bg-blue-600 text-white rounded"
@@ -135,13 +135,13 @@ const UserDashboard = () => {
                     Spacialist
                   </p>
                   <p className="text-lg font-semibold">
-                    {selectedBooking.service}
+                    {selectedBooking.service || "N/A"}
                   </p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-500">Doctor</p>
                   <p className="text-lg font-semibold">
-                    {selectedBooking.doctor}
+                    {selectedBooking.doctor || "N/A"}
                   </p>
                 </div>
 
@@ -156,7 +156,7 @@ const UserDashboard = () => {
                         : "bg-red-100 text-red-700"
                     }`}
                   >
-                    {selectedBooking.status}
+                    {selectedBooking.status || "N/A"}
                   </span>
                 </div>
               </div>
