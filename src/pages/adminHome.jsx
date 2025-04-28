@@ -501,8 +501,7 @@ const AdminHome = () => {
                           Add
                         </button>
                         <button
-                          onClick={() => setIsSlotOpen(false)}
-                          disabled={selectedSlot.date === todayFormatted}
+                          onClick={() => setIsSlotOpen(false)}  
                           className="bg-red-500 hover:bg-red-600 text-white font-semibold px-5 py-2 rounded-lg shadow transition disabled:opacity-50"
                         >
                           Cancel
