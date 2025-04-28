@@ -97,7 +97,6 @@ const AdminHome = () => {
 
   return (
     <div className="mx-[10%] py-10 flex flex-col justify-between">
-
       {/* add new appointment */}
       <div className="self-end">
         <button
@@ -501,7 +500,7 @@ const AdminHome = () => {
                           Add
                         </button>
                         <button
-                          onClick={() => setIsSlotOpen(false)}  
+                          onClick={() => setIsSlotOpen(false)}
                           className="bg-red-500 hover:bg-red-600 text-white font-semibold px-5 py-2 rounded-lg shadow transition disabled:opacity-50"
                         >
                           Cancel

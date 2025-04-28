@@ -431,18 +431,6 @@
           }
         },
         {
-          "id": "878c6139-ce2a-478b-8dc1-9764458db85f",
-          "service": "Dentist",
-          "doctor": "Dr. Rohan Mehta",
-          "status": "Pending",
-          "notes": "",
-          "slot": {
-            "date": "2025-04-28",
-            "start": "10:00",
-            "end": "12:00"
-          }
-        },
-        {
           "id": "9fd597a6-92b2-4251-8fe3-c8200073bf6c",
           "service": "Dentist",
           "doctor": "Dr. Rohan Mehta",

@@ -29,7 +29,9 @@ const PaginatedAppointmentTable = ({
           {currentRows.map((user) => (
             <tr key={user.id} className="hover:bg-gray-50 border-b transition">
               <td className="py-3 px-6 text-center">{user.name || "N/A"}</td>
-              <td className="py-3 px-6 text-center">{user.slot?.date || "N/A"}</td>
+              <td className="py-3 px-6 text-center">
+                {user.slot?.date || "N/A"}
+              </td>
               <td className="py-3 px-6 text-center">{user.service}</td>
               <td className="py-3 px-6 text-center">
                 {user.slot?.start || "N/A"} - {user.slot?.end || "N/A"}

@@ -78,13 +78,13 @@ const MyCalendar = () => {
       <div className="flex gap-2 items-center">
         <>
           <button
-            className="px-3 py-2 bg-gray-200 rounded cursor-pointer"
+            className="px-3 py-2 bg-white border border-gray-300 hover:bg-gray-100 rounded cursor-pointer"
             onClick={() => onNavigate("PREV")}
           >
             Back
           </button>
           <button
-            className="px-3 py-2 bg-gray-200 rounded cursor-pointer"
+            className="px-3 py-2 bg-white border border-gray-300 hover:bg-gray-100 rounded cursor-pointer"
             onClick={() => onNavigate("NEXT")}
           >
             Next
@@ -96,19 +96,19 @@ const MyCalendar = () => {
       <div className="space-x-2">
         <button
           onClick={() => onView("month")}
-          className="p-2 bg-gray-200 rounded cursor-pointer"
+          className="py-2 px-3 bg-white border border-gray-300 hover:bg-gray-100 rounded-md cursor-pointer"
         >
           Month
         </button>
         <button
           onClick={() => onView("week")}
-          className="p-2 bg-gray-200 rounded cursor-pointer"
+          className="py-2 px-3 bg-white border border-gray-300 hover:bg-gray-100 rounded cursor-pointer"
         >
           Weeks
         </button>
         <button
           onClick={() => onView("day")}
-          className="p-2 bg-gray-200 rounded cursor-pointer"
+          className="py-2 px-3 bg-white border border-gray-300 hover:bg-gray-100 rounded cursor-pointer"
         >
           Day
         </button>
