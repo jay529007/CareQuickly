@@ -7,7 +7,7 @@ import getDay from "date-fns/getDay";
 import enUS from "date-fns/locale/en-US";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Input from "../components/re-usablecomponets/InputFeild";
-// import "../../App.css";
+import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { loadState } from "../store/localstorage";
 import { fetchUsers } from "../functions/userSlice";
@@ -160,7 +160,7 @@ const MyCalendar = () => {
   } = useForm();
   const onSubmit = (formdata) => {
     const newAppointment = {
-      id: crypto.randomUUID(),
+      id: uuidv4(),
       service: formdata.appointments.service,
       doctor: formdata.appointments.doctor,
       status: "Pending",
@@ -187,7 +187,7 @@ const MyCalendar = () => {
     if (isSlot) {
       updateUser(currentUser.id, updatedUserData);
       console.log("Updated User:", updatedUserData);
-
+      window.location.reload();
       // Optional: Close modal
       setShowModal(false);
     } else {

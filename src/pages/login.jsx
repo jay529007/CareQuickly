@@ -50,67 +50,69 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-sky-50">
-      <div className="w-full max-w-md bg-sky-200 p-8 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-          Login
-        </h2>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Email Input */}
-          <div>
-            <Input
-              label="Email: "
-              id="email"
-              type="email"
-              {...register("email", {
-                required: "Email is required",
-              })}
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
+    <>
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-sky-100 via-blue-100 to-sky-100 px-4">
+        <div className="w-full max-w-md bg-white p-10 rounded-3xl shadow-2xl">
+          <h2 className="text-3xl font-extrabold text-center text-blue-600 mb-8">
+            Welcome
+          </h2>
 
-          {/* Password Input */}
-          <div>
-            <Input
-              label="Password"
-              id="password"
-              type="password"
-              {...register("password", {
-                required: "Password is required",
-              })}
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Email Input */}
+            <div>
+              <Input
+                label="Email Address"
+                id="email"
+                type="email"
+                {...register("email", { required: "Email is required" })}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
 
-          {/* Submit Button */}
-          <div>
-            <button
-              type="submit"
-              className="w-full py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            >
-              Login
-            </button>
-          </div>
-        </form>
+            {/* Password Input */}
+            <div>
+              <Input
+                label="Password"
+                id="password"
+                type="password"
+                {...register("password", { required: "Password is required" })}
+              />
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
 
-        <div className="mt-4 text-center">
-          <p className="text-sm text-gray-600">
-            Don't have an account?{" "}
-            <Link to="/register" className="text-blue-600 hover:text-blue-700">
-              Register here
-            </Link>
-          </p>
+            {/* Submit Button */}
+            <div>
+              <button
+                type="submit"
+                className="w-full py-3 bg-blue-600 hover:bg-blue-700 transition duration-300 text-white font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+              >
+                Login
+              </button>
+            </div>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+              Don't have an account?{" "}
+              <Link
+                to="/register"
+                className="text-blue-600 hover:underline font-semibold"
+              >
+                Register here
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

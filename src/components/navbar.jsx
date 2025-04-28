@@ -41,12 +41,12 @@ const Navbar = () => {
               <NavLink to="/dashboard" className={Linkclass}>
                 Dashboard
               </NavLink>
-              <Link
+              {/* <Link
                 to="/contect"
                 className="hover:text-indigo-600 cursor-pointer"
               >
                 test
-              </Link>
+              </Link> */}
             </div>
           ) : (
             <div className="space-x-6">
@@ -56,17 +56,17 @@ const Navbar = () => {
               <NavLink to="/admindashboard" className={Linkclass}>
                 Dashboard
               </NavLink>
-              <Link
+              {/* <Link
                 to="/admintest"
                 className="hover:text-indigo-600 cursor-pointer"
               >
                 test
-              </Link>
+              </Link> */}
             </div>
           )}
           <button
             onClick={Logout}
-            className="hover:text-gray-50 bg-blue-500 px-2 py-2 rounded-2xl text-white cursor-pointer"
+            className="hover:text-gray-600 cursor-pointer text-red-600 transition-all duration-150 "
           >
             Logout
           </button>

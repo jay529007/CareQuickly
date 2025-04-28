@@ -8,8 +8,18 @@
       "availableslots": [
         {
           "date": "2025-04-26",
+          "start": "11:00",
+          "end": "19:00"
+        },
+        {
+          "date": "2025-04-28",
           "start": "10:00",
           "end": "19:00"
+        },
+        {
+          "date": "2025-04-29",
+          "start": "10:00",
+          "end": "17:00"
         }
       ],
       "image": "src/assets/docter4.png"
@@ -24,6 +34,11 @@
           "date": "2025-04-26",
           "start": "10:00",
           "end": "19:00"
+        },
+        {
+          "date": "2025-04-28",
+          "start": "10:00",
+          "end": "19:00"
         }
       ],
       "image": "src/assets/docter7.png"
@@ -35,9 +50,9 @@
       "experience": 7,
       "availableslots": [
         {
-          "date": "2025-04-26",
-          "start": "11:00",
-          "end": "13:00"
+          "date": "2025-04-24",
+          "start": "10:00",
+          "end": "19:00"
         },
         {
           "date": "2025-04-25",
@@ -45,12 +60,17 @@
           "end": "19:00"
         },
         {
-          "date": "2025-04-24",
+          "date": "2025-04-26",
+          "start": "11:00",
+          "end": "13:00"
+        },
+        {
+          "date": "2025-04-27",
           "start": "10:00",
           "end": "19:00"
         },
         {
-          "date": "2025-04-27",
+          "date": "2025-04-28",
           "start": "10:00",
           "end": "19:00"
         }
@@ -67,6 +87,11 @@
           "date": "2025-04-26",
           "start": "10:00",
           "end": "19:00"
+        },
+        {
+          "date": "2025-04-28",
+          "start": "10:00",
+          "end": "19:00"
         }
       ],
       "image": "src/assets/docter2.png"
@@ -78,7 +103,7 @@
       "experience": 15,
       "availableslots": [
         {
-          "date": "2025-04-26",
+          "date": "2025-04-28",
           "start": "10:00",
           "end": "19:00"
         }
@@ -95,6 +120,11 @@
           "date": "2025-04-26",
           "start": "10:00",
           "end": "19:00"
+        },
+        {
+          "date": "2025-04-28",
+          "start": "10:00",
+          "end": "19:00"
         }
       ],
       "image": "src/assets/docter5.png"
@@ -107,6 +137,11 @@
       "availableslots": [
         {
           "date": "2025-04-26",
+          "start": "10:00",
+          "end": "19:00"
+        },
+        {
+          "date": "2025-04-28",
           "start": "10:00",
           "end": "19:00"
         }
@@ -134,6 +169,7 @@
         {
           "id": "a380a169-dasads-b81SAF46hgr4-dsafwe43",
           "status": "Cancelled",
+          "doctor": "Dr. Rohan Mehta",
           "service": "Dentist",
           "notes": "Scheduled routine cleaning. No issues.",
           "slot": {
@@ -145,6 +181,7 @@
         {
           "id": "asd-dsfds324a-453FDS5-9e15-as223",
           "service": "Dentist",
+          "doctor": "Dr. Rohan Mehta",
           "status": "Confirmed",
           "notes": "Scheduled routine cleaning. No issues.",
           "slot": {
@@ -156,6 +193,7 @@
         {
           "id": "asddas-dsa-4535-9e15-as223",
           "service": "Dentist",
+          "doctor": "Dr. Rohan Mehta",
           "status": "Confirmed",
           "notes": "Scheduled routine cleaning. No issues.",
           "slot": {
@@ -185,6 +223,7 @@
           "id": "a380a169-dasads-b843efsdf146hgr4-dsafwe43",
           "status": "Cancelled",
           "service": "Dentist",
+          "doctor": "Dr. Rohan Mehta",
           "notes": "Scheduled routine cleaning. No issues.",
           "slot": {
             "date": "2025-04-22",
@@ -195,6 +234,7 @@
         {
           "id": "asd-dsa-4535-9e15-adsfs223",
           "service": "Dentist",
+          "doctor": "Dr. Rohan Mehta",
           "status": "Confirmed",
           "notes": "Scheduled routine cleaning. No issues.",
           "slot": {
@@ -224,6 +264,7 @@
         {
           "id": "vwer34-dasads-b8146hgr4-dsafwe43",
           "status": "Cancelled",
+          "doctor": "Dr. Rohan Mehta",
           "service": "Dentist",
           "notes": "Scheduled routine cleaning. No issues.",
           "slot": {
@@ -254,6 +295,7 @@
           "id": "a380a169-dasads-b8146hgr4-dsafwe43",
           "status": "Cancelled",
           "service": "Dentist",
+          "doctor": "Dr. Rohan Mehta",
           "notes": "Scheduled routine cleaning. No issues.",
           "slot": {
             "date": "2025-04-20",
@@ -264,6 +306,7 @@
         {
           "id": "asd-dsa-4535-9e15-as223",
           "service": "Dentist",
+          "doctor": "Dr. Rohan Mehta",
           "status": "Confirmed",
           "notes": "Scheduled routine cleaning. No issues.",
           "slot": {
@@ -293,6 +336,7 @@
         {
           "id": "43fbdgfdfda-gdg-4037-8ccc-vcx",
           "service": "Cardiologist",
+          "doctor": "Dr. Arvind Nair",
           "status": "Confirmed",
           "notes": "Occasional chest discomfort when climbing stairs.",
           "slot": {
@@ -305,6 +349,7 @@
           "id": "a380a169-das-b814-dsa",
           "status": "Cancelled",
           "service": "General-Physician",
+          "doctor": "Dr. Sneha Patil",
           "notes": "Annual health check-up required for work.",
           "slot": {
             "date": "2025-04-30",
@@ -315,6 +360,7 @@
         {
           "id": "asd-dsa-4535-9e15-50039a1ae388",
           "service": "Dentist",
+          "doctor": "Dr. Rohan Mehta",
           "status": "Confirmed",
           "notes": "Scheduled routine cleaning. No issues.",
           "slot": {
@@ -326,6 +372,7 @@
         {
           "id": "cd485c24-247a-447d-sd2-aa",
           "service": "General-Physician",
+          "doctor": "Dr. Sneha Patil",
           "status": "Confirmed",
           "notes": "Annual health check-up required for work.",
           "slot": {
@@ -355,6 +402,7 @@
         {
           "id": "6e644c5b-bdb7-4535-9e15-50039a1ae388",
           "service": "Cardiologist",
+          "doctor": "Dr. Arvind Nair",
           "status": "Confirmed",
           "notes": "Occasional chest discomfort when climbing stairs.",
           "slot": {
@@ -366,6 +414,7 @@
         {
           "id": "cd485c24-247a-447d-bcc2-f8ede39683ae",
           "service": "General-Physician",
+          "doctor": "Dr. Sneha Patil",
           "status": "Confirmed",
           "notes": "Annual health check-up required for work.",
           "slot": {
@@ -377,12 +426,66 @@
         {
           "id": "fdcb74b5-0ee5-403f-82f9-8e57636122b4",
           "service": "Dermatologist",
+          "doctor": "Dr. K. Sharma",
           "status": "Pending",
           "notes": "Skin allergy treatment, Developed a rash due to change in soap.",
           "slot": {
             "date": "2025-04-24",
             "start": "11:00",
             "end": "13:00"
+          }
+        },
+        {
+          "id": "878c6139-ce2a-478b-8dc1-9764458db85f",
+          "service": "Dentist",
+          "doctor": "Dr. Rohan Mehta",
+          "status": "Pending",
+          "notes": "",
+          "slot": {
+            "date": "2025-04-28",
+            "start": "10:00",
+            "end": "12:00"
+          }
+        },
+        {
+          "id": "9fd597a6-92b2-4251-8fe3-c8200073bf6c",
+          "service": "Dentist",
+          "doctor": "Dr. Rohan Mehta",
+          "status": "Pending",
+          "notes": "",
+          "slot": {
+            "date": "2025-04-28",
+            "start": "10:00",
+            "end": "12:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "2de1",
+      "name": "Carol Romero",
+      "email": "test@password.com",
+      "number": "9234567890",
+      "password": "$2b$10$cnNBqH4sILOHgbiJCDtYbOQvABWU9gjHFm8/7Nlm3yVTexg92h20G",
+      "dob": "1997-07-02",
+      "gender": "Female",
+      "emergency_contact": {
+        "name": "Aspen Sherman",
+        "phone": "1311584631"
+      },
+      "address": "Perferendis autem en",
+      "medical_history": "Laborum voluptatem ",
+      "appointments": [
+        {
+          "id": "6543cbfa-334c-4992-9fc3-224702d97cab",
+          "service": "General Physician",
+          "doctor": "Dr. Sneha Patil",
+          "status": "Pending",
+          "notes": "",
+          "slot": {
+            "date": "2025-04-26",
+            "start": "12:00",
+            "end": "11:00"
           }
         }
       ]

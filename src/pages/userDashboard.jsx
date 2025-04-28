@@ -131,9 +131,15 @@ const UserDashboard = () => {
             <div className="space-y-4 text-gray-700">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm font-medium text-gray-500">Doctor</p>
+                  <p className="text-sm font-medium text-gray-500">Spacialist</p>
                   <p className="text-lg font-semibold">
                     {selectedBooking.service}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Doctor</p>
+                  <p className="text-lg font-semibold">
+                    {selectedBooking.doctor}
                   </p>
                 </div>
 

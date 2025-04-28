@@ -1,5 +1,4 @@
 import React from "react";
-import GlobalStatus from "./components/GlobalStatus";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Mainlayout from "./pages/mainlayout";
 import GuestUserHome from "./pages/guestUserHome";
@@ -11,8 +10,8 @@ import { Notfound } from "./pages/error/notfound";
 import Contect from "./pages/contect";
 import Appointment from "./pages/Appointment";
 import AdminHome from "./pages/adminHome";
-import Admintest from "./pages/admintest";
 import UserDetails from "./pages/userDetails";
+import Nouserfound from "./pages/error/no-userfound";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +31,10 @@ const router = createBrowserRouter([
     element: <Notfound />,
   },
   {
+    path: "/nouserfound",
+    element: <Nouserfound />,
+  },
+  {
     path: "/",
     element: <Mainlayout />,
     children: [
@@ -49,12 +52,9 @@ const router = createBrowserRouter([
       },
       {
         path: "/userdetails",
-        element: <UserDetails/>
+        element: <UserDetails />,
       },
-      {
-        path: "/admintest",
-        element: <Admintest />,
-      },
+
       {
         path: "/contect",
         element: <Contect />,
@@ -70,7 +70,7 @@ const router = createBrowserRouter([
 export default function App() {
   return (
     <>
-      <GlobalStatus />
+     
       <RouterProvider router={router} />
     </>
   );
