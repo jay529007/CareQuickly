@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-import format from "date-fns/format";
-import parse from "date-fns/parse";
-import startOfWeek from "date-fns/startOfWeek";
-import getDay from "date-fns/getDay";
-import enUS from "date-fns/locale/en-US";
+import { Calendar } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Input from "../components/re-usablecomponets/InputFeild";
+import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
+
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { loadState } from "../store/localstorage";
@@ -14,16 +11,10 @@ import { fetchUsers } from "../functions/userSlice";
 import { useForm } from "react-hook-form";
 import { updateUser } from "../functions/userAPI";
 import { fetchDoctor } from "../functions/doctorSlice";
+import { localizer } from "../functions/localizer";
+import { isAfter, format, startOfDay } from "date-fns";
 
-const locales = { "en-US": enUS };
-const localizer = dateFnsLocalizer({
-  format,
-  parse,
-  startOfWeek,
-  getDay,
-  locales,
-});
-
+const DragAndDropCalendar = withDragAndDrop(Calendar);
 const MyCalendar = () => {
   const [currentView, setCurrentView] = useState("month");
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -45,6 +36,67 @@ const MyCalendar = () => {
 
   // for navigating in toolbar
   const handleViewChange = (view) => setCurrentView(view);
+
+  //Restriction in hours
+  const isWithinAllowedHours = (start, end) => {
+    const startHour = start.getHours();
+    const endHour = end.getHours();
+    return startHour >= 10 && endHour <= 19;
+  };
+  // for dnd
+  const handleEventDrop = ({ event, start, end }) => {
+    if (!isWithinAllowedHours(start, end)) {
+      alert("You can only book between 10:00 AM and 7:00 PM");
+      return;
+    }
+
+    const updatedSlot = {
+      date: format(start, "yyyy-MM-dd"),
+      start: format(start, "HH:mm"),
+      end: format(end, "HH:mm"),
+    };
+
+    const updatedAppointments = currentUser.appointments.map((appt) =>
+      appt.id === event.id ? { ...appt, slot: updatedSlot } : appt
+    );
+
+    const updatedUserData = {
+      ...currentUser,
+      appointments: updatedAppointments,
+    };
+
+    updateUser(currentUser.id, updatedUserData);
+
+    // Update UI
+    setEvents((prev) =>
+      prev.map((evt) => (evt.id === event.id ? { ...evt, start, end } : evt))
+    );
+  };
+  const isDraggable = (event) => {
+    const now = startOfDay(new Date());
+    return isAfter(event.start, now);
+  };
+  // changeing color
+  const eventStyleGetter = (event) => {
+    let backgroundColor = isDraggable(event) ? "#1fc640" : "gray";
+
+    return {
+      style: {
+        backgroundColor,
+        color: "white",
+        borderRadius: "5px",
+        border: "none",
+        padding: "2px 5px",
+      },
+    };
+  };
+
+  // const handleEventResize = ({ event, start, end }) => {
+  //   const updated = events.map((evt) =>
+  //     evt.id === event.id ? { ...evt, start, end } : evt
+  //   );
+  //   onEventsChange(updated);
+  // };
 
   // Formatting Appointments for Calendar
   useEffect(() => {
@@ -191,16 +243,28 @@ const MyCalendar = () => {
       // Optional: Close modal
       setShowModal(false);
     } else {
-      alert("doctor not available");
+      console.log(newAppointment);
+
+      alert(`${newAppointment.doctor} is not available`);
     }
   };
 
   return (
     <div className="p-4">
       {/* Displaying the Calendar */}
-      <Calendar
+      <DragAndDropCalendar
         localizer={localizer}
         events={events}
+        eventPropGetter={eventStyleGetter}
+        draggableAccessor={isDraggable}
+        min={new Date(2023, 0, 1, 10, 0)}
+        max={new Date(2023, 0, 1, 19, 0)}
+        step={60}
+        timeslots={1}
+        dayLayoutAlgorithm="no-overlap"
+        onEventDrop={handleEventDrop}
+        // onEventResize={handleEventResize}
+        // resizable
         startAccessor="start"
         endAccessor="end"
         style={{ height: 600 }}
