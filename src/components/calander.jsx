@@ -4,7 +4,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import Input from "../components/re-usablecomponets/InputFeild";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 
-import { v4 as uuidv4 } from "uuid";
+import { NIL, v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { loadState } from "../store/localstorage";
 import { fetchUsers } from "../functions/userSlice";
@@ -234,9 +234,6 @@ const MyCalendar = () => {
   const selectedDoctorslot = selectedDocter?.availableslots?.find(
     (slots) => slots.date === format(selectedDate, "yyyy-MM-dd")
   );
-  const seletcedUserSlot = currentUser?.appointments?.find(
-    (slots) => slots.slot.date === format(selectedDate, "yyyy-MM-dd")
-  );
 
   // Function to check if requested slot fits inside available slot
   const isSlotAvailable = (requestedSlot) => {
@@ -248,33 +245,28 @@ const MyCalendar = () => {
 
     return availableStart <= requestedStart && availableEnd >= requestedEnd;
   };
+  const seletcedUserSlot = currentUser?.appointments?.find((slot) => {
+    return slot.slot.date === format(selectedDate, "yyyy-MM-dd");
+  });
 
   const isSlotBlock = (requestedSlot) => {
-    const blockedStart = parseInt(seletcedUserSlot.slot.start.slice(0, 2));
-    const blockedEnd = parseInt(seletcedUserSlot.slot.end.slice(0, 2));
+    if (!seletcedUserSlot) return false;
+
+    const blockedStart = parseInt(seletcedUserSlot?.slot?.start.slice(0, 2));
+    const blockedEnd = parseInt(seletcedUserSlot?.slot?.end.slice(0, 2));
     const requestedStart = parseInt(requestedSlot.start.slice(0, 2));
     const requestedEnd = parseInt(requestedSlot.end.slice(0, 2));
+    // console.log(currentUser);
+    // console.log(seletcedUserSlot);
 
-    console.log(requestedStart, blockedStart, blockedEnd, requestedEnd);
+    // console.log(requestedStart, blockedStart, blockedEnd, requestedEnd);
     // Time:      10:00    11:00    12:00    1:00    2:00    3:00
     // Blocked:     |-----Blocked-----|
-    // Requested:                             |-request-|
-    // 13 > 10 12 < 14
+    // Requested:            |------request----|
     // overlap if request starts before blocked ends AND blocked starts before request ends
-    return requestedStart > blockedStart && blockedEnd < requestedEnd;
+    return requestedStart < blockedEnd && blockedStart < requestedEnd;
+    requestedStart < blockedEnd && blockedStart < requestedEnd;
   };
-
-  // const isSlotBlock = (requestedSlot) => {
-  //   const blockedStart = parseInt(seletcedUserSlot?.slot?.start.slice(0, 2));
-  //   const blockedEnd = parseInt(seletcedUserSlot?.slot?.end.slice(0, 2));
-  //   const requestedStart = parseInt(requestedSlot?.start.slice(0, 2));
-  //   const requestedEnd = parseInt(requestedSlot?.end.slice(0, 2));
-
-  //   console.log(blockedStart, blockedEnd, requestedStart, requestedEnd);
-  //   // 18  <= 15  13  <=19
-  //   return requestedStart > blockedEnd && blockedStart < requestedEnd;
-  //   return requestedStart < blockedEnd && requestedEnd > blockedStart;
-  // };
 
   const {
     register,
@@ -294,9 +286,9 @@ const MyCalendar = () => {
         end: formdata.appointments.slot.end,
       },
     };
-    const isSlotAv = isSlotAvailable(formdata.appointments.slot);
+    const isSlotAv = isSlotAvailable(formdata.appointments?.slot);
     console.log(isSlotAv);
-    const isSlotbl = isSlotBlock(formdata.appointments.slot);
+    const isSlotbl = isSlotBlock(formdata.appointments?.slot);
     console.log(isSlotbl);
 
     const updatedAppointments = [
@@ -309,21 +301,22 @@ const MyCalendar = () => {
       appointments: updatedAppointments,
     };
 
-    if (isSlotAv) {
-      // alert(`${newAppointment.doctor} is available`);
-      if (isSlotbl) {
-        // console.log("DONE");
-        updateUser(currentUser.id, updatedUserData);
-        dispatch(fetchUsers());
-        window.location.reload();
-        // // Close modal
-        setShowModal(false);
-      } else {
-        alert("you already have appointment on this time");
-      }
-    } else {
-      alert(`${newAppointment.doctor} is not available`);
+    if (!isSlotAv) {
+      window.location.reload();
+      return alert(`${newAppointment.doctor} is not available`);
     }
+
+    if (isSlotbl) {
+      // there _is_ an overlap with an existing appointment → block it
+      window.location.reload();
+      return alert("You already have an appointment at this time");
+    }
+    alert("DONE");
+    updateUser(currentUser.id, updatedUserData);
+    dispatch(fetchUsers());
+    window.location.reload();
+    // Close modal
+    setShowModal(false);
   };
 
   return (
