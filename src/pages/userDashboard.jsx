@@ -35,8 +35,8 @@ const UserDashboard = () => {
       ...currentUser,
       appointments: updatedAppointments,
     };
-    updateUser(currentUser.id, updatedUser);
-    window.location.reload();
+    await updateUser(currentUser.id, updatedUser);
+    dispatch(fetchUsers());
   };
   return (
     <div className="max-h-screen px-[15%]  p-6">

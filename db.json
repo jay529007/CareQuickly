@@ -41,6 +41,11 @@
           "end": "19:00"
         },
         {
+          "date": "2025-04-29",
+          "start": "10:00",
+          "end": "17:00"
+        },
+        {
           "date": "2025-04-30",
           "start": "10:00",
           "end": "17:00"
@@ -78,6 +83,11 @@
           "date": "2025-04-28",
           "start": "10:00",
           "end": "19:00"
+        },
+        {
+          "date": "2025-04-30",
+          "start": "10:00",
+          "end": "17:00"
         }
       ],
       "image": "src/assets/docter3.png"
@@ -461,27 +471,15 @@
           }
         },
         {
-          "id": "9fd597a6-92b2-4251-8fe3-c8200073bf6c",
-          "service": "Dentist",
-          "doctor": "Dr. Rohan Mehta",
+          "id": "67010a3f-84a8-43d7-bbe4-482562b6e785",
+          "service": "Cardiologist",
+          "doctor": "Dr. Arvind Nair",
           "status": "Pending",
           "notes": "",
           "slot": {
-            "date": "2025-04-29",
-            "start": "10:00",
-            "end": "12:00"
-          }
-        },
-        {
-          "id": "6491f76c-7891-4327-8d2c-514dafa858a8",
-          "service": "Dentist",
-          "doctor": "Dr. Rohan Mehta",
-          "status": "Pending",
-          "notes": "jklkhgjfhndbfdd",
-          "slot": {
             "date": "2025-04-30",
-            "start": "10:00",
-            "end": "16:00"
+            "start": "13:00",
+            "end": "17:00"
           }
         }
       ]

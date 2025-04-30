@@ -11,8 +11,22 @@ import { fetchUsers } from "../functions/userSlice";
 import { useForm } from "react-hook-form";
 import { updateUser } from "../functions/userAPI";
 import { fetchDoctor } from "../functions/doctorSlice";
-import { localizer } from "../functions/localizer";
+
 import { isAfter, format, startOfDay } from "date-fns";
+import { dateFnsLocalizer } from "react-big-calendar";
+import { parse, startOfWeek, getDay } from "date-fns";
+
+import enUS from "date-fns/locale/en-US";
+
+const locales = { "en-US": enUS };
+
+export const localizer = dateFnsLocalizer({
+  format,
+  parse,
+  startOfWeek,
+  getDay,
+  locales,
+});
 
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 const MyCalendar = () => {
@@ -267,12 +281,10 @@ const MyCalendar = () => {
     if (isSlot) {
       updateUser(currentUser.id, updatedUserData);
       console.log("Updated User:", updatedUserData);
-      window.location.reload();
+      dispatch(fetchUsers());
       // Optional: Close modal
       setShowModal(false);
     } else {
-      console.log(newAppointment);
-
       alert(`${newAppointment.doctor} is not available`);
     }
   };
