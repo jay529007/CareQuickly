@@ -44,7 +44,7 @@ const MyCalendar = () => {
     return startHour >= 10 && endHour <= 19;
   };
   // for dnd
-  const handleEventDrop = ({ event, start, end }) => {
+  const handleEventDrop = async ({ event, start, end }) => {
     if (!isWithinAllowedHours(start, end)) {
       alert("You can only book between 10:00 AM and 7:00 PM");
       return;
@@ -65,8 +65,8 @@ const MyCalendar = () => {
       appointments: updatedAppointments,
     };
 
-    updateUser(currentUser.id, updatedUserData);
-
+    await updateUser(currentUser.id, updatedUserData);
+    dispatch(fetchUsers());
     // Update UI
     setEvents((prev) =>
       prev.map((evt) => (evt.id === event.id ? { ...evt, start, end } : evt))
@@ -91,12 +91,40 @@ const MyCalendar = () => {
     };
   };
 
-  // const handleEventResize = ({ event, start, end }) => {
-  //   const updated = events.map((evt) =>
-  //     evt.id === event.id ? { ...evt, start, end } : evt
-  //   );
-  //   onEventsChange(updated);
-  // };
+  const handleEventResize = async ({ event, start, end }) => {
+    if (!isWithinAllowedHours(start, end)) {
+      alert("You can only book between 10:00 AM and 7:00 PM");
+      return;
+    }
+
+    // find the original appointment so we can keep its original date
+    const originalAppt = currentUser.appointments.find(
+      (a) => a.id === event.id
+    );
+    const updatedSlot = {
+      date: originalAppt.slot.date, //  preserve original date
+      start: format(start, "HH:mm"),
+      end: format(end, "HH:mm"),
+    };
+
+    const updatedAppointments = currentUser.appointments.map((appt) =>
+      appt.id === event.id ? { ...appt, slot: updatedSlot } : appt
+    );
+
+    const updatedUserData = {
+      ...currentUser,
+      appointments: updatedAppointments,
+    };
+
+    await updateUser(currentUser.id, updatedUserData);
+    dispatch(fetchUsers());
+
+    // Update UI
+    const updated = events.map((evt) =>
+      evt.id === event.id ? { ...evt, start, end } : evt
+    );
+    onEventsChange(updated);
+  };
 
   // Formatting Appointments for Calendar
   useEffect(() => {
@@ -263,8 +291,8 @@ const MyCalendar = () => {
         timeslots={1}
         dayLayoutAlgorithm="no-overlap"
         onEventDrop={handleEventDrop}
-        // onEventResize={handleEventResize}
-        // resizable
+        onEventResize={handleEventResize}
+        resizable
         startAccessor="start"
         endAccessor="end"
         style={{ height: 600 }}
