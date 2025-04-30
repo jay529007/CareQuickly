@@ -19,7 +19,7 @@
         {
           "date": "2025-04-30",
           "start": "10:00",
-          "end": "17:00"
+          "end": "19:00"
         }
       ],
       "image": "src/assets/docter4.png"
@@ -83,11 +83,6 @@
           "date": "2025-04-28",
           "start": "10:00",
           "end": "19:00"
-        },
-        {
-          "date": "2025-04-30",
-          "start": "10:00",
-          "end": "17:00"
         }
       ],
       "image": "src/assets/docter3.png"
@@ -465,9 +460,9 @@
           "status": "Pending",
           "notes": "Skin allergy treatment, Developed a rash due to change in soap.",
           "slot": {
-            "date": "2025-05-02",
-            "start": "11:00",
-            "end": "13:00"
+            "date": "2025-04-30",
+            "start": "10:00",
+            "end": "12:00"
           }
         },
         {
@@ -477,9 +472,21 @@
           "status": "Pending",
           "notes": "",
           "slot": {
-            "date": "2025-04-30",
+            "date": "2025-04-29",
             "start": "13:00",
             "end": "17:00"
+          }
+        },
+        {
+          "id": "dae1559d-e780-4852-8601-028eee0f45d5",
+          "service": "Dermatologist",
+          "doctor": "Dr. Aarti Sharma",
+          "status": "Pending",
+          "notes": "",
+          "slot": {
+            "date": "2025-04-30",
+            "start": "14:00",
+            "end": "16:00"
           }
         }
       ]

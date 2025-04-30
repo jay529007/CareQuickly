@@ -11,12 +11,11 @@ import { fetchUsers } from "../functions/userSlice";
 import { useForm } from "react-hook-form";
 import { updateUser } from "../functions/userAPI";
 import { fetchDoctor } from "../functions/doctorSlice";
-
-import { isAfter, format, startOfDay } from "date-fns";
 import { dateFnsLocalizer } from "react-big-calendar";
-import { parse, startOfWeek, getDay } from "date-fns";
-
+import { format, parse, startOfWeek, getDay } from "date-fns";
 import enUS from "date-fns/locale/en-US";
+
+import { isAfter, startOfDay } from "date-fns";
 
 const locales = { "en-US": enUS };
 
@@ -232,20 +231,50 @@ const MyCalendar = () => {
     setselectedDocter(doctor);
   };
 
-  const selectedslot = selectedDocter?.availableslots?.find(
+  const selectedDoctorslot = selectedDocter?.availableslots?.find(
     (slots) => slots.date === format(selectedDate, "yyyy-MM-dd")
+  );
+  const seletcedUserSlot = currentUser?.appointments?.find(
+    (slots) => slots.slot.date === format(selectedDate, "yyyy-MM-dd")
   );
 
   // Function to check if requested slot fits inside available slot
   const isSlotAvailable = (requestedSlot) => {
-    const availableStart = parseInt(selectedslot?.start.slice(0, 2));
-    const availableEnd = parseInt(selectedslot?.end.slice(0, 2));
+    const availableStart = parseInt(selectedDoctorslot?.start.slice(0, 2));
+    const availableEnd = parseInt(selectedDoctorslot?.end.slice(0, 2));
     const requestedStart = parseInt(requestedSlot?.start.slice(0, 2));
     const requestedEnd = parseInt(requestedSlot?.end.slice(0, 2));
     // console.log(availableStart, availableEnd, requestedStart, requestedEnd);
 
     return availableStart <= requestedStart && availableEnd >= requestedEnd;
   };
+
+  const isSlotBlock = (requestedSlot) => {
+    const blockedStart = parseInt(seletcedUserSlot.slot.start.slice(0, 2));
+    const blockedEnd = parseInt(seletcedUserSlot.slot.end.slice(0, 2));
+    const requestedStart = parseInt(requestedSlot.start.slice(0, 2));
+    const requestedEnd = parseInt(requestedSlot.end.slice(0, 2));
+
+    console.log(requestedStart, blockedStart, blockedEnd, requestedEnd);
+    // Time:      10:00    11:00    12:00    1:00    2:00    3:00
+    // Blocked:     |-----Blocked-----|
+    // Requested:                             |-request-|
+    // 13 > 10 12 < 14
+    // overlap if request starts before blocked ends AND blocked starts before request ends
+    return requestedStart > blockedStart && blockedEnd < requestedEnd;
+  };
+
+  // const isSlotBlock = (requestedSlot) => {
+  //   const blockedStart = parseInt(seletcedUserSlot?.slot?.start.slice(0, 2));
+  //   const blockedEnd = parseInt(seletcedUserSlot?.slot?.end.slice(0, 2));
+  //   const requestedStart = parseInt(requestedSlot?.start.slice(0, 2));
+  //   const requestedEnd = parseInt(requestedSlot?.end.slice(0, 2));
+
+  //   console.log(blockedStart, blockedEnd, requestedStart, requestedEnd);
+  //   // 18  <= 15  13  <=19
+  //   return requestedStart > blockedEnd && blockedStart < requestedEnd;
+  //   return requestedStart < blockedEnd && requestedEnd > blockedStart;
+  // };
 
   const {
     register,
@@ -265,8 +294,10 @@ const MyCalendar = () => {
         end: formdata.appointments.slot.end,
       },
     };
-    const isSlot = isSlotAvailable(formdata.appointments.slot);
-    console.log(isSlot);
+    const isSlotAv = isSlotAvailable(formdata.appointments.slot);
+    console.log(isSlotAv);
+    const isSlotbl = isSlotBlock(formdata.appointments.slot);
+    console.log(isSlotbl);
 
     const updatedAppointments = [
       ...(currentUser.appointments || []),
@@ -278,12 +309,18 @@ const MyCalendar = () => {
       appointments: updatedAppointments,
     };
 
-    if (isSlot) {
-      updateUser(currentUser.id, updatedUserData);
-      console.log("Updated User:", updatedUserData);
-      dispatch(fetchUsers());
-      // Optional: Close modal
-      setShowModal(false);
+    if (isSlotAv) {
+      // alert(`${newAppointment.doctor} is available`);
+      if (isSlotbl) {
+        // console.log("DONE");
+        updateUser(currentUser.id, updatedUserData);
+        dispatch(fetchUsers());
+        window.location.reload();
+        // // Close modal
+        setShowModal(false);
+      } else {
+        alert("you already have appointment on this time");
+      }
     } else {
       alert(`${newAppointment.doctor} is not available`);
     }
@@ -297,8 +334,8 @@ const MyCalendar = () => {
         events={events}
         eventPropGetter={eventStyleGetter}
         draggableAccessor={isDraggable}
-        min={new Date(2023, 0, 1, 10, 0)}
-        max={new Date(2023, 0, 1, 19, 0)}
+        min={new Date(0, 0, 0, 10, 0)}
+        max={new Date(0, 0, 0, 19, 0)}
         step={60}
         timeslots={1}
         dayLayoutAlgorithm="no-overlap"
