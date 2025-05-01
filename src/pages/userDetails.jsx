@@ -15,7 +15,7 @@ const UserDetails = () => {
   useEffect(() => {
     dispatch(fetchUsers());
   }, []);
-
+  
   const allAppointments = users.flatMap(
     (user) =>
       user.appointments?.map((appointment) => ({
