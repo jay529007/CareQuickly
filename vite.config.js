@@ -9,7 +9,7 @@ export default defineConfig({
   server: {
     port: 4000,
     proxy: {
-      "/api": "https://json-lldi.onrender.com/api",
+      "/": "https://json-lldi.onrender.com/api",
     },
     // host: true,
     // proxy: {
