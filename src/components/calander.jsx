@@ -241,8 +241,6 @@ const MyCalendar = () => {
     const availableEnd = parseInt(selectedDoctorslot?.end.slice(0, 2));
     const requestedStart = parseInt(requestedSlot?.start.slice(0, 2));
     const requestedEnd = parseInt(requestedSlot?.end.slice(0, 2));
-    // console.log(availableStart, availableEnd, requestedStart, requestedEnd);
-
     return availableStart <= requestedStart && availableEnd >= requestedEnd;
   };
   const seletcedUserSlot = currentUser?.appointments?.find((slot) => {
@@ -256,16 +254,7 @@ const MyCalendar = () => {
     const blockedEnd = parseInt(seletcedUserSlot?.slot?.end.slice(0, 2));
     const requestedStart = parseInt(requestedSlot.start.slice(0, 2));
     const requestedEnd = parseInt(requestedSlot.end.slice(0, 2));
-    // console.log(currentUser);
-    // console.log(seletcedUserSlot);
-
-    // console.log(requestedStart, blockedStart, blockedEnd, requestedEnd);
-    // Time:      10:00    11:00    12:00    1:00    2:00    3:00
-    // Blocked:     |-----Blocked-----|
-    // Requested:            |------request----|
-    // overlap if request starts before blocked ends AND blocked starts before request ends
     return requestedStart < blockedEnd && blockedStart < requestedEnd;
-    requestedStart < blockedEnd && blockedStart < requestedEnd;
   };
 
   const {
@@ -307,13 +296,12 @@ const MyCalendar = () => {
     }
 
     if (isSlotbl) {
-      // there _is_ an overlap with an existing appointment → block it
       window.location.reload();
       return alert("You already have an appointment at this time");
     }
-    alert("DONE");
     updateUser(currentUser.id, updatedUserData);
     dispatch(fetchUsers());
+    alert("Succecfully Booked Appointment");
     window.location.reload();
     // Close modal
     setShowModal(false);

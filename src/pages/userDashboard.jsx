@@ -99,8 +99,8 @@ const UserDashboard = () => {
                     onClick={() => cancelBooking(app)}
                     disabled={
                       app.status == "Cancelled" 
-                      // ||
-                      // app.slot.date === todayFormatted
+                      ||
+                      app.slot.date === todayFormatted
                     }
                     className="px-3 py-1 bg-red-500 text-white rounded disabled:opacity-50 "
                   >

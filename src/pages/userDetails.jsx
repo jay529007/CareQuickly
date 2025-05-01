@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../functions/userSlice";
 import PaginatedAppointmentTable from "../components/pagginationtable";
 import Input from "../components/re-usablecomponets/InputFeild";
+import { generateCSV, downloadCSV } from "../functions/exportAppointments";
 
 const UserDetails = () => {
   const [filter, setFilter] = useState({ user: "", date: "", status: "" });
@@ -34,7 +35,20 @@ const UserDetails = () => {
   );
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">User Details</h1>
+      <div className="flex justify-between pr-2">
+        <h1 className="text-3xl font-bold mb-6">User Details</h1>
+        <div>
+          <button
+            onClick={() => {
+              const csv = generateCSV(users); // Pass full user list
+              downloadCSV(csv);
+            }}
+            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+          >
+            Export CSV
+          </button>
+        </div>
+      </div>
 
       {/* Filters */}
       <div className="grid grid-cols-1   md:grid-cols-4 gap-4 mb-6">
@@ -71,10 +85,18 @@ const UserDetails = () => {
           className="w-full pl-4 border my-0.5 text-gray-500 border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
           onChange={(e) => setFilter({ ...filter, status: e.target.value })}
         >
-          <option className="text-black" value="">All Status</option>
-          <option className="text-black" value="Confirmed">Confirmed</option>
-          <option className="text-black" value="Pending">Pending</option>
-          <option className="text-black" value="Cancelled">Cancelled</option>
+          <option className="text-black" value="">
+            All Status
+          </option>
+          <option className="text-black" value="Confirmed">
+            Confirmed
+          </option>
+          <option className="text-black" value="Pending">
+            Pending
+          </option>
+          <option className="text-black" value="Cancelled">
+            Cancelled
+          </option>
         </select>
 
         {/* Reset Button */}
@@ -164,13 +186,16 @@ const UserDetails = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm font-medium text-gray-500">Date</p>
-                  <p className="text-lg">{selectedBooking.slot.date || "N/A"}</p>
+                  <p className="text-lg">
+                    {selectedBooking.slot.date || "N/A"}
+                  </p>
                 </div>
 
                 <div>
                   <p className="text-sm font-medium text-gray-500">Time</p>
                   <p className="text-lg">
-                    {selectedBooking.slot.start || "N/A"} - {selectedBooking.slot.end || "N/A"}
+                    {selectedBooking.slot.start || "N/A"} -{" "}
+                    {selectedBooking.slot.end || "N/A"}
                   </p>
                 </div>
               </div>

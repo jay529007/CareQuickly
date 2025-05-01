@@ -23,16 +23,16 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
-    path: "/guest",
-    element: <GuestUserHome />,
-  },
-  {
     path: "*",
     element: <Notfound />,
   },
   {
     path: "/nouserfound",
     element: <Nouserfound />,
+  },
+  {
+    path: "/guest",
+    element: <GuestUserHome />,
   },
   {
     path: "/",
