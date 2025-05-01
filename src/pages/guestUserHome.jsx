@@ -13,7 +13,7 @@ const GuestUserHome = () => {
   useEffect(() => {
     dispatch(fetchDoctor());
     navigate("/");
-    window.location.reload();
+    // window.location.reload();
   }, []);
   return (
     <>
