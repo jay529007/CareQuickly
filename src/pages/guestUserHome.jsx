@@ -12,7 +12,7 @@ const GuestUserHome = () => {
   const doctors = useSelector((state) => state.doctors.doctors);
   useEffect(() => {
     dispatch(fetchDoctor());
-    navigate("/");
+    // navigate("/");
     // window.location.reload();
   }, []);
   return (
