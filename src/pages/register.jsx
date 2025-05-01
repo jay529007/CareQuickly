@@ -24,7 +24,7 @@ const Register = () => {
     addUser(safeData);
     console.log("Sucessfull-added");
     navigate("/");
-    window.location.reload();
+    // window.location.reload();
   };
 
   const errorClass =
