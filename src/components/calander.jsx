@@ -301,7 +301,7 @@ const MyCalendar = () => {
     updateUser(currentUser.id, updatedUserData);
     dispatch(fetchUsers());
     alert("Succecfully Booked Appointment");
-    window.location.reload();
+    // window.location.reload();
     // Close modal
     setShowModal(false);
   };
