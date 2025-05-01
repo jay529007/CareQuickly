@@ -14,8 +14,8 @@ const UserDetails = () => {
   const users = useSelector((state) => state.users?.users);
   useEffect(() => {
     dispatch(fetchUsers());
-  }, []);
-  
+  }, [dispatch]);
+
   const allAppointments = users.flatMap(
     (user) =>
       user.appointments?.map((appointment) => ({

@@ -4,7 +4,6 @@ export const getUsers = async () => {
   try {
     const res = await api.get("/users");
     console.log(res.date);
-
     return res.data;
   } catch (error) {
     console.error("Error fetching users", error);

@@ -3,8 +3,10 @@ import { Link, NavLink } from "react-router-dom";
 import { clearState, loadState } from "../store/localstorage";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../functions/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const id = loadState();
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users.users);
@@ -16,6 +18,7 @@ const Navbar = () => {
   const Logout = () => {
     clearState();
     console.log("logout");
+    navigate("/");
     window.location.reload();
   };
 
