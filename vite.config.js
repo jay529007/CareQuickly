@@ -8,9 +8,9 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     port: 4000,
-    proxy: {
-      "/": "https://json-lldi.onrender.com/api",
-    },
+    // proxy: {
+    //   "/": "https://json-lldi.onrender.com/api",
+    // },
     // host: true,
     // proxy: {
     //   "/api": {
