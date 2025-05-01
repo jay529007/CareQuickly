@@ -27,7 +27,7 @@
           "end": "19:00"
         }
       ],
-      "image": "public/docter4.png"
+      "image": "https://as2.ftcdn.net/jpg/03/20/74/45/1000_F_320744517_TaGkT7aRlqqWdfGUuzRKDABtFEoN5CiO.jpg"
     },
     {
       "id": "7",
@@ -61,7 +61,7 @@
           "end": "19:00"
         }
       ],
-      "image": "src/assets/docter7.png"
+      "image": "https://wp04-media.cdn.ihealthspot.com/wp-content/uploads/sites/170/2021/12/iStock-1327024466-1024x683.jpg.webp"
     },
     {
       "id": "2",
@@ -100,7 +100,7 @@
           "end": "19:00"
         }
       ],
-      "image": "src/assets/docter3.png"
+      "image": "https://scontent.fraj1-1.fna.fbcdn.net/v/t39.30808-6/482227980_9706510556039466_4859460059796532212_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_ohc=lZgKDtsCMrYQ7kNvwHN89pr&_nc_oc=AdlC2CNN_2nqmvMS8QK5E1e0gwEiG4HBM5df5tFEHUhfaKP3N73h5bmJ923q_C_jmqo&_nc_zt=23&_nc_ht=scontent.fraj1-1.fna&_nc_gid=rmfknBf6ss1ljbhX4KBXVw&oh=00_AfF9GH0qvhAj8kmdAadELJRw_UrDpDyqmJ3LK5YwNGxabw&oe=68194F37"
     },
     {
       "id": "3",
@@ -129,7 +129,7 @@
           "end": "19:00"
         }
       ],
-      "image": "src/assets/docter2.png"
+      "image": "https://factdr.com/wp-content/uploads/2021/07/Doctor-Registration-FactDr-m.jpg"
     },
     {
       "id": "4",
@@ -153,7 +153,7 @@
           "end": "19:00"
         }
       ],
-      "image": "src/assets/docter1.png"
+      "image": "https://img.freepik.com/premium-photo/mature-indian-male-doctor-white-background_856987-1143.jpg?w=1060"
     },
     {
       "id": "5",
@@ -182,7 +182,7 @@
           "end": "19:00"
         }
       ],
-      "image": "src/assets/docter5.png"
+      "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*C47YbbyYm97nDIK6HBNNNw.png"
     },
     {
       "id": "6",
@@ -211,7 +211,7 @@
           "end": "19:00"
         }
       ],
-      "image": "src/assets/docter6.png"
+      "image": "https://i.pinimg.com/736x/dd/15/7c/dd157c311ad36cb2a542a3ed6dae20f7.jpg"
     }
   ],
   "users": [
