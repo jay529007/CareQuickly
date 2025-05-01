@@ -8,7 +8,7 @@ const DocterCard = ({ doctor }) => {
     <>
       <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition">
         <div className="h-40 bg-gray-200 overflow-clip ">
-          <img className="" src={doctor.image} alt={doctor.name} />
+          <img className="" src={`https://doctor-apoinment-system.vercel.app/${doctor.image}`} alt={doctor.name} />
         </div>
         <div className="p-6">
           <h3 className="text-xl font-semibold mb-1">{doctor.name}</h3>
