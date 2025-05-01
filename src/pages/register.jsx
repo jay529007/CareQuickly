@@ -23,8 +23,8 @@ const Register = () => {
     safeData.password = hash;
     addUser(safeData);
     console.log("Sucessfull-added");
-    // navigate("/");
-    // window.location.reload();
+    navigate("/login");
+    window.location.reload();
   };
 
   const errorClass =
