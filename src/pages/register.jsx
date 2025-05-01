@@ -23,7 +23,7 @@ const Register = () => {
     safeData.password = hash;
     addUser(safeData);
     console.log("Sucessfull-added");
-    navigate("/");
+    // navigate("/");
     // window.location.reload();
   };
 
