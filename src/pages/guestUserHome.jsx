@@ -4,12 +4,16 @@ import { useDispatch, useSelector } from "react-redux";
 import DocterCard from "../components/docterCard";
 import Hero from "../components/hero";
 import Flow from "../components/flow";
+import { useNavigate } from "react-router-dom";
 
 const GuestUserHome = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const doctors = useSelector((state) => state.doctors.doctors);
   useEffect(() => {
     dispatch(fetchDoctor());
+    navigate("/");
+    window.location.reload();
   }, []);
   return (
     <>
