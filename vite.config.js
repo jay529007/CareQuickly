@@ -8,11 +8,12 @@ export default defineConfig({
   server: {
     port: 4000,
     // host: true,
-    proxy: {
-      "/api": {
-        target: "http://localhost:5000",
-        rewrite: (path) => path.replace(/^\/api/, ""),
-      },
-    },
+    // proxy: {
+    //   "/api": {
+    //     // target: "http://localhost:5000",
+    //     target: "https://json-lldi.onrender.com/api",
+    //     rewrite: (path) => path.replace(/^\/api/, ""),
+    //   },
+    // },
   },
 });

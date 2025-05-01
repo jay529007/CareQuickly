@@ -40,12 +40,12 @@ const UserDetails = () => {
         <div>
           <button
             onClick={() => {
-              const csv = generateCSV(users); // Pass full user list
+              const csv = generateCSV(users); 
               downloadCSV(csv);
             }}
             className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
           >
-            Export CSV
+            Export
           </button>
         </div>
       </div>

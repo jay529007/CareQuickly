@@ -1,5 +1,6 @@
 export const generateCSV = (users) => {
   const headers = [
+    "Id",
     "Name",
     "Email",
     "Service",
@@ -15,6 +16,7 @@ export const generateCSV = (users) => {
   users.forEach((user) => {
     user.appointments?.forEach((app) => {
       rows.push([
+        user.id,
         user.name,
         user.email,
         app.service,

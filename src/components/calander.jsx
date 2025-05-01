@@ -294,7 +294,6 @@ const MyCalendar = () => {
       window.location.reload();
       return alert(`${newAppointment.doctor} is not available`);
     }
-
     if (isSlotbl) {
       window.location.reload();
       return alert("You already have an appointment at this time");
