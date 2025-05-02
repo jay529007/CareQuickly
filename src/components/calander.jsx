@@ -241,7 +241,7 @@ const MyCalendar = () => {
     let backgroundColor;
 
     if (event.status === "Confirmed") {
-      backgroundColor = "#1fc640"; 
+      backgroundColor = "#1fc640";
     } else if (event.status === "Pending") {
       backgroundColor = "orange";
     } else if (event.status === "Cancelled") {
@@ -274,7 +274,7 @@ const MyCalendar = () => {
     if (confirmedSlots.length === 0) return false;
 
     const isBlocked = confirmedSlots.some((apt) => {
-      // extract the numeric hour from the nested slot object
+      // extracting the hour in numeric from
       const blockedStart = parseInt(apt?.slot?.start.slice(0, 2), 10);
       const blockedEnd = parseInt(apt.slot.end.slice(0, 2), 10);
 

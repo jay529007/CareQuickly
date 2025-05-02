@@ -1,8 +1,7 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import Loading from "../pages/error/loading";
 
 const GlobalStatus = () => {
   const navigate = useNavigate();
