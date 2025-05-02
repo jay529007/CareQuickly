@@ -25,7 +25,7 @@ const Register = () => {
     safeData.password = hash;
 
     try {
-      dispatch(addUser(safeData));
+      addUser(safeData);
       console.log("Successfully added");
       navigate("/");
     } catch (error) {

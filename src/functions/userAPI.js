@@ -13,6 +13,7 @@ export const getUsers = async () => {
 export const addUser = async (userData) => {
   try {
     const res = await api.post("/users", userData);
+    console.log("added");
     return res.data;
   } catch (error) {
     console.error("Error adding users", error);
