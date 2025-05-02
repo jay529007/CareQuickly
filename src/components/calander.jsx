@@ -90,20 +90,6 @@ const MyCalendar = () => {
     const now = startOfDay(new Date());
     return isAfter(event.start, now);
   };
-  // changeing color
-  const eventStyleGetter = (event) => {
-    let backgroundColor = isDraggable(event) ? "#1fc640" : "gray";
-
-    return {
-      style: {
-        backgroundColor,
-        color: "white",
-        borderRadius: "5px",
-        border: "none",
-        padding: "2px 5px",
-      },
-    };
-  };
 
   const handleEventResize = async ({ event, start, end }) => {
     if (!isWithinAllowedHours(start, end)) {
@@ -145,6 +131,7 @@ const MyCalendar = () => {
     if (allAppointments) {
       const formatted = allAppointments.map((appt, index) => {
         const dateStr = appt.slot.date;
+        const status = appt.status;
         const [startHour, startMin] = appt.slot.start.split(":").map(Number);
         const [endHour, endMin] = appt.slot.end.split(":").map(Number);
 
@@ -157,6 +144,7 @@ const MyCalendar = () => {
         return {
           id: appt.id || index,
           title: `${appt.service}`,
+          status,
           start,
           end,
         };
@@ -244,18 +232,60 @@ const MyCalendar = () => {
     const requestedEnd = parseInt(requestedSlot?.end.slice(0, 2));
     return availableStart <= requestedStart && availableEnd >= requestedEnd;
   };
-  const seletcedUserSlot = currentUser?.appointments?.find((slot) => {
+  const seletcedUserSlot = currentUser?.appointments?.filter((slot) => {
     return slot.slot.date === format(selectedDate, "yyyy-MM-dd");
   });
 
-  const isSlotBlock = (requestedSlot) => {
-    if (!seletcedUserSlot) return false;
+  // changeing color
+  const eventStyleGetter = (event) => {
+    let backgroundColor;
 
-    const blockedStart = parseInt(seletcedUserSlot?.slot?.start.slice(0, 2));
-    const blockedEnd = parseInt(seletcedUserSlot?.slot?.end.slice(0, 2));
-    const requestedStart = parseInt(requestedSlot.start.slice(0, 2));
-    const requestedEnd = parseInt(requestedSlot.end.slice(0, 2));
-    return requestedStart < blockedEnd && blockedStart < requestedEnd;
+    // 1) First decide by status
+    if (event.status === "Confirmed") {
+      backgroundColor = "#1fc640"; // green
+    } else if (event.status === "Pending") {
+      backgroundColor = "orange";
+    } else if (event.status === "Cancelled") {
+      backgroundColor = "red";
+    } else {
+      backgroundColor = "gray";
+    }
+    if (!isDraggable(event)) {
+      backgroundColor = "gray";
+    }
+
+    return {
+      style: {
+        backgroundColor,
+        color: "white",
+        pointerEvents: event.status === "Pending" ? "auto" : "none",
+        borderRadius: "5px",
+        border: "none",
+        padding: "2px 5px",
+      },
+    };
+  };
+
+  const isSlotBlock = (requestedSlot) => {
+    if (!seletcedUserSlot?.length) return false;
+    // filter   confirmed
+    const confirmedSlots = seletcedUserSlot.filter(
+      (slot) => slot.status === "Confirmed"
+    );
+    if (confirmedSlots.length === 0) return false;
+
+    const isBlocked = confirmedSlots.some((apt) => {
+      // extract the numeric hour from the nested slot object
+      const blockedStart = parseInt(apt?.slot?.start.slice(0, 2), 10);
+      const blockedEnd = parseInt(apt.slot.end.slice(0, 2), 10);
+
+      const reqStart = parseInt(requestedSlot?.start.slice(0, 2), 10);
+      const reqEnd = parseInt(requestedSlot.end.slice(0, 2), 10);
+
+      // return true if intervals overlap:
+      return reqStart < blockedEnd && blockedStart < reqEnd;
+    });
+    return isBlocked;
   };
 
   const {
@@ -280,7 +310,6 @@ const MyCalendar = () => {
 
     const isSlotbl = isSlotBlock(formdata.appointments?.slot);
 
-
     const updatedAppointments = [
       ...(currentUser.appointments || []),
       newAppointment,
@@ -299,10 +328,12 @@ const MyCalendar = () => {
       window.location.reload();
       return alert("You already have an appointment at this time");
     }
+    // console.log("sd");
+
     updateUser(currentUser.id, updatedUserData);
     dispatch(fetchUsers());
     alert("Succecfully Booked Appointment");
-    // window.location.reload();
+    window.location.reload();
     navigate("/dashboard");
     // Close modal
     setShowModal(false);

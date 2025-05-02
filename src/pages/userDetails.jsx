@@ -43,23 +43,20 @@ const UserDetails = () => {
   };
   useEffect(() => {
     // find the full user object from Redux
-    const user = users.find((u) => u.id === selectedBooking?.userId);
+    if (!selectedBooking) return;
+    const user = users.find((u) => u.id === selectedBooking.userId);
     if (!user) return;
 
     // produce a brand‑new appointments array
     const updatedAppointments = user.appointments.map((apt) =>
-      apt.id === selectedBooking?.id ? { ...apt, status: userStatus } : apt
+      apt.id === selectedBooking.id ? { ...apt, status: userStatus } : apt
     );
-    console.log(updatedAppointments);
-    if (!selectedBooking) return;
 
     const doUpdate = async () => {
-      // 1) send the PUT and wait for it
       await updateUser(selectedBooking.userId, {
         ...user,
         appointments: updatedAppointments,
       });
-      // 2) now that the server is updated, re‑fetch your users
       dispatch(fetchUsers());
     };
 

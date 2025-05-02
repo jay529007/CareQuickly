@@ -79,12 +79,26 @@ const UserDashboard = () => {
           <tbody className="text-gray-700 text-center">
             {filteredBookings?.map((app) => (
               <tr key={app.id} className="hover:bg-gray-50 border-b">
-                <td className="py-3 px-6">{app.service || "N/A"}</td>
+                <td className="py-3 px-6">{app.doctor || "N/A"}</td>
                 <td className="py-3 px-6">{app.slot.date || "N/A"}</td>
                 <td className="py-3 px-6">
                   {app.slot.start || "N/A"} - {app.slot.end || "N/A"}
                 </td>
-                <td className="py-3 px-6">{app.status || "N/A"}</td>
+
+                <td
+                  className={`text-sm py-1.5 px-2 my-3 font-bold inline-block  rounded-full ${
+                    app.status === "Confirmed"
+                      ? "bg-green-100 text-green-700"
+                      : app.status === "Pending"
+                      ? "bg-yellow-100 text-yellow-700"
+                      : app.status === "Cancelled"
+                      ? "bg-red-100 text-red-700"
+                      : "bg-gray-100 text-white"
+                  }`}
+                >
+                  {app.status || "N/A"}
+                </td>
+
                 <td className="py-3 px-6 space-x-2">
                   <button
                     className="px-3 py-1 bg-blue-600 text-white rounded"
@@ -98,8 +112,7 @@ const UserDashboard = () => {
                   <button
                     onClick={() => cancelBooking(app)}
                     disabled={
-                      app.status == "Cancelled" 
-                      ||
+                      app.status == "Cancelled" ||
                       app.slot.date === todayFormatted
                     }
                     className="px-3 py-1 bg-red-500 text-white rounded disabled:opacity-50 "
