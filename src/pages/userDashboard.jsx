@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { loadState } from "../store/localstorage";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../functions/userSlice";
@@ -8,6 +8,7 @@ const UserDashboard = () => {
   // fetchUsers
   const id = loadState();
   const dispatch = useDispatch();
+  const [sortAsc, setSortAsc] = useState(false);
   const users = useSelector((state) => state.users.users);
   useEffect(() => {
     dispatch(fetchUsers());
@@ -25,6 +26,7 @@ const UserDashboard = () => {
       (!filter.date || b.slot.date === filter.date) &&
       (!filter.status || b.status === filter.status)
   );
+
   // canceling booking
   const cancelBooking = async (data) => {
     const updatedAppointments = allAppointments.filter(
@@ -38,11 +40,21 @@ const UserDashboard = () => {
     await updateUser(currentUser.id, updatedUser);
     dispatch(fetchUsers());
   };
+
+  const sortedBookings = useMemo(() => {
+    return [...(filteredBookings || [])].sort((a, b) => {
+      // ascending if sortAsc, else descending
+      return sortAsc
+        ? a.slot.date.localeCompare(b.slot.date)
+        : b.slot.date.localeCompare(a.slot.date);
+    });
+  }, [filteredBookings, sortAsc]);
+  const toggleSort = () => setSortAsc((s) => !s);
   return (
     <div className="max-h-screen px-[15%]  p-6">
       <h2 className="text-3xl text-gray-800 font-bold mb-4">My Appointments</h2>
-      <div className="flex gap-3">
-        <div className="mb-4  flex gap-4">
+      <div className="flex my-2  gap-3">
+        <div className="">
           <select
             value={filter.status}
             onChange={(e) => setFilter({ ...filter, status: e.target.value })}
@@ -63,21 +75,35 @@ const UserDashboard = () => {
             onChange={(e) => setFilter({ ...filter, date: e.target.value })}
           />
         </div>
+        <button
+          onClick={() => setFilter({ date: "", status: "" })}
+          className=" py-2 px-4 border bg-red-500 text-white hover:text-black rounded-lg font-medium hover:bg-gray-200 transition"
+        >
+          Clean
+        </button>
       </div>
-
+      <div className="flex items-center mb-2"></div>
       <div className="overflow-x-auto  shadow rounded-lg">
         <table className="min-w-full bg-white">
           <thead className="bg-sky-200 text-gray-800">
             <tr>
               <th className=" py-3 px-6">Doctor</th>
-              <th className=" py-3 px-6">Date</th>
+              <th
+                className=" py-3 px-6 cursor-pointer select-none"
+                onClick={toggleSort}
+              >
+                Date
+                {/* <span className="ml-2 inline-block bg-blue-300 px-1 rounded-2xl text-xs font-bold transition-transform">
+                  {sortAsc ? "↑" : "↓"}
+                </span> */}
+              </th>
               <th className=" py-3 px-6">Time</th>
               <th className=" py-3 px-6">Status</th>
               <th className=" py-3 px-6">Actions</th>
             </tr>
           </thead>
           <tbody className="text-gray-700 text-center">
-            {filteredBookings?.map((app) => (
+            {sortedBookings?.map((app) => (
               <tr key={app.id} className="hover:bg-gray-50 border-b">
                 <td className="py-3 px-6">{app.doctor || "N/A"}</td>
                 <td className="py-3 px-6">{app.slot.date || "N/A"}</td>

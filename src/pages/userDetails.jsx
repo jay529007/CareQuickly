@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../functions/userSlice";
 import PaginatedAppointmentTable from "../components/pagginationtable";
@@ -12,6 +12,7 @@ const UserDetails = () => {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [userStatus, setUserStatus] = useState(selectedBooking?.status);
   const [isOpen, setIsOpen] = useState(false);
+  const [sortAsc, setSortAsc] = useState(false);
   const navigate = useNavigate();
 
   // fetching appointment
@@ -71,6 +72,15 @@ const UserDetails = () => {
       (!filter.date || apt.slot?.date === filter.date) &&
       (!filter.status || apt.status === filter.status)
   );
+  const sortedBookings = useMemo(() => {
+    return [...(filteredallAppointments || [])].sort((a, b) => {
+      // ascending if sortAsc, else descending
+      return sortAsc
+        ? a.slot.date.localeCompare(b.slot.date)
+        : b.slot.date.localeCompare(a.slot.date);
+    });
+  }, [filteredallAppointments, sortAsc]);
+  const toggleSort = () => setSortAsc((s) => !s);
   return (
     <div className="p-6">
       <div className="flex justify-between pr-2">
@@ -147,11 +157,13 @@ const UserDetails = () => {
       </div>
       {/* Booking Table */}
       <div className="">
-        {filteredallAppointments.length > 0 ? (
+        {sortedBookings.length > 0 ? (
           <PaginatedAppointmentTable
-            appointments={filteredallAppointments}
+            appointments={sortedBookings}
             setSelectedBooking={setSelectedBooking}
             setIsOpen={setIsOpen}
+            toggleSort={toggleSort}
+            sortAsc={sortAsc}
           />
         ) : (
           <p className="text-center p-4 bg-white rounded">No bookings found</p>

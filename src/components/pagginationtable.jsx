@@ -4,6 +4,8 @@ const PaginatedAppointmentTable = ({
   appointments,
   setSelectedBooking,
   setIsOpen,
+  toggleSort,
+  sortAsc,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
@@ -18,7 +20,15 @@ const PaginatedAppointmentTable = ({
         <thead className="bg-sky-200 text-gray-700 text-sm font-semibold sticky top-0 z-10">
           <tr>
             <th className="py-3 px-6 text-center">User</th>
-            <th className="py-3 px-6 text-center">Date</th>
+            <th
+              className="py-3 px-6 cursor-pointer select-none text-center"
+              onClick={toggleSort}
+            >
+              Date
+              {/* <span className="ml-2 inline-block bg-blue-300 px-1 rounded-2xl text-xs font-bold transition-transform">
+                {sortAsc ? "↑" : "↓"}
+              </span> */}
+            </th>
             <th className="py-3 px-6 text-center">Service</th>
             <th className="py-3 px-6 text-center">Time</th>
             <th className="py-3 px-6 text-center">Status</th>
