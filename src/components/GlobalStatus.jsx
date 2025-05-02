@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import Loading from "../pages/error/loading";
 
 const GlobalStatus = () => {
   const navigate = useNavigate();
@@ -17,12 +18,14 @@ const GlobalStatus = () => {
     }
   }, [error, navigate]); // 🔥 add dependencies!
 
-  console.log("Loading...");
   if (isLoading) {
+    console.log("Loading...");
     return (
-      <div className="flex justify-center items-center max-h-screen h-[100dvh]">
-        <AiOutlineLoading className="size-9 text-gray-500 animate-spin" />
-      </div>
+      <>
+        <div className="flex justify-center items-center max-h-screen h-[200dvh]">
+          <AiOutlineLoading className="size-9 text-gray-500 animate-spin" />
+        </div>
+      </>
     );
   }
 
