@@ -16,6 +16,7 @@ import { format, parse, startOfWeek, getDay } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 
 import { isAfter, startOfDay } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 const locales = { "en-US": enUS };
 
@@ -36,7 +37,7 @@ const MyCalendar = () => {
   const [events, setEvents] = useState([]);
   const [selectedSpecialty, setselectedSpecialty] = useState("");
   const [selectedDocter, setselectedDocter] = useState(null);
-
+  const navigate = useNavigate();
   // fetching currentusers  Appointments
   const id = loadState();
   const dispatch = useDispatch();
@@ -302,6 +303,7 @@ const MyCalendar = () => {
     dispatch(fetchUsers());
     alert("Succecfully Booked Appointment");
     // window.location.reload();
+    navigate("/dashboard");
     // Close modal
     setShowModal(false);
   };
