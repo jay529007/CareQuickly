@@ -4,11 +4,16 @@ import { fetchUsers } from "../functions/userSlice";
 import PaginatedAppointmentTable from "../components/pagginationtable";
 import Input from "../components/re-usablecomponets/InputFeild";
 import { generateCSV, downloadCSV } from "../functions/exportAppointments";
+import { updateUser } from "../functions/userAPI";
+import { useNavigate } from "react-router-dom";
 
 const UserDetails = () => {
   const [filter, setFilter] = useState({ user: "", date: "", status: "" });
   const [selectedBooking, setSelectedBooking] = useState(null);
+  const [userStatus, setUserStatus] = useState(selectedBooking?.status);
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+
   // fetching appointment
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users?.users);
@@ -26,6 +31,42 @@ const UserDetails = () => {
       })) || []
   );
 
+  // user Appointment status
+  useEffect(() => {
+    if (selectedBooking?.status) {
+      setUserStatus(selectedBooking.status);
+    }
+  }, [selectedBooking]);
+
+  const handleStatusChange = (e) => {
+    setUserStatus(e.target.value);
+  };
+  useEffect(() => {
+    // find the full user object from Redux
+    const user = users.find((u) => u.id === selectedBooking?.userId);
+    if (!user) return;
+
+    // produce a brand‑new appointments array
+    const updatedAppointments = user.appointments.map((apt) =>
+      apt.id === selectedBooking?.id ? { ...apt, status: userStatus } : apt
+    );
+    console.log(updatedAppointments);
+    if (!selectedBooking) return;
+
+    const doUpdate = async () => {
+      // 1) send the PUT and wait for it
+      await updateUser(selectedBooking.userId, {
+        ...user,
+        appointments: updatedAppointments,
+      });
+      // 2) now that the server is updated, re‑fetch your users
+      dispatch(fetchUsers());
+    };
+
+    doUpdate();
+  }, [userStatus]);
+
+  // filters
   const filteredallAppointments = allAppointments.filter(
     (apt) =>
       (!filter.name ||
@@ -40,7 +81,7 @@ const UserDetails = () => {
         <div>
           <button
             onClick={() => {
-              const csv = generateCSV(users); 
+              const csv = generateCSV(users);
               downloadCSV(csv);
             }}
             className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
@@ -109,7 +150,6 @@ const UserDetails = () => {
       </div>
       {/* Booking Table */}
       <div className="">
-        {/* <h2 className="text-xl font-semibold mb-4">All Appointments</h2> */}
         {filteredallAppointments.length > 0 ? (
           <PaginatedAppointmentTable
             appointments={filteredallAppointments}
@@ -160,19 +200,47 @@ const UserDetails = () => {
                     {selectedBooking.service || "N/A"}
                   </p>
                   <br />
-                  <p className="text-sm font-medium text-gray-500">Status</p>
+                  <p className="text-sm font-medium mb-1 text-gray-500">
+                    Status
+                  </p>
+
                   <span
-                    className={`text-sm font-bold inline-block px-3 py-1 rounded-full ${
-                      selectedBooking.status === "Confirmed"
+                    className={`text-sm font-bold inline-block  rounded-full ${
+                      userStatus === "Confirmed"
                         ? "bg-green-100 text-green-700"
-                        : selectedBooking.status === "Pending"
+                        : userStatus === "Pending"
                         ? "bg-yellow-100 text-yellow-700"
-                        : selectedBooking.status === "Cancelled"
+                        : userStatus === "Cancelled"
                         ? "bg-red-100 text-red-700"
-                        : "bg-gray-100 text-gray-700"
+                        : "bg-gray-100 text-white"
                     }`}
                   >
-                    {selectedBooking.status || "N/A"}
+                    {/* {selectedBooking.status || "N/A"} */}
+                    <select
+                      className="px-2 py-2 "
+                      onChange={handleStatusChange}
+                      // value={selectedBooking.status || "N/A"}
+                      value={userStatus || "N/A"}
+                    >
+                      <option
+                        className="px-2 border my-3 text-red-600"
+                        value="Cancelled"
+                      >
+                        Cancelled
+                      </option>
+                      <option
+                        className="px-2 border my-3 text-yellow-500"
+                        value="Pending"
+                      >
+                        Pending
+                      </option>
+                      <option
+                        className="px-2 border my-3 text-green-600"
+                        value="Confirmed"
+                      >
+                        Confirmed
+                      </option>
+                    </select>
                   </span>
                 </div>
 

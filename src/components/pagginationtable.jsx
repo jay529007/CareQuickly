@@ -36,6 +36,43 @@ const PaginatedAppointmentTable = ({
               <td className="py-3 px-6 text-center">
                 {user.slot?.start || "N/A"} - {user.slot?.end || "N/A"}
               </td>
+              {/* <td className="py-3 px-3 text-center">
+                <span
+                  className={`py-2 px-3 rounded-full font-medium text-xs ${
+                    user.status === "Confirmed"
+                      ? "bg-green-100 text-green-700"
+                      : user.status === "Pending"
+                      ? "bg-yellow-100  text-yellow-700"
+                      : user.status === "Cancelled"
+                      ? "bg-red-100  text-red-700"
+                      : "bg-gray-100 text-gray-700"
+                  }`}
+                >
+                  <select className=" py-2.5 px-3" >
+                    <option hidden value={user.status}>
+                      {user.status || "N/A"}
+                    </option>
+                    <option
+                      className="px-2 border my-3 text-red-600"
+                      value="Cancelled"
+                    >
+                      Cancelled
+                    </option>
+                    <option
+                      className="px-2 border my-3   text-yellow-500"
+                      value="Pending"
+                    >
+                      Pending
+                    </option>
+                    <option
+                      className="px-2 border my-3   text-green-600"
+                      value="Confirmed"
+                    >
+                      Confirmed
+                    </option>
+                  </select>
+                </span>
+              </td> */}
               <td className="py-3 px-6 text-center">
                 <span
                   className={`py-2.5 px-4 rounded-full font-medium text-xs ${

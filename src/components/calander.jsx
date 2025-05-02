@@ -277,9 +277,9 @@ const MyCalendar = () => {
       },
     };
     const isSlotAv = isSlotAvailable(formdata.appointments?.slot);
-    console.log(isSlotAv);
+
     const isSlotbl = isSlotBlock(formdata.appointments?.slot);
-    console.log(isSlotbl);
+
 
     const updatedAppointments = [
       ...(currentUser.appointments || []),
