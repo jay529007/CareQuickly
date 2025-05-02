@@ -240,9 +240,8 @@ const MyCalendar = () => {
   const eventStyleGetter = (event) => {
     let backgroundColor;
 
-    // 1) First decide by status
     if (event.status === "Confirmed") {
-      backgroundColor = "#1fc640"; // green
+      backgroundColor = "#1fc640"; 
     } else if (event.status === "Pending") {
       backgroundColor = "orange";
     } else if (event.status === "Cancelled") {

@@ -16,14 +16,18 @@ const GlobalStatus = () => {
     if (error) {
       navigate("/nouserfound");
     }
-  }, [error, navigate]); // 🔥 add dependencies!
+  }, [error]);
 
   if (isLoading) {
+    if (!isLoading) return;
     console.log("Loading...");
     return (
       <>
-        <div className="flex justify-center items-center max-h-screen h-[200dvh]">
-          <AiOutlineLoading className="size-9 text-gray-500 animate-spin" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="flex flex-col items-center p-6 space-y-4 bg-white bg-opacity-80 rounded-2xl shadow-lg">
+            <AiOutlineLoading className="w-12 h-12 text-gray-700 animate-spin" />
+            <span className="text-gray-800 font-medium">Loading…</span>
+          </div>
         </div>
       </>
     );
