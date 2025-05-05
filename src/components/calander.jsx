@@ -57,85 +57,9 @@ const MyCalendar = () => {
     const endHour = end.getHours();
     return startHour >= 10 && endHour <= 19;
   };
-  // for dnd
-  const handleEventDrop = async ({ event, start, end }) => {
-    if (!isWithinAllowedHours(start, end)) {
-      alert("You can only book between 10:00 AM and 7:00 PM");
-      return;
-    }
-
-    const updatedSlot = {
-      date: format(start, "yyyy-MM-dd"),
-      start: format(start, "HH:mm"),
-      end: format(end, "HH:mm"),
-    };
-
-    const updatedAppointments = currentUser.appointments.map((appt) =>
-      appt.id === event.id ? { ...appt, slot: updatedSlot } : appt
-    );
-
-    const updatedUserData = {
-      ...currentUser,
-      appointments: updatedAppointments,
-    };
-
-    try {
-      await updateUser(currentUser.id, updatedUserData);
-      dispatch(fetchUsers());
-      // Update UI
-      setEvents((prev) =>
-        prev.map((evt) => (evt.id === event.id ? { ...evt, start, end } : evt))
-      );
-      toast.success("Appointment moved");
-    } catch (error) {
-      console.error("Drag update failed", err);
-      toast.error("Could not move appointment");
-    }
-  };
   const isDraggable = (event) => {
     const now = startOfDay(new Date());
     return isAfter(event.start, now);
-  };
-
-  const handleEventResize = async ({ event, start, end }) => {
-    if (!isWithinAllowedHours(start, end)) {
-      alert("You can only book between 10:00 AM and 7:00 PM");
-      return;
-    }
-
-    // find the original appointment so we can keep its original date
-    const originalAppt = currentUser.appointments.find(
-      (a) => a.id === event.id
-    );
-    const updatedSlot = {
-      date: originalAppt.slot.date, //  preserve original date
-      start: format(start, "HH:mm"),
-      end: format(end, "HH:mm"),
-    };
-
-    const updatedAppointments = currentUser.appointments.map((appt) =>
-      appt.id === event.id ? { ...appt, slot: updatedSlot } : appt
-    );
-
-    const updatedUserData = {
-      ...currentUser,
-      appointments: updatedAppointments,
-    };
-
-    try {
-      await updateUser(currentUser.id, updatedUserData);
-      dispatch(fetchUsers());
-
-      // Update UI
-      const updated = events.map((evt) =>
-        evt.id === event.id ? { ...evt, start, end } : evt
-      );
-      onEventsChange(updated);
-      toast.success("Appointment resized");
-    } catch (error) {
-      console.error("Resize update failed", err);
-      toast.error("Could not resize appointment");
-    }
   };
 
   // Formatting Appointments for Calendar
@@ -280,7 +204,7 @@ const MyCalendar = () => {
   const isSlotBlock = (requestedSlot) => {
     if (!seletcedUserSlot?.length) return false;
     // filter   confirmed
-    const confirmedSlots = seletcedUserSlot.filter(
+    const confirmedSlots = seletcedUserSlot?.filter(
       (slot) => slot.status === "Confirmed"
     );
     if (confirmedSlots.length === 0) return false;
@@ -297,6 +221,122 @@ const MyCalendar = () => {
       return reqStart < blockedEnd && blockedStart < reqEnd;
     });
     return isBlocked;
+  };
+
+  // dnd
+
+  const isDnDBlocked = (start, end, confirmedSlots) => {
+    if (!confirmedSlots?.length) return false;
+
+    const reqStartHour = parseInt(format(start, "HH"), 10);
+    const reqEndHour = parseInt(format(end, "HH"), 10);
+
+    return confirmedSlots.some((apt) => {
+      const blockedStart = parseInt(apt?.slot?.start.slice(0, 2), 10);
+      const blockedEnd = parseInt(apt?.slot?.end.slice(0, 2), 10);
+
+      return reqStartHour < blockedEnd && blockedStart < reqEndHour;
+    });
+  };
+
+  const handleEventDrop = async ({ event, start, end }) => {
+    const slotsForDay = currentUser?.appointments?.filter(
+      (slot) => slot.slot.date === format(start, "yyyy-MM-dd")
+    );
+    const confirmedSlots = slotsForDay?.filter(
+      (slot) => slot.status === "Confirmed"
+    );
+
+    if (isDnDBlocked(start, end, confirmedSlots)) {
+      toast.error("Slot is already booked");
+      return;
+    }
+
+    if (!isWithinAllowedHours(start, end)) {
+      alert("You can only book between 10:00 AM and 7:00 PM");
+      return;
+    }
+
+    const updatedSlot = {
+      date: format(start, "yyyy-MM-dd"),
+      start: format(start, "HH:mm"),
+      end: format(end, "HH:mm"),
+    };
+
+    const updatedAppointments = currentUser.appointments.map((appt) =>
+      appt.id === event.id ? { ...appt, slot: updatedSlot } : appt
+    );
+
+    const updatedUserData = {
+      ...currentUser,
+      appointments: updatedAppointments,
+    };
+
+    try {
+      await updateUser(currentUser.id, updatedUserData);
+      dispatch(fetchUsers());
+      // Update UI
+      setEvents((prev) =>
+        prev.map((evt) => (evt.id === event.id ? { ...evt, start, end } : evt))
+      );
+      toast.success("Appointment moved");
+    } catch (error) {
+      console.error("Drag update failed", err);
+      toast.error("Could not move appointment");
+    }
+  };
+
+  const handleEventResize = async ({ event, start, end }) => {
+    const slotsForDay = currentUser?.appointments?.filter(
+      (slot) => slot.slot.date === format(start, "yyyy-MM-dd")
+    );
+    const confirmedSlots = slotsForDay?.filter(
+      (slot) => slot.status === "Confirmed"
+    );
+
+    if (isDnDBlocked(start, end, confirmedSlots)) {
+      toast.error("Slot is already booked");
+      return;
+    }
+
+    if (!isWithinAllowedHours(start, end)) {
+      alert("You can only book between 10:00 AM and 7:00 PM");
+      return;
+    }
+
+    // find the original appointment so we can keep its original date
+    const originalAppt = currentUser.appointments.find(
+      (a) => a.id === event.id
+    );
+    const updatedSlot = {
+      date: originalAppt.slot.date, //  preserve original date
+      start: format(start, "HH:mm"),
+      end: format(end, "HH:mm"),
+    };
+
+    const updatedAppointments = currentUser.appointments.map((appt) =>
+      appt.id === event.id ? { ...appt, slot: updatedSlot } : appt
+    );
+
+    const updatedUserData = {
+      ...currentUser,
+      appointments: updatedAppointments,
+    };
+
+    try {
+      await updateUser(currentUser.id, updatedUserData);
+      dispatch(fetchUsers());
+
+      // Update UI
+      const updated = events.map((evt) =>
+        evt.id === event.id ? { ...evt, start, end } : evt
+      );
+      onEventsChange(updated);
+      toast.success("Appointment resized");
+    } catch (error) {
+      console.error("Resize update failed", err);
+      toast.error("Could not resize appointment");
+    }
   };
 
   const {
