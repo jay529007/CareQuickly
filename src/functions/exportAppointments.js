@@ -34,8 +34,8 @@ export const generateCSV = (users) => {
     });
 
     toast.success("CSV generated successfully!", {
-      position: "top-center", // This will center only this specific toast
-      autoClose: 5000, // You can set a custom auto close time
+      position: "top-center",
+      autoClose: 5000,
       hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,
@@ -44,11 +44,10 @@ export const generateCSV = (users) => {
   } catch (error) {
     console.error("Error generating CSV:", error);
     toast.error("Failed to generate CSV.", {
-      position: "top-center", // This will center only this specific toast
-      autoClose: 5000, // You can set a custom auto close time
+      position: "top-center",
+      autoClose: 5000,
       hideProgressBar: true,
       closeOnClick: true,
-      pauseOnHover: true,
     });
   }
 };
@@ -68,8 +67,8 @@ export const downloadCSV = (csvContent, filename = "appointments.csv") => {
     document.body.removeChild(link);
 
     toast.success("CSV downloaded successfully!", {
-      position: "top-center", // This will center only this specific toast
-      autoClose: 5000, // You can set a custom auto close time
+      position: "top-center",
+      autoClose: 5000,
       hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,
@@ -77,8 +76,8 @@ export const downloadCSV = (csvContent, filename = "appointments.csv") => {
   } catch (error) {
     console.error("Error downloading CSV:", error);
     toast.error("Failed to download CSV.", {
-      position: "top-center", // This will center only this specific toast
-      autoClose: 5000, // You can set a custom auto close time
+      position: "top-center",
+      autoClose: 5000,
       hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,

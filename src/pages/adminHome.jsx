@@ -29,6 +29,7 @@ const AdminHome = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -48,7 +49,7 @@ const AdminHome = () => {
 
     const updatedDoctor = { ...selectedDocter, availableslots: updatedSlots };
     updateDoctorSlot(updatedDoctor.id, updatedDoctor);
-    window.location.reload();
+    dispatch(fetchDoctor());
   };
 
   // console.log(selectedDocter);
@@ -80,12 +81,14 @@ const AdminHome = () => {
       setIsSlotOpen(false);
       setisAddNewSlotopen(false);
       toast.success("Slot updated successfully");
+      reset();
       dispatch(fetchDoctor());
       // window.location.reload();
       // setTimeout(() => window.location.reload(), 100);
     } catch (error) {
       console.error("Slot update failed:", error);
       toast.error("Something went wrong while updating the slot.");
+      reset();
     }
   };
 
