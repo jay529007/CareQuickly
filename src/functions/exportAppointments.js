@@ -1,48 +1,87 @@
+import { toast } from "react-toastify";
+
 export const generateCSV = (users) => {
-  const headers = [
-    "Id",
-    "Name",
-    "Email",
-    "Service",
-    "Doctor",
-    "Status",
-    "Date",
-    "Start Time",
-    "End Time",
-    "Notes",
-  ];
-  const rows = [];
+  try {
+    const headers = [
+      "Id",
+      "Name",
+      "Email",
+      "Service",
+      "Doctor",
+      "Status",
+      "Date",
+      "Start Time",
+      "End Time",
+      "Notes",
+    ];
+    const rows = [];
 
-  users.forEach((user) => {
-    user.appointments?.forEach((app) => {
-      rows.push([
-        user.id,
-        user.name,
-        user.email,
-        app.service,
-        app.doctor,
-        app.status,
-        app.slot.date,
-        app.slot.start,
-        app.slot.end,
-        app.notes,
-      ]);
+    users.forEach((user) => {
+      user.appointments?.forEach((app) => {
+        rows.push([
+          user.id,
+          user.name,
+          user.email,
+          app.service,
+          app.doctor,
+          app.status,
+          app.slot.date,
+          app.slot.start,
+          app.slot.end,
+          app.notes,
+        ]);
+      });
     });
-  });
 
-  return [headers, ...rows].map((e) => e.join(",")).join("\n");
+    toast.success("CSV generated successfully!", {
+      position: "top-center", // This will center only this specific toast
+      autoClose: 5000, // You can set a custom auto close time
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+    });
+    return [headers, ...rows].map((e) => e.join(",")).join("\n");
+  } catch (error) {
+    console.error("Error generating CSV:", error);
+    toast.error("Failed to generate CSV.", {
+      position: "top-center", // This will center only this specific toast
+      autoClose: 5000, // You can set a custom auto close time
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+    });
+  }
 };
 
 export const downloadCSV = (csvContent, filename = "appointments.csv") => {
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
+  try {
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
 
-  const link = document.createElement("a");
-  link.setAttribute("href", url);
-  link.setAttribute("download", filename);
-  link.style.display = "none";
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", filename);
+    link.style.display = "none";
 
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast.success("CSV downloaded successfully!", {
+      position: "top-center", // This will center only this specific toast
+      autoClose: 5000, // You can set a custom auto close time
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+    });
+  } catch (error) {
+    console.error("Error downloading CSV:", error);
+    toast.error("Failed to download CSV.", {
+      position: "top-center", // This will center only this specific toast
+      autoClose: 5000, // You can set a custom auto close time
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+    });
+  }
 };

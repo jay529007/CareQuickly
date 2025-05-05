@@ -12,6 +12,7 @@ import Appointment from "./pages/Appointment";
 import AdminHome from "./pages/adminHome";
 import UserDetails from "./pages/userDetails";
 import Nouserfound from "./pages/error/no-userfound";
+import { ToastContainer } from "react-toastify";
 
 const router = createBrowserRouter([
   {
@@ -70,6 +71,7 @@ const router = createBrowserRouter([
 export default function App() {
   return (
     <>
+      <ToastContainer />
       <RouterProvider router={router} />
     </>
   );

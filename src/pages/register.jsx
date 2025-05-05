@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 import { addUser } from "../functions/userAPI";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -27,8 +28,10 @@ const Register = () => {
     try {
       addUser(safeData);
       console.log("Successfully added");
+      toast.success("Registred Successfully");
       navigate("/");
     } catch (error) {
+      toast.error(error);
       console.error("Add user failed", error);
     }
   };

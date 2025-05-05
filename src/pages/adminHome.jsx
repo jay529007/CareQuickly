@@ -4,6 +4,7 @@ import { fetchDoctor } from "../functions/doctorSlice";
 import { useForm } from "react-hook-form";
 import { updateDoctorSlot } from "../functions/doctorAPI";
 import Input from "../components/re-usablecomponets/InputFeild";
+import { toast } from "react-toastify";
 
 const AdminHome = () => {
   const [selectedSpecialty, setselectedSpecialty] = useState("");
@@ -31,22 +32,6 @@ const AdminHome = () => {
     formState: { errors },
   } = useForm();
 
-  const [blockedSlots, setBlockedSlots] = useState(["10:00", "15:30"]);
-  const [slots, setSlots] = useState([
-    "09:00",
-    "10:00",
-    "11:00",
-    "13:00",
-    "15:00",
-    "17:00",
-  ]);
-
-  const toggleBlockSlot = (time) => {
-    setBlockedSlots((prev) =>
-      prev.includes(time) ? prev.filter((t) => t !== time) : [...prev, time]
-    );
-  };
-
   const handleDoctorChange = (e) => {
     const doctor = FilterdDoctersbySpecialty.find(
       (doctor) => doctor.name === e.target.value
@@ -69,30 +54,39 @@ const AdminHome = () => {
   // console.log(selectedDocter);
 
   const onSubmit = async (formdata) => {
-    const newSlot = {
-      date: formdata.availableslots.date,
-      start: formdata.availableslots.start,
-      end: formdata.availableslots.end,
-    };
+    try {
+      const newSlot = {
+        date: formdata.availableslots.date,
+        start: formdata.availableslots.start,
+        end: formdata.availableslots.end,
+      };
 
-    const updatedDoctor = { ...selectedDocter };
-    const existingSlots = [...(updatedDoctor.availableslots || [])];
-    // if slotalrady available it'l have -1 index
-    const index = existingSlots.findIndex((slot) => slot.date === newSlot.date);
+      const updatedDoctor = { ...selectedDocter };
+      const existingSlots = [...(updatedDoctor.availableslots || [])];
+      // if slotalrady available it'l have -1 index
+      const index = existingSlots.findIndex(
+        (slot) => slot.date === newSlot.date
+      );
 
-    if (index !== -1) {
-      existingSlots[index] = newSlot;
-    } else {
-      existingSlots.push(newSlot);
+      if (index !== -1) {
+        existingSlots[index] = newSlot;
+      } else {
+        existingSlots.push(newSlot);
+      }
+
+      updatedDoctor.availableslots = existingSlots;
+
+      await updateDoctorSlot(updatedDoctor.id, updatedDoctor);
+      setIsSlotOpen(false);
+      setisAddNewSlotopen(false);
+      toast.success("Slot updated successfully");
+      dispatch(fetchDoctor());
+      // window.location.reload();
+      // setTimeout(() => window.location.reload(), 100);
+    } catch (error) {
+      console.error("Slot update failed:", error);
+      toast.error("Something went wrong while updating the slot.");
     }
-
-    updatedDoctor.availableslots = existingSlots;
-
-    await updateDoctorSlot(updatedDoctor.id, updatedDoctor);
-    setIsSlotOpen(false);
-    setisAddNewSlotopen(false);
-    window.location.reload();
-    alert("Slot updated successfully!");
   };
 
   return (
@@ -513,7 +507,7 @@ const AdminHome = () => {
             )}
           </div>
         </div>
-      )}  
+      )}
     </div>
   );
 };

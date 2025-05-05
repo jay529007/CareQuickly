@@ -4,6 +4,7 @@ import { clearState, loadState } from "../store/localstorage";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../functions/userSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -16,10 +17,15 @@ const Navbar = () => {
   const currntUser = users.find((user) => user.id === id);
   const isAdmin = currntUser?.role === "admin";
   const Logout = () => {
-    clearState();
-    console.log("logout");
-    navigate("/");
-    window.location.reload();
+    try {
+      clearState();
+      toast.success("Logged out successfully!");
+      console.log("logout");
+      setTimeout(() => window.location.reload(), 1000);
+    } catch (error) {
+      toast.error("Failed to log out. Please try again.");
+      console.error("Logout error:", error);
+    }
   };
 
   const Linkclass = ({ isActive }) =>

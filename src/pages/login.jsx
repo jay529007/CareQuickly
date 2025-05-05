@@ -7,6 +7,7 @@ import { fetchUsers } from "../functions/userSlice";
 import bcrypt from "bcryptjs";
 import { saveState } from "../store/localstorage";
 import { updateUser } from "../functions/userAPI";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -37,14 +38,16 @@ const LoginPage = () => {
       const id = matchuser.id;
       try {
         // await updateUser(id, matchuser);
-        console.log("user login");
         saveState(id);
         navigate("/");
-        window.location.reload();
+        toast.success("Login Successfully");
+        setTimeout(() => window.location.reload(), 100);
       } catch (error) {
+        toast.error(error);
         console.error("error 400");
       }
     } else {
+      toast.error("Something went wrong check again");
       console.error("error");
     }
   };

@@ -6,6 +6,7 @@ import Input from "../components/re-usablecomponets/InputFeild";
 import { generateCSV, downloadCSV } from "../functions/exportAppointments";
 import { updateUser } from "../functions/userAPI";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const UserDetails = () => {
   const [filter, setFilter] = useState({ user: "", date: "", status: "" });
@@ -54,11 +55,17 @@ const UserDetails = () => {
     );
 
     const doUpdate = async () => {
-      await updateUser(selectedBooking.userId, {
-        ...user,
-        appointments: updatedAppointments,
-      });
-      dispatch(fetchUsers());
+      try {
+        await updateUser(selectedBooking.userId, {
+          ...user,
+          appointments: updatedAppointments,
+        });
+        dispatch(fetchUsers());
+        toast.success("Appointment status updated successfully!");
+      } catch (error) {
+        console.error("Failed to update user status:", error);
+        toast.error("Failed to update appointment status.");
+      }
     };
 
     doUpdate();
