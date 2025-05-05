@@ -3,6 +3,7 @@ import { loadState } from "../store/localstorage";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../functions/userSlice";
 import { updateUser } from "../functions/userAPI";
+import { toast } from "react-toastify";
 
 const UserDashboard = () => {
   // fetchUsers
@@ -37,8 +38,15 @@ const UserDashboard = () => {
       ...currentUser,
       appointments: updatedAppointments,
     };
-    await updateUser(currentUser.id, updatedUser);
-    dispatch(fetchUsers());
+    try {
+      await updateUser(currentUser.id, updatedUser);
+      dispatch(fetchUsers());
+      toast.success("Booking cancelled successfully!");
+      setSelectedBooking(null);
+    } catch (error) {
+      console.error("Cancel booking failed:", error);
+      toast.error("Failed to cancel booking. Please try again.");
+    }
   };
 
   const sortedBookings = useMemo(() => {

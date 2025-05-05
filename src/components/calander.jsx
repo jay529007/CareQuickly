@@ -14,7 +14,7 @@ import { fetchDoctor } from "../functions/doctorSlice";
 import { dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import enUS from "date-fns/locale/en-US";
-
+import { toast } from "react-toastify";
 import { isAfter, startOfDay } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
@@ -79,12 +79,18 @@ const MyCalendar = () => {
       appointments: updatedAppointments,
     };
 
-    await updateUser(currentUser.id, updatedUserData);
-    dispatch(fetchUsers());
-    // Update UI
-    setEvents((prev) =>
-      prev.map((evt) => (evt.id === event.id ? { ...evt, start, end } : evt))
-    );
+    try {
+      await updateUser(currentUser.id, updatedUserData);
+      dispatch(fetchUsers());
+      // Update UI
+      setEvents((prev) =>
+        prev.map((evt) => (evt.id === event.id ? { ...evt, start, end } : evt))
+      );
+      toast.success("Appointment moved");
+    } catch (error) {
+      console.error("Drag update failed", err);
+      toast.error("Could not move appointment");
+    }
   };
   const isDraggable = (event) => {
     const now = startOfDay(new Date());
@@ -116,14 +122,20 @@ const MyCalendar = () => {
       appointments: updatedAppointments,
     };
 
-    await updateUser(currentUser.id, updatedUserData);
-    dispatch(fetchUsers());
+    try {
+      await updateUser(currentUser.id, updatedUserData);
+      dispatch(fetchUsers());
 
-    // Update UI
-    const updated = events.map((evt) =>
-      evt.id === event.id ? { ...evt, start, end } : evt
-    );
-    onEventsChange(updated);
+      // Update UI
+      const updated = events.map((evt) =>
+        evt.id === event.id ? { ...evt, start, end } : evt
+      );
+      onEventsChange(updated);
+      toast.success("Appointment resized");
+    } catch (error) {
+      console.error("Resize update failed", err);
+      toast.error("Could not resize appointment");
+    }
   };
 
   // Formatting Appointments for Calendar
@@ -290,9 +302,10 @@ const MyCalendar = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
-  const onSubmit = (formdata) => {
+  const onSubmit = async (formdata) => {
     const newAppointment = {
       id: uuidv4(),
       service: formdata.appointments.service,
@@ -320,22 +333,30 @@ const MyCalendar = () => {
     };
 
     if (!isSlotAv) {
-      window.location.reload();
-      return alert(`${newAppointment.doctor} is not available`);
+      toast.info(`${newAppointment.doctor} is not available`);
+      reset();
+      return;
     }
     if (isSlotbl) {
-      window.location.reload();
-      return alert("You already have an appointment at this time");
+      toast.info("You already have an appointment at this time");
+      reset();
+      return;
     }
     // console.log("sd");
 
-    updateUser(currentUser.id, updatedUserData);
-    dispatch(fetchUsers());
-    alert("Succecfully Booked Appointment");
-    window.location.reload();
-    navigate("/dashboard");
-    // Close modal
-    setShowModal(false);
+    try {
+      await updateUser(currentUser.id, updatedUserData);
+      dispatch(fetchUsers());
+      toast.success("Successfully Booked Appointment");
+      // Close modal
+      setShowModal(false);
+      reset();
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Booking failed", error);
+      toast.error("Booking failed—please try again");
+      reset();
+    }
   };
 
   return (
