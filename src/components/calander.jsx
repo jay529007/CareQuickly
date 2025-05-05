@@ -217,7 +217,6 @@ const MyCalendar = () => {
       const reqStart = parseInt(requestedSlot?.start.slice(0, 2), 10);
       const reqEnd = parseInt(requestedSlot.end.slice(0, 2), 10);
 
-      // return true if intervals overlap:
       return reqStart < blockedEnd && blockedStart < reqEnd;
     });
     return isBlocked;
