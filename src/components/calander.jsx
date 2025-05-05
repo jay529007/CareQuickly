@@ -36,7 +36,7 @@ const MyCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [events, setEvents] = useState([]);
   const [selectedSpecialty, setselectedSpecialty] = useState("");
-  const [selectedDocter, setselectedDocter] = useState(null);
+  const [selectedDoctor, setselectedDoctor] = useState(null);
   const navigate = useNavigate();
   // fetching currentusers  Appointments
   const id = loadState();
@@ -229,24 +229,8 @@ const MyCalendar = () => {
     const doctor = FilterdDoctersbySpecialty.find(
       (doctor) => doctor.name === e.target.value
     );
-    setselectedDocter(doctor);
+    setselectedDoctor(doctor);
   };
-
-  const selectedDoctorslot = selectedDocter?.availableslots?.find(
-    (slots) => slots.date === format(selectedDate, "yyyy-MM-dd")
-  );
-
-  // Function to check if requested slot fits inside available slot
-  const isSlotAvailable = (requestedSlot) => {
-    const availableStart = parseInt(selectedDoctorslot?.start.slice(0, 2));
-    const availableEnd = parseInt(selectedDoctorslot?.end.slice(0, 2));
-    const requestedStart = parseInt(requestedSlot?.start.slice(0, 2));
-    const requestedEnd = parseInt(requestedSlot?.end.slice(0, 2));
-    return availableStart <= requestedStart && availableEnd >= requestedEnd;
-  };
-  const seletcedUserSlot = currentUser?.appointments?.filter((slot) => {
-    return slot.slot.date === format(selectedDate, "yyyy-MM-dd");
-  });
 
   // changeing color
   const eventStyleGetter = (event) => {
@@ -276,6 +260,22 @@ const MyCalendar = () => {
       },
     };
   };
+
+  const selectedDoctorslot = selectedDoctor?.availableslots?.find(
+    (slots) => slots.date === format(selectedDate, "yyyy-MM-dd")
+  );
+
+  // Function to check if requested slot fits inside available slot
+  const isSlotAvailable = (requestedSlot) => {
+    const availableStart = parseInt(selectedDoctorslot?.start.slice(0, 2));
+    const availableEnd = parseInt(selectedDoctorslot?.end.slice(0, 2));
+    const requestedStart = parseInt(requestedSlot?.start.slice(0, 2));
+    const requestedEnd = parseInt(requestedSlot?.end.slice(0, 2));
+    return availableStart <= requestedStart && availableEnd >= requestedEnd;
+  };
+  const seletcedUserSlot = currentUser?.appointments?.filter((slot) => {
+    return slot.slot.date === format(selectedDate, "yyyy-MM-dd");
+  });
 
   const isSlotBlock = (requestedSlot) => {
     if (!seletcedUserSlot?.length) return false;
@@ -343,7 +343,6 @@ const MyCalendar = () => {
       reset();
       return;
     }
-    // console.log("sd");
 
     try {
       await updateUser(currentUser.id, updatedUserData);
@@ -430,7 +429,7 @@ const MyCalendar = () => {
                       required: "Select the Service",
                       onChange: (e) => {
                         setselectedSpecialty(e.target.value),
-                          setselectedDocter("");
+                          setselectedDoctor("");
                       },
                     })}
                   >
