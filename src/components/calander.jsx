@@ -334,11 +334,12 @@ const MyCalendar = () => {
 
     if (!isSlotAv) {
       toast.info(`${newAppointment.doctor} is not available`);
+      toast.info("Please Choose any other Slot");
       reset();
       return;
     }
     if (isSlotbl) {
-      toast.info("You already have an appointment at this time");
+      toast.info("Slot is already Booked");
       reset();
       return;
     }
