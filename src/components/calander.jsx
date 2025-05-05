@@ -239,6 +239,21 @@ const MyCalendar = () => {
     });
   };
 
+  // const isDnDSlotAvailable = (start, end) => {
+  //   if (!selectedDoctorslot) {
+  //     toast.error("No available slots for the selected doctor on this date.");
+  //     return false;
+  //   }
+
+  //   const availableStart = parseInt(selectedDoctorslot?.start.slice(0, 2), 10);
+  //   const availableEnd = parseInt(selectedDoctorslot?.end.slice(0, 2), 10);
+
+  //   const requestedStart = parseInt(format(start, "HH"));
+  //   const requestedEnd = parseInt(format(end, "HH"));
+
+  //   return availableStart <= requestedStart && availableEnd >= requestedEnd;
+  // };
+
   const handleEventDrop = async ({ event, start, end }) => {
     const slotsForDay = currentUser?.appointments?.filter(
       (slot) => slot.slot.date === format(start, "yyyy-MM-dd")
@@ -251,7 +266,11 @@ const MyCalendar = () => {
       toast.error("Slot is already booked");
       return;
     }
-
+    // if (isDnDSlotAvailable(start, end)) {
+    //   toast.info("Doctor is not available for the selected time.");
+    //   toast.info("Please choose a different slot.");
+    //   return;
+    // }
     if (!isWithinAllowedHours(start, end)) {
       alert("You can only book between 10:00 AM and 7:00 PM");
       return;
@@ -298,6 +317,11 @@ const MyCalendar = () => {
       toast.error("Slot is already booked");
       return;
     }
+    // if (isDnDSlotAvailable(start, end)) {
+    //   toast.info("doctor is not available");
+    //   toast.info("Please Choose any other Slot");
+    //   return;
+    // }
 
     if (!isWithinAllowedHours(start, end)) {
       alert("You can only book between 10:00 AM and 7:00 PM");

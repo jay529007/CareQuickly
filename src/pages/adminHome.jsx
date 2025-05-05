@@ -494,7 +494,7 @@ const AdminHome = () => {
                           type="submit"
                           className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-lg shadow transition"
                         >
-                          Add
+                          Update
                         </button>
                         <button
                           onClick={() => setIsSlotOpen(false)}

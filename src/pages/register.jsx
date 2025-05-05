@@ -88,7 +88,7 @@ const Register = () => {
                     required: "Enter your number",
                     pattern: {
                       value: /^[6-9]/,
-                      message: "Number must start with 6-9",
+                      message: "Number must start with 6 - 9",
                     },
                     validate: {
                       isTenDigits: (value) =>
