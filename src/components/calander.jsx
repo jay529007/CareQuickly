@@ -238,22 +238,29 @@ const MyCalendar = () => {
     });
   };
 
-  // const isDnDSlotAvailable = (start, end) => {
-  //   if (!selectedDoctorslot) {
-  //     toast.error("No available slots for the selected doctor on this date.");
-  //     return false;
-  //   }
+  function isDnDSlotUnavailable(start, end, doctorslot) {
+    if (!doctorslot) {
+      // no availability record → unavailable
+      return true;
+    }
 
-  //   const availableStart = parseInt(selectedDoctorslot?.start.slice(0, 2), 10);
-  //   const availableEnd = parseInt(selectedDoctorslot?.end.slice(0, 2), 10);
+    const availStart = parseInt(doctorslot.start.slice(0, 2), 10);
+    const availEnd = parseInt(doctorslot.end.slice(0, 2), 10);
 
-  //   const requestedStart = parseInt(format(start, "HH"));
-  //   const requestedEnd = parseInt(format(end, "HH"));
+    const reqStart = parseInt(format(start, "HH"), 10);
+    const reqEnd = parseInt(format(end, "HH"), 10);
 
-  //   return availableStart <= requestedStart && availableEnd >= requestedEnd;
-  // };
+    // return true if the requested interval lies outside the availability window
+    return reqStart < availStart || reqEnd > availEnd;
+  }
 
   const handleEventDrop = async ({ event, start, end }) => {
+    const dropDate = format(start, "yyyy-MM-dd");
+    const doctorslot = selectedDoctor?.availableslots?.find(
+      (s) => s.date === dropDate
+    );
+
+    // conflict with other appointments?
     const slotsForDay = currentUser?.appointments?.filter(
       (slot) => slot.slot.date === format(start, "yyyy-MM-dd")
     );
@@ -265,11 +272,12 @@ const MyCalendar = () => {
       toast.error("Slot is already booked");
       return;
     }
-    // if (isDnDSlotAvailable(start, end)) {
-    //   toast.info("Doctor is not available for the selected time.");
-    //   toast.info("Please choose a different slot.");
-    //   return;
-    // }
+
+    // outside doctor's available window
+    if (isDnDSlotUnavailable(start, end, doctorslot)) {
+      toast.info("Doctor is not available at that time");
+      return;
+    }
     if (!isWithinAllowedHours(start, end)) {
       alert("You can only book between 10:00 AM and 7:00 PM");
       return;
@@ -305,6 +313,12 @@ const MyCalendar = () => {
   };
 
   const handleEventResize = async ({ event, start, end }) => {
+    const dropDate = format(start, "yyyy-MM-dd");
+    const doctorslot = selectedDoctor?.availableslots?.find(
+      (s) => s.date === dropDate
+    );
+
+    // conflict with other appointments?
     const slotsForDay = currentUser?.appointments?.filter(
       (slot) => slot.slot.date === format(start, "yyyy-MM-dd")
     );
@@ -316,11 +330,11 @@ const MyCalendar = () => {
       toast.error("Slot is already booked");
       return;
     }
-    // if (isDnDSlotAvailable(start, end)) {
-    //   toast.info("doctor is not available");
-    //   toast.info("Please Choose any other Slot");
-    //   return;
-    // }
+    // outside doctor's available window
+    if (isDnDSlotUnavailable(start, end, doctorslot)) {
+      toast.info("Doctor is not available at that time");
+      return;
+    }
 
     if (!isWithinAllowedHours(start, end)) {
       alert("You can only book between 10:00 AM and 7:00 PM");
