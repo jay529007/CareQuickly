@@ -57,10 +57,6 @@ const MyCalendar = () => {
     const endHour = end.getHours();
     return startHour >= 10 && endHour <= 19;
   };
-  const isDraggable = (event) => {
-    const now = startOfDay(new Date());
-    return isAfter(event.start, now);
-  };
 
   // Formatting Appointments for Calendar
   useEffect(() => {
@@ -93,23 +89,29 @@ const MyCalendar = () => {
   // toolbar
   const CustomToolbar = ({ label, onNavigate, onView }) => (
     <div className="flex justify-between items-center mb-3">
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-2  items-center">
         <>
           <button
             className="px-3 py-2 bg-white border border-gray-300 hover:bg-gray-100 rounded cursor-pointer"
             onClick={() => onNavigate("PREV")}
           >
-            Back
+            {/* < */}
+            &lt;
+            {/* Back */}
           </button>
+          <h3 className="px-3 py-2 bg-gray-100 border border-gray-300 rounded">
+            {label}
+          </h3>
           <button
             className="px-3 py-2 bg-white border border-gray-300 hover:bg-gray-100 rounded cursor-pointer"
             onClick={() => onNavigate("NEXT")}
           >
-            Next
+            {/* > */}
+            &gt;
+            {/* Next */}
           </button>
         </>
       </div>
-      <h3 className="text-lg font-bold">{label}</h3>
 
       <div className="space-x-2">
         <button
@@ -156,8 +158,27 @@ const MyCalendar = () => {
     setselectedDoctor(doctor);
   };
 
+  const isDraggable = (event) => {
+    const now = startOfDay(new Date());
+    return isAfter(event.start, now);
+  };
+
+  const dayPropGetter = (date) => {
+    const isSunday = date.getDay() === 0;
+    // if (isSunday) {
+    //   return {
+    //     style: {
+    //     backgroundColor: '#f5f5f5',
+    //     pointerEvents: 'none', // disables clicks, drags
+    //     opacity: 0.6,
+    //   },
+    //   };
+    // }
+    // return {};
+  };
+
   // changeing color
-  const eventStyleGetter = (event) => {
+  const eventStyleGetter = (event, date) => {
     let backgroundColor;
 
     if (event.status === "Confirmed") {
@@ -172,12 +193,16 @@ const MyCalendar = () => {
     if (!isDraggable(event)) {
       backgroundColor = "gray";
     }
+    if (dayPropGetter) {
+      backgroundColor = "gray";
+    }
 
     return {
       style: {
         backgroundColor,
         color: "white",
         pointerEvents: event.status === "Pending" ? "auto" : "none",
+        pointerEvents: date.getDay() === 0 ? "auto" : "none",
         borderRadius: "5px",
         border: "none",
         padding: "2px 5px",
@@ -443,6 +468,7 @@ const MyCalendar = () => {
         localizer={localizer}
         events={events}
         eventPropGetter={eventStyleGetter}
+        dayPropGetter={dayPropGetter}
         draggableAccessor={isDraggable}
         min={new Date(0, 0, 0, 10, 0)}
         max={new Date(0, 0, 0, 19, 0)}
