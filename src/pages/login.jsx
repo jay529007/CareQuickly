@@ -54,9 +54,9 @@ const LoginPage = () => {
 
   return (
     <>
-      <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-sky-100 via-blue-100 to-sky-100 px-4">
-        <div className="w-full max-w-md bg-white p-10 rounded-3xl shadow-2xl">
-          <h2 className="text-3xl font-extrabold text-center text-blue-600 mb-8">
+      <div className="flex justify-center items-center min-h-screen bg-[#F5F5F5] px-4">
+        <div className="bg-white p-8 rounded-xl shadow-sm w-full max-w-md">
+          <h2 className="text-3xl font-extrabold text-center text-[#0066CC] mb-8">
             Welcome
           </h2>
 
@@ -70,7 +70,7 @@ const LoginPage = () => {
                 {...register("email", { required: "Email is required" })}
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-red-500 text-sm w-fit p-1 font-medium uppercase mt-2 bg-red-50 rounded">
                   {errors.email.message}
                 </p>
               )}
@@ -85,7 +85,7 @@ const LoginPage = () => {
                 {...register("password", { required: "Password is required" })}
               />
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-red-500 text-sm w-fit p-1 font-medium uppercase mt-2 bg-red-50 rounded">
                   {errors.password.message}
                 </p>
               )}
@@ -95,7 +95,7 @@ const LoginPage = () => {
             <div>
               <button
                 type="submit"
-                className="w-full py-3 bg-blue-600 hover:bg-blue-700 transition duration-300 text-white font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full py-3 bg-[#3182CE] hover:bg-[#2C5282] transition duration-300 text-white font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-[#90CDF4]"
               >
                 Login
               </button>
@@ -103,11 +103,11 @@ const LoginPage = () => {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[#718096]">
               Don't have an account?{" "}
               <Link
                 to="/register"
-                className="text-blue-600 hover:underline font-semibold"
+                className="text-[#0066CC] hover:underline font-semibold"
               >
                 Register here
               </Link>

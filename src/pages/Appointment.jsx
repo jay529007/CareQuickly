@@ -4,9 +4,11 @@ import MyCalendar from "../components/calander";
 const Appointment = () => {
   return (
     <>
-      <h2 className="text-2xl py-3 font-semibold mb-4">My Appoinments</h2>
-      <div style={{ height: "fit" }}>
-        <MyCalendar />
+      <div className="p-4 bg-gray-50">
+        {/* <h2 className="text-2xl py-3 font-semibold mb-4">Appoinment Calendar</h2> */}
+        <div className="p-4 border border-gray-50 shadow-lg rounded-xl" style={{ height: "fit" }}>
+          <MyCalendar />
+        </div>
       </div>
     </>
   );

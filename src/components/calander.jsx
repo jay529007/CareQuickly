@@ -437,7 +437,7 @@ const MyCalendar = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="">
       {/* Displaying the Calendar */}
       <DragAndDropCalendar
         localizer={localizer}

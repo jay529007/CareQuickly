@@ -58,6 +58,7 @@ const UserDashboard = () => {
     });
   }, [filteredBookings, sortAsc]);
   const toggleSort = () => setSortAsc((s) => !s);
+
   return (
     <div className="max-h-screen px-[15%]  p-6">
       <h2 className="text-3xl text-gray-800 font-bold mb-4">My Appointments</h2>
@@ -135,7 +136,12 @@ const UserDashboard = () => {
 
                 <td className="py-3 px-6 space-x-2">
                   <button
-                    className="px-3 py-1 bg-blue-600 text-white rounded"
+                    className={`px-3 py-1 bg-blue-600 text-white rounded ${
+                      app.status !== "Pending" ||
+                      app.slot.date === todayFormatted
+                        ? "w-[50%]"
+                        : ""
+                    }`}
                     onClick={() => {
                       setSelectedBooking(app);
                       setIsOpen(true);
@@ -143,17 +149,19 @@ const UserDashboard = () => {
                   >
                     View
                   </button>
-                  <button
-                    onClick={() => cancelBooking(app)}
-                    disabled={
-                      app.status == "Cancelled" ||
-                      app.status == "Confirmed" ||
-                      app.slot.date === todayFormatted
-                    }
-                    className="px-3 py-1 bg-red-500 text-white rounded disabled:opacity-50 "
-                  >
-                    Cancel
-                  </button>
+                  {app.status === "Pending" &&
+                    app.slot.date !== todayFormatted && (
+                      <button
+                        onClick={() => cancelBooking(app)}
+                        disabled={
+                          app.status !== "Pending" ||
+                          app.slot.date === todayFormatted
+                        }
+                        className="px-3 py-1 bg-red-500 text-white rounded disabled:opacity-50 "
+                      >
+                        Cancel
+                      </button>
+                    )}
                 </td>
               </tr>
             ))}

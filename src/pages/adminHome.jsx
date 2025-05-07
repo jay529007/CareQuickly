@@ -107,7 +107,7 @@ const AdminHome = () => {
       {/* Docter Details */}
       <div className="p-8">
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">
-          Docter Details
+          Doctor Details
         </h2>
 
         <div className="overflow-x-auto  shadow rounded-lg">

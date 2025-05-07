@@ -7,6 +7,7 @@ import { addUser } from "../functions/userAPI";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import Dropdown from "../components/re-usablecomponets/dropdown";
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -37,13 +38,13 @@ const Register = () => {
   };
 
   const errorClass =
-    "text-red-500 text-sm w-fit p-1 font-medium uppercase mt-2 bg-gray-200/50";
+    "text-[#D14343] text-sm w-fit p-1 font-medium uppercase mt-2 bg-red-50 rounded";
 
   return (
     <>
-      <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-indigo-100 via-purple-100 to-indigo-100 px-4 py-4">
-        <div className="w-full max-w-4xl bg-white p-10 rounded-3xl shadow-2xl">
-          <h2 className="text-4xl font-extrabold text-center text-indigo-600 mb-10">
+      <div className="flex justify-center items-center min-h-screen bg-[#EBF8FF] px-4 py-4">
+        <div className="w-full max-w-4xl bg-white p-10 rounded-3xl shadow-2xl border border-[#E2E8F0]">
+          <h2 className="text-3xl font-extrabold text-center text-[#2B6CB0] mb-8">
             Create your account
           </h2>
 
@@ -59,7 +60,6 @@ const Register = () => {
                 <p className={errorClass}>{errors.name.message}</p>
               )}
             </div>
-
             {/* Email + Phone */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
@@ -101,7 +101,6 @@ const Register = () => {
                 )}
               </div>
             </div>
-
             {/* Password + Confirm */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
@@ -134,7 +133,6 @@ const Register = () => {
                 )}
               </div>
             </div>
-
             {/* DOB + Gender */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
@@ -150,15 +148,16 @@ const Register = () => {
                 )}
               </div>
 
+              {/* Gender (Dropdown) */}
               <div>
                 <label
                   htmlFor="gender"
-                  className="block mb-2 text-gray-700 font-semibold"
+                  className="block mb-2 text-slate-700 font-semibold"
                 >
                   Gender
                 </label>
                 <select
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  className="bg-[#F7FAFC] border border-[#CBD5E0] text-[#4A5568] text-sm rounded-lg focus:ring-1 focus:ring-[#3182CE] focus:border-[#3182CE] block w-full p-2.5"
                   {...register("gender", { required: "Gender is required" })}
                 >
                   <option hidden value="">
@@ -173,7 +172,6 @@ const Register = () => {
                 )}
               </div>
             </div>
-
             {/* Emergency Contact */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
@@ -191,27 +189,22 @@ const Register = () => {
                 />
               </div>
             </div>
-
-            {/* Address */}
-            <div>
-              <label className="block mb-2 text-gray-700 font-semibold">
-                Address
-              </label>
-              <textarea
-                rows="3"
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                {...register("address", {
-                  minLength: {
-                    value: 10,
-                    message: "Too short! Add more detail.",
-                  },
-                })}
-              />
-              {errors.address && (
-                <p className={errorClass}>{errors.address.message}</p>
-              )}
-            </div>
-
+            {/*  Address */}
+            <label className="block mb-2 text-slate-700 font-semibold">
+              Address
+            </label>
+            <textarea
+              rows="3"
+              className="bg-[#F7FAFC] border border-[#CBD5E0]
+            text-[#4A5568] text-sm rounded-lg focus:ring-[#3182CE]
+            focus:border-[#3182CE] block w-full p-3"
+              {...register("address", {
+                minLength: {
+                  value: 10,
+                  message: "Too short! Add more detail.",
+                },
+              })}
+            />
             {/* Medical History */}
             <div>
               <label className="block mb-2 text-gray-700 font-semibold">
@@ -219,28 +212,25 @@ const Register = () => {
               </label>
               <textarea
                 rows="3"
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
                 {...register("medical_history")}
               />
             </div>
-
-            {/* Submit */}
-            <div>
-              <button
-                type="submit"
-                className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 transition duration-300 text-white font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400"
-              >
-                Register
-              </button>
-            </div>
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full py-3 bg-[#3182CE] hover:bg-[#2C5282] transition duration-300 text-white font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-[#90CDF4]"
+            >
+              Register
+            </button>
           </form>
 
           <div className="mt-8 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[#718096]">
               Already have an account?{" "}
               <Link
                 to="/login"
-                className="text-indigo-600 hover:underline font-semibold"
+                className="text-[#3182CE] hover:underline font-semibold"
               >
                 Login here
               </Link>
