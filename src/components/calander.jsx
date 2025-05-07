@@ -136,9 +136,6 @@ const MyCalendar = () => {
     </div>
   );
 
-  // saving new Appointment
-  // const isoDate = new Date(selectedDate).toISOString();
-
   const errorClass =
     "text-red-500 text-sm w-fit p-1 font-medium uppercase mt-2 bg-gray-200/50";
 
@@ -157,28 +154,32 @@ const MyCalendar = () => {
     );
     setselectedDoctor(doctor);
   };
-
+  // --------------------------- disable clicks according days -------------------------
   const isDraggable = (event) => {
     const now = startOfDay(new Date());
     return isAfter(event.start, now);
   };
 
+  // const isDisabledDate = (date) => {
+  //   const today = startOfDay(new Date());
+  //   return isBefore(date, today);
+  // };
+
   const dayPropGetter = (date) => {
-    const isSunday = date.getDay() === 0;
-    // if (isSunday) {
-    //   return {
-    //     style: {
-    //     backgroundColor: '#f5f5f5',
-    //     pointerEvents: 'none', // disables clicks, drags
-    //     opacity: 0.6,
-    //   },
-    //   };
-    // }
-    // return {};
+    if (date.getDay() === 0) {
+      return {
+        style: {
+          backgroundColor: "#e0e0e0",
+          pointerEvents: "none",
+          cursor: "not-allowed",
+        },
+      };
+    }
+    return {};
   };
 
-  // changeing color
-  const eventStyleGetter = (event, date) => {
+  // changeing color events
+  const eventStyleGetter = (event) => {
     let backgroundColor;
 
     if (event.status === "Confirmed") {
@@ -193,16 +194,12 @@ const MyCalendar = () => {
     if (!isDraggable(event)) {
       backgroundColor = "gray";
     }
-    if (dayPropGetter) {
-      backgroundColor = "gray";
-    }
 
     return {
       style: {
         backgroundColor,
         color: "white",
         pointerEvents: event.status === "Pending" ? "auto" : "none",
-        pointerEvents: date.getDay() === 0 ? "auto" : "none",
         borderRadius: "5px",
         border: "none",
         padding: "2px 5px",
@@ -210,6 +207,7 @@ const MyCalendar = () => {
     };
   };
 
+  // -------------------  dnd and form logic -----------------------------------
   const selectedDoctorslot = selectedDoctor?.availableslots?.find(
     (slots) => slots.date === format(selectedDate, "yyyy-MM-dd")
   );
