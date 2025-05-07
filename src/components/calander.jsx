@@ -4,7 +4,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import Input from "../components/re-usablecomponets/InputFeild";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 
-import { NIL, v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { loadState } from "../store/localstorage";
 import { fetchUsers } from "../functions/userSlice";
@@ -135,7 +135,7 @@ const MyCalendar = () => {
   );
 
   // saving new Appointment
-  const isoDate = new Date(selectedDate).toISOString();
+  // const isoDate = new Date(selectedDate).toISOString();
 
   const errorClass =
     "text-red-500 text-sm w-fit p-1 font-medium uppercase mt-2 bg-gray-200/50";
