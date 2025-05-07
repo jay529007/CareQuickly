@@ -240,7 +240,7 @@ const MyCalendar = () => {
 
   function isDnDSlotUnavailable(start, end, doctorslot) {
     if (!doctorslot) {
-      // no availability record → unavailable
+      // no availability record = unavailable
       return true;
     }
 
@@ -307,7 +307,7 @@ const MyCalendar = () => {
       );
       toast.success("Appointment moved");
     } catch (error) {
-      console.error("Drag update failed", err);
+      console.error("Drag update failed", error);
       toast.error("Could not move appointment");
     }
   };
