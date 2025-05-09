@@ -3,11 +3,7 @@ import { useForm } from "react-hook-form";
 import Input from "../components/re-usablecomponets/InputFeild";
 import { Link } from "react-router-dom";
 import bcrypt from "bcryptjs";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-
-import { fetchDoctor } from "../functions/doctorSlice";
 import { addDoctor } from "../functions/doctorAPI";
 const qualificationOptions = [
   "MBBS",
@@ -18,14 +14,6 @@ const qualificationOptions = [
 ];
 
 const AddDoctor = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  //   const doctors = useSelector((doctor) => doctor.doctors.doctors);
-  //   useEffect(() => {
-  //     dispatch(fetchDoctor());
-  //   }, []);
-  //   console.log(doctors[1]);
-
   const {
     register,
     handleSubmit,

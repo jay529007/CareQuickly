@@ -14,6 +14,7 @@ import UserDetails from "./pages/userDetails";
 import Nouserfound from "./pages/error/no-userfound";
 import { ToastContainer } from "react-toastify";
 import AddDoctor from "./pages/addDoctor";
+import DoctorProfilePage from "./pages/DoctorProfilePage";
 
 const router = createBrowserRouter([
   {
@@ -53,8 +54,12 @@ const router = createBrowserRouter([
         element: <AdminHome />,
       },
       {
-        path: "//admin/doctors/new",
+        path: "/admin/doctors/new",
         element: <AddDoctor />,
+      },
+      {
+        path: "/admin/doctors/:id",
+        element: <DoctorProfilePage />,
       },
       {
         path: "/userdetails",

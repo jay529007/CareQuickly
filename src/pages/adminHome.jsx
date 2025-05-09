@@ -134,7 +134,7 @@ const AdminHome = () => {
                   <td className="py-3 px-6">{slot.specialty || "N/A"}</td>
                   <td className="py-3 px-6">{slot.experience || "N/A"}</td>
                   <td className="py-3 px-6">
-                    {slot.availableslots.some(
+                    {slot.availableslots?.some(
                       (s) => s.date === todayFormatted
                     ) ? (
                       <span className="text-green-500 font-semibold">
