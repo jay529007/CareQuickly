@@ -22,4 +22,71 @@
   font-size: large;
 }
 
+.doctor-home-page {
+  width: 80%;
+  margin: 0 auto;
+  padding: 2rem;
+}
 
+.doctor-details {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.doctor-details img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin-right: 1.5rem;
+}
+
+h2 {
+  font-size: 28px;
+  margin: 0;
+}
+
+h3 {
+  font-size: 24px;
+  margin-top: 2rem;
+}
+
+.appointments-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.appointments-table th,
+.appointments-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.appointments-table th {
+  background-color: #f4f4f4;
+}
+
+button {
+  padding: 6px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.available-slots ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.available-slots li {
+  padding: 5px;
+  border-bottom: 1px solid #ddd;
+}

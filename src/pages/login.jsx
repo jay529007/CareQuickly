@@ -8,14 +8,17 @@ import bcrypt from "bcryptjs";
 import { saveState } from "../store/localstorage";
 import { updateUser } from "../functions/userAPI";
 import { toast } from "react-toastify";
+import { fetchDoctor } from "../functions/doctorSlice";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   // data fetching
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users.users);
+  const doctors = useSelector((state) => state.doctors.doctors);
   useEffect(() => {
     dispatch(fetchUsers());
+    dispatch(fetchDoctor());
   }, [dispatch]);
   //   console.log(users);
 
@@ -23,32 +26,68 @@ const LoginPage = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
   // Handle form submission
   const onSubmit = async (formdata) => {
-    let matchuser = await users.find((user) => {
-      const match =
+    let matchUser = users.find((user) => {
+      return (
         user.email === formdata.email &&
-        bcrypt.compareSync(formdata.password, user.password);
-      return match;
+        bcrypt.compareSync(formdata.password, user.password)
+      );
     });
-    if (matchuser) {
-      const id = matchuser.id;
+
+    let userType = null;
+
+    // Determine if user or admin
+    if (matchUser) {
+      userType = matchUser.role === "admin" ? "admin" : "user";
+    } else {
+      // If not in users, check doctors
+      matchUser = doctors.find((doc) => {
+        return (
+          doc.email === formdata.email &&
+          bcrypt.compareSync(formdata.password, doc.password)
+        );
+      });
+
+      if (matchUser) {
+        userType = "doctor";
+      }
+    }
+
+    if (matchUser) {
+      const id = matchUser.id;
+
       try {
-        // await updateUser(id, matchuser);
-        saveState(id);
+        // Save user ID and role
+        localStorage.setItem("userId", id);
+        localStorage.setItem("userType", userType);
+
+        // Role-based logs (or redirection)
+        if (userType === "user") {
+          console.log("User logged in", matchUser);
+          // navigate("/user-dashboard");
+        } else if (userType === "admin") {
+          console.log("Admin logged in", matchUser);
+          // navigate("/admin-dashboard");
+        } else if (userType === "doctor") {
+          console.log("Doctor logged in", matchUser);
+          // navigate("/doctor-dashboard");
+        }
         navigate("/");
+        reset();
         toast.success("Login Successfully");
         setTimeout(() => window.location.reload(), 100);
       } catch (error) {
-        toast.error(error);
-        console.error("error 400");
+        toast.error("Login failed");
+        console.error("Error during login:", error);
       }
     } else {
-      toast.error("Something went wrong check again");
-      console.error("error");
+      toast.error("Invalid email or password");
+      console.error("No matching account found");
     }
   };
 

@@ -15,6 +15,7 @@ import Nouserfound from "./pages/error/no-userfound";
 import { ToastContainer } from "react-toastify";
 import AddDoctor from "./pages/addDoctor";
 import DoctorProfilePage from "./pages/DoctorProfilePage";
+import DoctorHomePage from "./pages/DoctorHome";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
   {
     path: "/guest",
     element: <GuestUserHome />,
+  },
+  {
+    path: "/doctor",
+    element: <DoctorHomePage />,
   },
   {
     path: "/",
