@@ -10,9 +10,9 @@ import { Link } from "react-router-dom";
 const AdminHome = () => {
   const [selectedSpecialty, setselectedSpecialty] = useState("");
   const [selectedDocter, setselectedDocter] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const [isSlotOpen, setIsSlotOpen] = useState(false);
-  const [selectedSlot, setselectedSlot] = useState(null);
+  // const [isOpen, setIsOpen] = useState(false);
+  // const [isSlotOpen, setIsSlotOpen] = useState(false);
+  // const [selectedSlot, setselectedSlot] = useState(null);
   const [isAddNewSlotopen, setisAddNewSlotopen] = useState(false);
 
   // fetching docter data
@@ -79,7 +79,7 @@ const AdminHome = () => {
       updatedDoctor.availableslots = existingSlots;
 
       await updateDoctorSlot(updatedDoctor.id, updatedDoctor);
-      setIsSlotOpen(false);
+      // setIsSlotOpen(false);
       setisAddNewSlotopen(false);
       toast.success("Slot updated successfully");
       reset();
@@ -134,28 +134,29 @@ const AdminHome = () => {
                   <td className="py-3 px-6">{slot.specialty || "N/A"}</td>
                   <td className="py-3 px-6">{slot.experience || "N/A"}</td>
                   <td className="py-3 px-6">
-                    {slot.availableslots?.some(
+                    {slot.unavailableslots?.some(
                       (s) => s.date === todayFormatted
                     ) ? (
-                      <span className="text-green-500 font-semibold">
-                        Available
-                      </span>
-                    ) : (
                       <span className="text-red-500 font-semibold">
                         Unavailable
+                      </span>
+                    ) : (
+                      <span className="text-green-500 font-semibold">
+                        Available
                       </span>
                     )}
                   </td>
                   <td className="py-3 px-6 flex justify-center space-x-2">
-                    <button
+                    <Link
+                      to={`admin/doctors/${slot.id}`}
                       className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                      onClick={() => {
-                        setselectedDocter(slot);
-                        setIsOpen(true);
-                      }}
+                      // onClick={() => {
+                      //   setselectedDocter(slot);
+                      //   setIsOpen(true);
+                      // }}
                     >
                       View
-                    </button>
+                    </Link>
                   </td>
                 </tr>
               ))}
@@ -310,7 +311,9 @@ const AdminHome = () => {
           </div>
         </div>
       )}
-      {/* Selected Doctor Details */}
+
+      {/* no more in use */}
+      {/* Selected Doctor Details
       {isOpen && (
         <div className="  flex items-center justify-center  ">
           <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-4xl">
@@ -329,7 +332,7 @@ const AdminHome = () => {
               </button>
             </div>
 
-            {/* Doctor Info */}
+            
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center space-x-4">
                 <img
@@ -351,7 +354,7 @@ const AdminHome = () => {
               </div>
             </div>
 
-            {/* Available Slots Table */}
+           
             <div className="mt-6">
               <h4 className="text-xl font-medium text-gray-800 mb-4">
                 Available Slots
@@ -398,11 +401,11 @@ const AdminHome = () => {
               </table>
             </div>
 
-            {/* Slot Details Modal */}
+           
             {isSlotOpen && (
               <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-[100]">
                 <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-lg">
-                  {/* Header */}
+                
                   <div className="flex justify-between items-center mb-6">
                     <h3 className="text-2xl font-bold text-gray-800">
                       Slot Details
@@ -415,7 +418,6 @@ const AdminHome = () => {
                     </button>
                   </div>
 
-                  {/* Table */}
                   <div className="overflow-x-auto mb-6">
                     <table className="min-w-full text-sm text-gray-700">
                       <thead>
@@ -435,7 +437,6 @@ const AdminHome = () => {
                     </table>
                   </div>
 
-                  {/* Form */}
                   <div className="mb-6">
                     <form
                       onSubmit={handleSubmit(onSubmit)}
@@ -494,7 +495,7 @@ const AdminHome = () => {
                           </select>
                         </div>
                       </div>
-                      {/* Buttons */}
+                  
                       <div className="flex justify-end gap-4">
                         <button
                           type="submit"
@@ -516,7 +517,7 @@ const AdminHome = () => {
             )}
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
