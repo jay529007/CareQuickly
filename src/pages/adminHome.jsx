@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { updateDoctorSlot } from "../functions/doctorAPI";
 import Input from "../components/re-usablecomponets/InputFeild";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const AdminHome = () => {
   const [selectedSpecialty, setselectedSpecialty] = useState("");
@@ -97,11 +98,16 @@ const AdminHome = () => {
       {/* add new appointment */}
       <div className="self-end">
         <button
-          className="bg-green-500 text-white px-5 py-2 rounded hover:bg-green-600"
+          className="bg-green-500 mr-4 text-white px-5 py-2 rounded hover:bg-green-600"
           onClick={() => setisAddNewSlotopen(true)}
         >
           + Add New Slot
         </button>
+        <Link to="/admin/doctors/new">
+          <button className="bg-green-500 text-white px-5 py-2 rounded hover:bg-green-600">
+            + Add New Doctor
+          </button>
+        </Link>
       </div>
 
       {/* Docter Details */}

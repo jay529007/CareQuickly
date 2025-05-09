@@ -13,6 +13,7 @@ import AdminHome from "./pages/adminHome";
 import UserDetails from "./pages/userDetails";
 import Nouserfound from "./pages/error/no-userfound";
 import { ToastContainer } from "react-toastify";
+import AddDoctor from "./pages/addDoctor";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
       {
         path: "/admindashboard",
         element: <AdminHome />,
+      },
+      {
+        path: "//admin/doctors/new",
+        element: <AddDoctor />,
       },
       {
         path: "/userdetails",

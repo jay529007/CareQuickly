@@ -7,7 +7,6 @@ import { addUser } from "../functions/userAPI";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import Dropdown from "../components/re-usablecomponets/dropdown";
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -157,7 +156,7 @@ const Register = () => {
                   Gender
                 </label>
                 <select
-                  className="bg-[#F7FAFC] border border-[#CBD5E0] text-[#4A5568] text-sm rounded-lg focus:ring-1 focus:ring-[#3182CE] focus:border-[#3182CE] block w-full p-2.5"
+                  className="bg-[#F7FAFC] border border-[#CBD5E0] text-[#4A5568] text-sm rounded-lg focus:ring-1 focus:ring-[#000000] focus:border-[#000000] block w-full p-2.5"
                   {...register("gender", { required: "Gender is required" })}
                 >
                   <option hidden value="">
