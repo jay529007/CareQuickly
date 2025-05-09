@@ -5,7 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchDoctor } from "../functions/doctorSlice";
 
 const DoctorHomePage = () => {
-  const doctorId = loadState();
+  const authdata = loadState();
+  const doctorId = authdata.id;
+
   const dispatch = useDispatch();
   const doctors = useSelector((doctor) => doctor.doctors.doctors);
   useEffect(() => {

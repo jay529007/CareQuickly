@@ -1,6 +1,12 @@
 export const loadState = () => {
   try {
-    return localStorage.getItem("userId");
+    const id = localStorage.getItem("userId");
+    const type = localStorage.getItem("userType");
+    const authdata = {
+      id: id,
+      type: type,
+    };
+    return authdata;
   } catch (error) {
     console.error("could not load local state", error);
     return undefined;

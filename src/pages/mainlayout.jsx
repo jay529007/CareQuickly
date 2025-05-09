@@ -9,29 +9,20 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDoctor } from "../functions/doctorSlice";
 import { fetchUsers } from "../functions/userSlice";
+import { NIL } from "uuid";
 
 const Mainlayout = () => {
-  const dispatch = useDispatch();
-  const users = useSelector((state) => state.users.users);
-  const doctors = useSelector((state) => state.doctors.doctors);
+  const authdata = loadState();
+  const type = authdata.type;
 
-  useEffect(() => {
-    dispatch(fetchUsers());
-    dispatch(fetchDoctor());
-  }, [dispatch]);
-
-  const id = loadState();
-
-  const currentUser = users.find((user) => user.id === id);
-  const currentDoctor = doctors.find((doc) => doc.id === id);
-
-  const isUserorAdmin = Boolean(currentUser);
-  const isDoctor = Boolean(currentDoctor);
-
+  const isUser = type === "user";
+  const isAdmin = type === "admin";
+  const isDoctor = type === "doctor";
+  
   return (
     <>
       <GlobalStatus />
-      {isUserorAdmin || isDoctor ? (
+      {isUser || isAdmin || isDoctor ? (
         <div>
           <Navbar />
           <ToastContainer />

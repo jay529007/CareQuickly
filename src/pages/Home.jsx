@@ -9,18 +9,13 @@ import { fetchDoctor } from "../functions/doctorSlice";
 import DoctorHomePage from "./DoctorHome";
 
 const Home = () => {
-  const id = loadState();
-  const dispatch = useDispatch();
-  const users = useSelector((state) => state.users.users);
-  const doctors = useSelector((doctor) => doctor.doctors.doctors);
-  useEffect(() => {
-    dispatch(fetchUsers());
-    dispatch(fetchDoctor());
-  }, []);
+  const authdata = loadState();
+  const type = authdata.type;
 
-  const currntUser = users.find((user) => user.id === id);
-  const isAdmin = currntUser?.role === "admin";
-  const isDoctor = doctors.find((doc) => doc.id === id);
+  const isUser = type === "user";
+  const isAdmin = type === "admin";
+  const isDoctor = type === "doctor";
+
   return (
     <>
       <div className="min-h-screen bg-indigo-50">

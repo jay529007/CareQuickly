@@ -20,7 +20,6 @@ const LoginPage = () => {
     dispatch(fetchUsers());
     dispatch(fetchDoctor());
   }, [dispatch]);
-  //   console.log(users);
 
   // Setup useForm hook
   const {
@@ -63,30 +62,37 @@ const LoginPage = () => {
 
       try {
         // Save user ID and role
+        // localStorage.setItem(
+        //   "authData",
+        //   JSON.stringify({ id: id, type: userType })
+        // );
+
         localStorage.setItem("userId", id);
         localStorage.setItem("userType", userType);
 
         // Role-based logs (or redirection)
         if (userType === "user") {
           console.log("User logged in", matchUser);
-          // navigate("/user-dashboard");
+          // navigate("/user/dashboard");
         } else if (userType === "admin") {
           console.log("Admin logged in", matchUser);
-          // navigate("/admin-dashboard");
+          // navigate("/admin/dashboard");
         } else if (userType === "doctor") {
           console.log("Doctor logged in", matchUser);
-          // navigate("/doctor-dashboard");
+          // navigate("/doctor/dashboard");
         }
         navigate("/");
         reset();
         toast.success("Login Successfully");
-        setTimeout(() => window.location.reload(), 100);
+        // setTimeout(() => window.location.reload(), 100);
       } catch (error) {
         toast.error("Login failed");
+        reset();
         console.error("Error during login:", error);
       }
     } else {
       toast.error("Invalid email or password");
+      reset();
       console.error("No matching account found");
     }
   };
