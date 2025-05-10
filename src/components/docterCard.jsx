@@ -2,7 +2,8 @@ import React from "react";
 import { loadState } from "../store/localstorage";
 
 const DocterCard = ({ doctor }) => {
-  const id = loadState();
+  const authdata = loadState();
+  const id = authdata.id;
 
   return (
     <>

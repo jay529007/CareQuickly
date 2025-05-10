@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDoctor } from "../functions/doctorSlice";
 import { fetchUsers } from "../functions/userSlice";
-import { NIL } from "uuid";
+
 
 const Mainlayout = () => {
   const authdata = loadState();
@@ -18,7 +18,7 @@ const Mainlayout = () => {
   const isUser = type === "user";
   const isAdmin = type === "admin";
   const isDoctor = type === "doctor";
-  
+
   return (
     <>
       <GlobalStatus />

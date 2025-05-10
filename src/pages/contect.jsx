@@ -32,7 +32,8 @@ const Contect = () => {
   const [events, setEvents] = useState([]);
 
   // data
-  const id = loadState();
+   const authdata = loadState();
+      const id = authdata.id;
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users?.users);
   useEffect(() => {

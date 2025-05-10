@@ -7,15 +7,14 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Navbar = () => {
-  const navigate = useNavigate();
-  const id = loadState();
-  const dispatch = useDispatch();
-  const users = useSelector((state) => state.users.users);
-  useEffect(() => {
-    dispatch(fetchUsers());
-  }, []);
-  const currntUser = users.find((user) => user.id === id);
-  const isAdmin = currntUser?.role === "admin";
+ 
+  const authdata = loadState();
+  const type = authdata.type;
+
+  const isUser = type === "user";
+  const isAdmin = type === "admin";
+  const isDoctor = type === "doctor";
+
   const Logout = () => {
     try {
       clearState();

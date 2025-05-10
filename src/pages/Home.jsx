@@ -18,7 +18,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-indigo-50">
+      <div className="">
         {isAdmin ? <AdminHome /> : isDoctor ? <DoctorHomePage /> : <UserHome />}
       </div>
     </>

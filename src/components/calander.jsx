@@ -39,7 +39,8 @@ const MyCalendar = () => {
   const [selectedDoctor, setselectedDoctor] = useState(null);
   const navigate = useNavigate();
   // fetching currentusers  Appointments
-  const id = loadState();
+  const authdata = loadState();
+    const id = authdata.id;
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users?.users);
   useEffect(() => {
@@ -502,7 +503,7 @@ const MyCalendar = () => {
                 <Input
                   label="Name: "
                   type="text"
-                  value={currentUser.name}
+                  value={currentUser?.name}
                   disabled
                   className="border w-full p-1 mb-2"
                   placeholder="User"
@@ -514,7 +515,7 @@ const MyCalendar = () => {
                   label="Email: "
                   type="text"
                   disabled
-                  value={currentUser.email}
+                  value={currentUser?.email}
                   className="border w-full p-1 mb-2"
                   placeholder="Useremail"
                 />

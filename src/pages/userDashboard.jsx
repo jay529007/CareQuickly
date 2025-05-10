@@ -7,7 +7,8 @@ import { toast } from "react-toastify";
 
 const UserDashboard = () => {
   // fetchUsers
-  const id = loadState();
+  const authdata = loadState();
+  const id = authdata.id;
   const dispatch = useDispatch();
   const [sortAsc, setSortAsc] = useState(false);
   const users = useSelector((state) => state.users.users);
