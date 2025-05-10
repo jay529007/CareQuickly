@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers } from "../functions/userSlice";
-import PaginatedAppointmentTable from "../components/pagginationtable";
-import Input from "../components/re-usablecomponets/InputFeild";
-import { generateCSV, downloadCSV } from "../functions/exportAppointments";
-import { updateUser } from "../functions/userAPI";
+import { fetchUsers } from "../../functions/userSlice";
+import PaginatedAppointmentTable from "../../components/pagginationtable";
+import Input from "../../components/re-usablecomponets/InputFeild";
+import { generateCSV, downloadCSV } from "../../functions/exportAppointments";
+import { updateUser } from "../../functions/userAPI";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 

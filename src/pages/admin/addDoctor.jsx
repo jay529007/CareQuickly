@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import Input from "../components/re-usablecomponets/InputFeild";
+import Input from "../../components/re-usablecomponets/InputFeild";
 import { Link } from "react-router-dom";
 import bcrypt from "bcryptjs";
 import { toast } from "react-toastify";
-import { addDoctor } from "../functions/doctorAPI";
+import { addDoctor } from "../../functions/doctorAPI";
 const qualificationOptions = [
   "MBBS",
   "MD Dermatology",

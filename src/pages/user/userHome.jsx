@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import DocterCard from "../components/docterCard";
+import DocterCard from "../../components/docterCard";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDoctor } from "../functions/doctorSlice";
+import { fetchDoctor } from "../../functions/doctorSlice";
 
 const UserHome = () => {
   const dispatch = useDispatch();

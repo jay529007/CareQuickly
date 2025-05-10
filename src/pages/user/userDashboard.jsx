@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { loadState } from "../store/localstorage";
+import { loadState } from "../../store/localstorage";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers } from "../functions/userSlice";
-import { updateUser } from "../functions/userAPI";
+import { fetchUsers } from "../../functions/userSlice";
+import { updateUser } from "../../functions/userAPI";
 import { toast } from "react-toastify";
 
 const UserDashboard = () => {

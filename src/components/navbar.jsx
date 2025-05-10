@@ -64,7 +64,7 @@ const Navbar = () => {
             isDoctor && (
               <div className="space-x-6">
                 <NavLink to="/doctor/dashboard" className={Linkclass}>
-                  Home
+                  Dashboard
                 </NavLink>
               </div>
             )

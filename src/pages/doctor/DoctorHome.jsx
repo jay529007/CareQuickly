@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { loadState } from "../store/localstorage";
+import { loadState } from "../../store/localstorage";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDoctor } from "../functions/doctorSlice";
+import { fetchDoctor } from "../../functions/doctorSlice";
 
 const DoctorHomePage = () => {
   const authdata = loadState();
@@ -25,9 +25,7 @@ const DoctorHomePage = () => {
                 {/* Doctor Image */}
                 <div className="md:w-1/3 flex justify-center p-6 bg-gray-50">
                   <img
-                    src={
-                      currentDoctor?.image || "https://via.placeholder.com/300"
-                    }
+                    src={currentDoctor?.image}
                     alt={currentDoctor?.name}
                     className="w-64 h-64 object-cover rounded-full border-4 border-white shadow-lg"
                   />

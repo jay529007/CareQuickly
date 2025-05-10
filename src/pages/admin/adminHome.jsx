@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDoctor } from "../functions/doctorSlice";
+import { fetchDoctor } from "../../functions/doctorSlice";
 import { useForm } from "react-hook-form";
-import { updateDoctorSlot } from "../functions/doctorAPI";
-import Input from "../components/re-usablecomponets/InputFeild";
+import { updateDoctorSlot } from "../../functions/doctorAPI";
+import Input from "../../components/re-usablecomponets/InputFeild";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
