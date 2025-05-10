@@ -10,8 +10,7 @@ const ProtectedRoutes = ({ allowedRoles }) => {
     clearState();
     return <Navigate to="/login" />;
   }
-  console.log(type);
-  console.log(allowedRoles);
+
 
   if (!allowedRoles.includes(type)) {
     // Redirect based on role
