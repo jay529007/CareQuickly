@@ -42,9 +42,9 @@ const AddDoctor = () => {
     <>
       <div className=" bg-[#EBF8FF] ">
         {/* back button */}
-        <div className="pt-6 sm:ml-[25%]">
+        <div className="pt-6 px-[5%] lg:px-[15%] xl:px-0 xl:ml-[24%]">
           <Link
-            to="/"
+            to="/admin/dashboard"
             className="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors font-medium group"
             aria-label="Return to dashboard"
           >
@@ -251,8 +251,8 @@ const AddDoctor = () => {
               </div>
               {/* Languages */}
               <div>
-                <h3 class="mb-4 font-semibold text-gray-900 ">Languages</h3>
-                <ul class="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg flex ">
+                <h3 className="mb-4 font-semibold text-gray-900 ">Languages</h3>
+                <ul className="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg flex ">
                   {/* English */}
                   <li className="w-full border-b border-gray-200 rounded-t-lg">
                     <div className="flex items-center ps-3">

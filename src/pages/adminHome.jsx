@@ -148,7 +148,7 @@ const AdminHome = () => {
                   </td>
                   <td className="py-3 px-6 flex justify-center space-x-2">
                     <Link
-                      to={`admin/doctors/${slot.id}`}
+                      to={`/admin/doctors/${slot.id}`}
                       className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                       // onClick={() => {
                       //   setselectedDocter(slot);

@@ -73,15 +73,14 @@ const LoginPage = () => {
         // Role-based logs (or redirection)
         if (userType === "user") {
           console.log("User logged in", matchUser);
-          // navigate("/user/dashboard");
+          navigate("/home");
         } else if (userType === "admin") {
           console.log("Admin logged in", matchUser);
-          // navigate("/admin/dashboard");
+          navigate("/admin/dashboard");
         } else if (userType === "doctor") {
           console.log("Doctor logged in", matchUser);
-          // navigate("/doctor/dashboard");
+          navigate("/doctor/dashboard");
         }
-        navigate("/");
         reset();
         toast.success("Login Successfully");
         // setTimeout(() => window.location.reload(), 100);

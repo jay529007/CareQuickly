@@ -20,7 +20,7 @@ const Flow = () => {
                 <div className="text-blue-600 text-3xl font-bold mb-2">
                   {index + 1}
                 </div>
-                <p className="text-lg font-medium">{step}</p>
+                <p className="text-lg text-nowrap  font-medium">{step}</p>
               </div>
             ))}
           </div>

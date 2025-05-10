@@ -19,7 +19,8 @@ const DocterCard = ({ doctor }) => {
           {/* <button
             disabled={!id}
             className={` w-full px-4 py-2  rounded-lg ${
-              id
+              id 
+              
                 ? "bg-blue-500 text-white cursor-pointer"
                 : "bg-gray-300 text-gray-600 cursor-not-allowed"
             } `}

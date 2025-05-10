@@ -7,7 +7,6 @@ import LoginPage from "./pages/login";
 import Register from "./pages/register";
 import Home from "./pages/Home";
 import { Notfound } from "./pages/error/notfound";
-import Contect from "./pages/contect";
 import Appointment from "./pages/Appointment";
 import AdminHome from "./pages/adminHome";
 import UserDetails from "./pages/userDetails";
@@ -16,68 +15,47 @@ import { ToastContainer } from "react-toastify";
 import AddDoctor from "./pages/addDoctor";
 import DoctorProfilePage from "./pages/DoctorProfilePage";
 import DoctorHomePage from "./pages/DoctorHome";
+import ProtectedRoutes from "./functions/ProtectedRoutes";
 
 const router = createBrowserRouter([
+  // ── Public ─────────────────────────────────────────────────────
+  { path: "/login", element: <LoginPage /> },
+  { path: "/register", element: <Register /> },
+  { path: "/", element: <GuestUserHome /> },
+  { path: "*", element: <Notfound /> },
+
+  // ── Authenticated ──────────────────────────────────────────────
   {
-    path: "/login",
-    element: <LoginPage />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-  {
-    path: "*",
-    element: <Notfound />,
-  },
-  {
-    path: "/nouserfound",
-    element: <Nouserfound />,
-  },
-  {
-    path: "/guest",
-    element: <GuestUserHome />,
-  },
-  {
-    path: "/doctor",
-    element: <DoctorHomePage />,
-  },
-  {
-    path: "/",
-    element: <Mainlayout />,
+    // guard for any authenticated role
+    element: <ProtectedRoutes allowedRoles={["user", "doctor", "admin"]} />,
     children: [
       {
-        path: "/",
-        element: <Home />,
-      },
-      {
-        path: "/dashboard",
-        element: <UserDashboard />,
-      },
-      {
-        path: "/admindashboard",
-        element: <AdminHome />,
-      },
-      {
-        path: "/admin/doctors/new",
-        element: <AddDoctor />,
-      },
-      {
-        path: "/admin/doctors/:id",
-        element: <DoctorProfilePage />,
-      },
-      {
-        path: "/userdetails",
-        element: <UserDetails />,
-      },
+        path: "/", // at “/”
+        element: <Mainlayout />, // show navbar/layout
+        children: [
+          { path: "/home", element: <Home /> }, // GET /
+          { path: "/appointment", element: <Appointment /> },
+          { path: "/appointment/details", element: <UserDashboard /> },
 
-      {
-        path: "/contect",
-        element: <Contect />,
-      },
-      {
-        path: "/appointment",
-        element: <Appointment />,
+          // ── Doctor + Admin ─────────────────────────
+          {
+            element: <ProtectedRoutes allowedRoles={["doctor", "admin"]} />,
+            children: [
+              { path: "/doctor/dashboard", element: <DoctorHomePage /> },
+            ],
+          },
+
+          // ── Admin Only ─────────────────────────────
+          {
+            element: <ProtectedRoutes allowedRoles={["admin"]} />,
+            children: [
+              { path: "/admin/dashboard", element: <AdminHome /> },
+              { path: "/userdetails", element: <UserDetails /> },
+              { path: "/admin/doctors/new", element: <AddDoctor /> },
+              { path: "/admin/doctors/:id", element: <DoctorProfilePage /> },
+            ],
+          },
+        ],
       },
     ],
   },

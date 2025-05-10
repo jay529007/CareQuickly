@@ -22,7 +22,7 @@ const DoctorProfilePage = () => {
           {/* Back button */}
           <div className="mb-6">
             <Link
-              to="/"
+              to="/admin/dashboard"
               className="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors font-medium group"
             >
               <svg

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Navbar = () => {
- 
+  const navigate = useNavigate();
   const authdata = loadState();
   const type = authdata.type;
 
@@ -20,7 +20,8 @@ const Navbar = () => {
       clearState();
       toast.success("Logged out successfully!");
       console.log("logout");
-      setTimeout(() => window.location.reload(), 1000);
+      // setTimeout(() => window.location.reload(), 1000);
+      setTimeout(() => navigate("/"), 1000);
     } catch (error) {
       toast.error("Failed to log out. Please try again.");
       console.error("Logout error:", error);
@@ -40,13 +41,13 @@ const Navbar = () => {
         <ul className="flex space-x-6 text-gray-700 font-medium">
           {!isAdmin ? (
             <div className="space-x-6">
-              <NavLink to="/" className={Linkclass}>
+              <NavLink to="/home" className={Linkclass}>
                 Home
               </NavLink>
               <NavLink to="/appointment" className={Linkclass}>
                 Appointment
               </NavLink>
-              <NavLink to="/dashboard" className={Linkclass}>
+              <NavLink to="/appointment/details" className={Linkclass}>
                 Dashboard
               </NavLink>
               {/* <Link
@@ -61,7 +62,7 @@ const Navbar = () => {
               <NavLink to="/userdetails" className={Linkclass}>
                 Appointments
               </NavLink>
-              <NavLink to="/admindashboard" className={Linkclass}>
+              <NavLink to="/admin/dashboard" className={Linkclass}>
                 Dashboard
               </NavLink>
               {/* <Link
