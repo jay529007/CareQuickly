@@ -39,7 +39,7 @@ const Navbar = () => {
       <nav className="bg-white shadow-md px-6 py-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold text-indigo-700">DocBook</h1>
         <ul className="flex space-x-6 text-gray-700 font-medium">
-          {!isAdmin ? (
+          {isUser ? (
             <div className="space-x-6">
               <NavLink to="/home" className={Linkclass}>
                 Home
@@ -50,28 +50,24 @@ const Navbar = () => {
               <NavLink to="/appointment/details" className={Linkclass}>
                 Dashboard
               </NavLink>
-              {/* <Link
-                to="/contect"
-                className="hover:text-indigo-600 cursor-pointer"
-              >
-                test
-              </Link> */}
             </div>
-          ) : (
+          ) : isAdmin ? (
             <div className="space-x-6">
-              <NavLink to="/userdetails" className={Linkclass}>
-                Appointments
+              <NavLink to="/patient/details" className={Linkclass}>
+                Patient Details
               </NavLink>
               <NavLink to="/admin/dashboard" className={Linkclass}>
                 Dashboard
               </NavLink>
-              {/* <Link
-                to="/admintest"
-                className="hover:text-indigo-600 cursor-pointer"
-              >
-                test
-              </Link> */}
             </div>
+          ) : (
+            isDoctor && (
+              <div className="space-x-6">
+                <NavLink to="/doctor/dashboard" className={Linkclass}>
+                  Home
+                </NavLink>
+              </div>
+            )
           )}
           <button
             onClick={Logout}

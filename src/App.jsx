@@ -5,7 +5,6 @@ import GuestUserHome from "./pages/guestUserHome";
 import UserDashboard from "./pages/userDashboard";
 import LoginPage from "./pages/login";
 import Register from "./pages/register";
-import Home from "./pages/Home";
 import { Notfound } from "./pages/error/notfound";
 import Appointment from "./pages/Appointment";
 import AdminHome from "./pages/adminHome";
@@ -16,6 +15,7 @@ import AddDoctor from "./pages/addDoctor";
 import DoctorProfilePage from "./pages/DoctorProfilePage";
 import DoctorHomePage from "./pages/DoctorHome";
 import ProtectedRoutes from "./functions/ProtectedRoutes";
+import UserHome from "./pages/userHome";
 
 const router = createBrowserRouter([
   // ── Public ─────────────────────────────────────────────────────
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
         path: "/", // at “/”
         element: <Mainlayout />, // show navbar/layout
         children: [
-          { path: "/home", element: <Home /> }, // GET /
+          { path: "/home", element: <UserHome /> }, // GET /
           { path: "/appointment", element: <Appointment /> },
           { path: "/appointment/details", element: <UserDashboard /> },
 
@@ -50,7 +50,7 @@ const router = createBrowserRouter([
             element: <ProtectedRoutes allowedRoles={["admin"]} />,
             children: [
               { path: "/admin/dashboard", element: <AdminHome /> },
-              { path: "/userdetails", element: <UserDetails /> },
+              { path: "/patient/details", element: <UserDetails /> },
               { path: "/admin/doctors/new", element: <AddDoctor /> },
               { path: "/admin/doctors/:id", element: <DoctorProfilePage /> },
             ],

@@ -5,18 +5,31 @@ import Mainlayout from "../pages/mainlayout";
 
 const ProtectedRoutes = ({ allowedRoles }) => {
   const authdata = loadState();
-  const type = authdata.type;
-  return allowedRoles.includes(type) ? (
-    <Outlet />
-  ) : type === "admin" ? (
-    <Navigate to="/admin/dashboard" />
-  ) : type === "doctor" ? (
-    <Navigate to="/doctor/dashboard" />
-  ) : type === "user" ? (
-    <Navigate to="/home" />
-  ) : (
-    ((<Navigate to="/" />), clearState())
-  );
+  const type = authdata.type || null;
+  if (!type) {
+    clearState();
+    return <Navigate to="/login" />;
+  }
+  console.log(type);
+  console.log(allowedRoles);
+
+  if (!allowedRoles.includes(type)) {
+    // Redirect based on role
+    switch (type) {
+      case "admin":
+        return <Navigate to="/admin/dashboard" />;
+      case "doctor":
+        return <Navigate to="/doctor/dashboard" />;
+      case "user":
+        return <Navigate to="/user/dashboard" />;
+      default:
+        clearState();
+        return <Navigate to="/login" />;
+    }
+  }
+
+  // Role is allowed — show route
+  return <Outlet />;
 };
 
 export default ProtectedRoutes;

@@ -8,7 +8,7 @@ import AdminHome from "./adminHome";
 import { fetchDoctor } from "../functions/doctorSlice";
 import DoctorHomePage from "./DoctorHome";
 
-const Home = () => {
+const notuseHome = () => {
   const authdata = loadState();
   const type = authdata.type;
 
@@ -25,4 +25,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default notuseHome;
