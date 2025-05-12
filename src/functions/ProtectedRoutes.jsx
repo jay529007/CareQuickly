@@ -1,33 +1,47 @@
-import React from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Navigate, Outlet, useParams } from "react-router-dom";
 import { clearState, loadState } from "../store/localstorage";
-import Mainlayout from "../pages/mainlayout";
+import { toast } from "react-toastify";
 
 const ProtectedRoutes = ({ allowedRoles }) => {
+  const param = useParams();
   const authdata = loadState();
-  const type = authdata.type || null;
-  if (!type) {
-    clearState();
-    return <Navigate to="/login" />;
-  }
+  const type = authdata?.type || null;
+  const [redirectPath, setRedirectPath] = useState(null);
 
-
-  if (!allowedRoles.includes(type)) {
-    // Redirect based on role
-    switch (type) {
-      case "admin":
-        return <Navigate to="/admin/dashboard" />;
-      case "doctor":
-        return <Navigate to="/doctor/dashboard" />;
-      case "user":
-        return <Navigate to="/user/dashboard" />;
-      default:
-        clearState();
-        return <Navigate to="/login" />;
+  useEffect(() => {
+    if (!type) {
+      clearState();
+      setRedirectPath("/login");
+      return;
     }
-  }
 
-  // Role is allowed — show route
+    if (!allowedRoles.includes(type)) {
+      // Handle unauthorized access based on role
+      switch (type) {
+        case "admin":
+          setRedirectPath("/admin/dashboard");
+          break;
+        case "doctor":
+          toast.error("No Access - Doctors cannot access this route.");
+          
+          setRedirectPath("/doctor/dashboard");
+          break;
+          case "user":
+            toast.error("No Access - Users cannot access this route.");
+            console.log("user");
+          setRedirectPath("/home");
+          break;
+        default:
+          clearState();
+          setRedirectPath("/login");
+      }
+    }
+  }, [param]);
+
+  // Redirect based on the computed path
+  if (redirectPath) return <Navigate to={redirectPath} />;
+
   return <Outlet />;
 };
 
