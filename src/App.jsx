@@ -35,7 +35,7 @@ const router = createBrowserRouter([
         element: <Mainlayout />, // show navbar/layout
         children: [
           { path: "/home", element: <UserHome /> }, // GET /
-          { path: "/appointment", element: <Appointment /> },
+          { path: "/appointment/calendar", element: <Appointment /> },
           { path: "/appointment/details", element: <UserDashboard /> },
 
           // ── Doctor + Admin ─────────────────────────
