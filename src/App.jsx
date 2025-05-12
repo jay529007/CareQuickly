@@ -2,20 +2,20 @@ import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Mainlayout from "./pages/mainlayout";
 import GuestUserHome from "./pages/guestUserHome";
-import UserDashboard from "./pages/userDashboard";
+import UserDashboard from "./pages/user/userDashboard";
 import LoginPage from "./pages/login";
 import Register from "./pages/register";
 import { Notfound } from "./pages/error/notfound";
 import Appointment from "./pages/Appointment";
-import AdminHome from "./pages/adminHome";
-import UserDetails from "./pages/userDetails";
+import AdminHome from "./pages/admin/adminHome";
+import UserDetails from "./pages/admin/userDetails";
 import Nouserfound from "./pages/error/no-userfound";
 import { ToastContainer } from "react-toastify";
-import AddDoctor from "./pages/addDoctor";
+import AddDoctor from "./pages/admin/addDoctor";
 import DoctorProfilePage from "./pages/DoctorProfilePage";
-import DoctorHomePage from "./pages/DoctorHome";
+import DoctorHomePage from "./pages/doctor/DoctorHome";
 import ProtectedRoutes from "./functions/ProtectedRoutes";
-import UserHome from "./pages/userHome";
+import UserHome from "./pages/user/userHome";
 
 const router = createBrowserRouter([
   // ── Public ─────────────────────────────────────────────────────
