@@ -19,6 +19,8 @@ const notuseHome = () => {
   return (
     <>
       <div className="">
+        {console.log("sdad")}
+
         {isAdmin ? <AdminHome /> : isDoctor ? <DoctorHomePage /> : <UserHome />}
       </div>
     </>

@@ -1,17 +1,18 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Input from "../components/re-usablecomponets/InputFeild";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUsers } from "../functions/userSlice";
 import bcrypt from "bcryptjs";
-import { saveState } from "../store/localstorage";
-import { updateUser } from "../functions/userAPI";
 import { toast } from "react-toastify";
 import { fetchDoctor } from "../functions/doctorSlice";
+import { loadState } from "../store/localstorage";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const authdata = loadState();
+  const params = useParams();
   // data fetching
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users.users);
@@ -61,12 +62,6 @@ const LoginPage = () => {
       const id = matchUser.id;
 
       try {
-        // Save user ID and role
-        // localStorage.setItem(
-        //   "authData",
-        //   JSON.stringify({ id: id, type: userType })
-        // );
-
         localStorage.setItem("userId", id);
         localStorage.setItem("userType", userType);
 
@@ -95,7 +90,11 @@ const LoginPage = () => {
       console.error("No matching account found");
     }
   };
-
+  useEffect(() => {
+    if (authdata.type === "user") navigate("/home");
+    else if (authdata.type === "admin") navigate("/admin/dashboard");
+    else if (authdata.type === "doctor") navigate("/doctor/dashboard");
+  }, [params]);
   return (
     <>
       <div className="flex justify-center items-center min-h-screen bg-[#F5F5F5] px-4">
@@ -126,7 +125,9 @@ const LoginPage = () => {
                 label="Password"
                 id="password"
                 type="password"
-                {...register("password", { required: "Password is required" })}
+                {...register("password", {
+                  required: "Password is required",
+                })}
               />
               {errors.password && (
                 <p className="text-red-500 text-sm w-fit p-1 font-medium uppercase mt-2 bg-red-50 rounded">

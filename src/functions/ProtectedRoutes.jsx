@@ -24,12 +24,10 @@ const ProtectedRoutes = ({ allowedRoles }) => {
           break;
         case "doctor":
           toast.error("No Access - Doctors cannot access this route.");
-          
           setRedirectPath("/doctor/dashboard");
           break;
-          case "user":
-            toast.error("No Access - Users cannot access this route.");
-            console.log("user");
+        case "user":
+          toast.error("No Access - Users cannot access this route.");
           setRedirectPath("/home");
           break;
         default:
@@ -37,7 +35,7 @@ const ProtectedRoutes = ({ allowedRoles }) => {
           setRedirectPath("/login");
       }
     }
-  }, [param]);
+  }, [param, type, allowedRoles]);
 
   // Redirect based on the computed path
   if (redirectPath) return <Navigate to={redirectPath} />;

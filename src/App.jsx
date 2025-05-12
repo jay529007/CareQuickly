@@ -9,13 +9,14 @@ import { Notfound } from "./pages/error/notfound";
 import Appointment from "./pages/Appointment";
 import AdminHome from "./pages/admin/adminHome";
 import UserDetails from "./pages/admin/userDetails";
-import Nouserfound from "./pages/error/no-userfound";
 import { ToastContainer } from "react-toastify";
 import AddDoctor from "./pages/admin/addDoctor";
 import DoctorProfilePage from "./pages/DoctorProfilePage";
 import DoctorHomePage from "./pages/doctor/DoctorHome";
 import ProtectedRoutes from "./functions/ProtectedRoutes";
 import UserHome from "./pages/user/userHome";
+import "react-toastify/dist/ReactToastify.css";
+import DoctorsAppointments from "./pages/doctor/DoctorsAppointments";
 
 const router = createBrowserRouter([
   // ── Public ─────────────────────────────────────────────────────
@@ -42,6 +43,8 @@ const router = createBrowserRouter([
             element: <ProtectedRoutes allowedRoles={["doctor", "admin"]} />,
             children: [
               { path: "/doctor/dashboard", element: <DoctorHomePage /> },
+              { path: "/doctor/appointments", element: <DoctorsAppointments/> },
+
             ],
           },
 

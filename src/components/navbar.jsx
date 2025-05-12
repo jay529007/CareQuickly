@@ -66,6 +66,9 @@ const Navbar = () => {
                 <NavLink to="/doctor/dashboard" className={Linkclass}>
                   Dashboard
                 </NavLink>
+                <NavLink to="/doctor/appointments" className={Linkclass}>
+                  Appointments
+                </NavLink>
               </div>
             )
           )}
