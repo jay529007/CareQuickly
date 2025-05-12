@@ -17,6 +17,8 @@ import ProtectedRoutes from "./functions/ProtectedRoutes";
 import UserHome from "./pages/user/userHome";
 import "react-toastify/dist/ReactToastify.css";
 import DoctorsAppointments from "./pages/doctor/DoctorsAppointments";
+import DoctorProfile from "./pages/doctor/DoctorProfile";
+import UpdateProfile from "./pages/doctor/updateProfile";
 
 const router = createBrowserRouter([
   // ── Public ─────────────────────────────────────────────────────
@@ -43,8 +45,15 @@ const router = createBrowserRouter([
             element: <ProtectedRoutes allowedRoles={["doctor", "admin"]} />,
             children: [
               { path: "/doctor/dashboard", element: <DoctorHomePage /> },
-              { path: "/doctor/appointments", element: <DoctorsAppointments/> },
-
+              {
+                path: "/doctor/appointments",
+                element: <DoctorsAppointments />,
+              },
+              { path: "/doctor/Profile/:id", element: <DoctorProfile /> },
+              {
+                path: "/doctor/Profile/update/:id",
+                element: <UpdateProfile />,
+              },
             ],
           },
 

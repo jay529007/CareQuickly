@@ -4,7 +4,9 @@ import Input from "../../components/re-usablecomponets/InputFeild";
 import { Link } from "react-router-dom";
 import bcrypt from "bcryptjs";
 import { toast } from "react-toastify";
-import { addDoctor } from "../../functions/doctorAPI";
+import { addDoctor, updateDoctorSlot } from "../../functions/doctorAPI";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDoctor } from "../../functions/doctorSlice";
 const qualificationOptions = [
   "MBBS",
   "MD Dermatology",
@@ -13,29 +15,46 @@ const qualificationOptions = [
   "DNB Psychiatry",
 ];
 
-const AddDoctor = () => {
+const AddDoctor = ({ isDoctor }) => {
+  const dispatch = useDispatch();
+  const doctors = useSelector((doctor) => doctor.doctors.doctors);
+  useEffect(() => {
+    dispatch(fetchDoctor());
+  }, []);
+
+  const currentDoctor = doctors?.find((doctors) => doctors.id === isDoctor);
+
   const {
     register,
     handleSubmit,
     watch,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({ defaultValues: currentDoctor ?? {} });
   //   const password = watch("password");
   const onSubmit = (data) => {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(data.password, salt);
-    data.password = hash;
+    if (!isDoctor) {
+      data.password = hash;
+    }
     console.log(data);
     try {
-      addDoctor(data);
-      toast.success("Registered Successfully");
+      if (!isDoctor) {
+        addDoctor(data);
+        toast.success("Registered Successfully");
+      }
+      if (isDoctor) {
+        updateDoctorSlot(isDoctor, data);
+        toast.success("Updated Successfully");
+      }
       reset();
     } catch (error) {
       toast.error(error);
       reset();
     }
   };
+
   const errorClass =
     "text-[#D14343] text-sm w-fit p-1 font-medium uppercase mt-2 bg-red-50 rounded";
   return (
@@ -44,7 +63,7 @@ const AddDoctor = () => {
         {/* back button */}
         <div className="pt-6 px-[5%] lg:px-[15%] xl:px-0 xl:ml-[24%]">
           <Link
-            to="/admin/dashboard"
+            to={isDoctor ? `/doctor/profile/${isDoctor}` : "/admin/dashboard"}
             className="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors font-medium group"
             aria-label="Return to dashboard"
           >
@@ -421,7 +440,7 @@ const AddDoctor = () => {
                 type="submit"
                 className="w-full py-3 bg-[#3182CE] hover:bg-[#2C5282] transition duration-300 text-white font-bold rounded-xl"
               >
-                Add Doctor
+                {!isDoctor ? "Add Doctor" : "Updated Doctor"}
               </button>
             </form>
           </div>

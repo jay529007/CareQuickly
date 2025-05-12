@@ -4,7 +4,7 @@ import { fetchDoctor } from "../functions/doctorSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Nouserfound from "./error/no-userfound";
 
-const DoctorProfilePage = () => {
+const DoctorProfilePage = ({ isDoctor }) => {
   const dispatch = useDispatch();
   const doctors = useSelector((doctor) => doctor.doctors.doctors);
   useEffect(() => {
@@ -14,34 +14,34 @@ const DoctorProfilePage = () => {
   const { id } = useParams();
 
   const currentDoctor = doctors?.find((doctors) => doctors.id === id);
-
   return (
     <>
       {currentDoctor ? (
         <div className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
           {/* Back button */}
-          <div className="mb-6">
-            <Link
-              to="/admin/dashboard"
-              className="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors font-medium group"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                className="w-5 h-5 mr-2 transition-transform group-hover:-translate-x-0.5"
-                aria-hidden="true"
+          {!isDoctor && (
+            <div className="mb-6">
+              <Link
+                to="/admin/dashboard"
+                className="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors font-medium group"
               >
-                <path
-                  fillRule="evenodd"
-                  d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              Back to Doctors
-            </Link>
-          </div>
-
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-5 h-5 mr-2 transition-transform group-hover:-translate-x-0.5"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Back to Doctors
+              </Link>
+            </div>
+          )}
           {/* Main Profile Card */}
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
             <div className="flex flex-col md:flex-row">
@@ -65,11 +65,22 @@ const DoctorProfilePage = () => {
                       {currentDoctor?.specialty}
                     </p>
                   </div>
-                  <div className="mt-4 md:mt-0 flex space-x-3">
-                    <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                      Book Appointment
-                    </button>
-                  </div>
+                  {!isDoctor ? (
+                    <div className="mt-4 md:mt-0 flex space-x-3">
+                      <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        Book Appointment
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="mt-4 md:mt-0 flex space-x-3">
+                      <Link
+                        to="/doctor/Profile/update/:id"
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                      >
+                        Update Profile
+                      </Link>
+                    </div>
+                  )}
                 </div>
 
                 {/* Bio */}

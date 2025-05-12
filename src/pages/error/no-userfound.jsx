@@ -1,12 +1,24 @@
 import React from "react";
 import { GoAlertFill } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
+import { loadState } from "../../store/localstorage";
 
 const Nouserfound = () => {
   const navigate = useNavigate();
+  const authdata = loadState();
+  const type = authdata.type;
+
   const gotoLoading = () => {
-    navigate("/");
-    window.location.reload();
+    if (type === "admin") {
+      navigate("/admin/dashboard");
+    } else if (type === "doctor") {
+      navigate("/doctor/dashboard");
+    } else if (type === "user") {
+      navigate("/home");
+    } else {
+      navigate("/");
+      clearState();
+    }
   };
   return (
     <div className="min-h-screen flex flex-col justify-center items-center  bg-gray-100">

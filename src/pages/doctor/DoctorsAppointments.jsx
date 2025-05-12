@@ -178,7 +178,8 @@ const DoctorAppointments = () => {
                         </div>
                         <div className="text-sm text-gray-500 flex items-center mt-1">
                           <FiClock className="mr-1" size={14} />
-                          {appointment.slot.start} - {appointment.slot.end}
+                          {appointment.slot.start || "N/A"} -{" "}
+                          {appointment.slot.end || "N/A"}
                         </div>
                       </td>
                       <td className="px-6 py-4">
@@ -188,18 +189,20 @@ const DoctorAppointments = () => {
                           </div>
                           <div className="ml-4">
                             <div className="font-medium">
-                              {appointment.patient.name}
+                              {appointment.patient.name || "N/A"}
                             </div>
                             <div className="text-sm text-gray-500">
-                              {`${appointment.patient.gender},${calculateAge(
-                                appointment.patient.dob
+                              {`${
+                                appointment.patient.gender || "N/A"
+                              },${calculateAge(
+                                appointment.patient.dob || "N/A"
                               )}`}
                             </div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-gray-500">
-                        {appointment.service}
+                        {appointment.service || "N/A"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
@@ -210,11 +213,12 @@ const DoctorAppointments = () => {
                               ? "bg-red-100 text-red-800"
                               : appointment.status === "Pending"
                               ? "bg-yellow-100 text-yellow-800"
-                              : appointment.status === "Completed" &&
-                                "bg-blue-100 text-blue-800"
+                              : appointment.status === "Completed"
+                              ? "bg-blue-100 text-blue-800"
+                              : "bg-gray-100 text-gray-800"
                           }`}
                         >
-                          {appointment.status}
+                          {appointment.status || "N/A"}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">

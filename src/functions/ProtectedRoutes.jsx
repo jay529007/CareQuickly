@@ -12,7 +12,7 @@ const ProtectedRoutes = ({ allowedRoles }) => {
   useEffect(() => {
     if (!type) {
       clearState();
-      setRedirectPath("/login");
+      navigate("/login");
       return;
     }
 

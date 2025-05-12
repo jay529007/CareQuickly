@@ -48,8 +48,8 @@ const Navbar = () => {
 
   const Linkclass = ({ isActive }) =>
     isActive
-      ? "hover:bg-blue-600 cursor-pointer py-2.5 px-2.5 rounded-2xl bg-blue-500 text-white transition-all duration-150 "
-      : "hover:bg-gray-200 bg-gray-100 text-gray-700 py-2.5 px-2.5 rounded-2xl transition-all duration-150 ";
+      ? "hover:bg-blue-600 cursor-pointer py-2.5 px-3.5 rounded-2xl bg-blue-500 text-white transition-all duration-150 "
+      : "hover:bg-gray-200 bg-gray-100 text-gray-700 py-2.5 px-3 rounded-2xl transition-all duration-150 ";
 
   return (
     <>
@@ -84,10 +84,13 @@ const Navbar = () => {
             isDoctor && (
               <div className="space-x-6">
                 <NavLink to="/doctor/dashboard" className={Linkclass}>
-                  Dashboard
+                  Home
                 </NavLink>
                 <NavLink to="/doctor/appointments" className={Linkclass}>
                   Appointments
+                </NavLink>
+                <NavLink to={`/doctor/profile/${id}`} className={Linkclass}>
+                  Profile
                 </NavLink>
               </div>
             )
