@@ -65,9 +65,9 @@ const DoctorHomePage = () => {
 
                 {/* Action Buttons */}
                 <div className="flex flex-wrap gap-4 mt-8">
-                  <button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md">
+                  {/* <button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md">
                     Book Appointment
-                  </button>
+                  </button> */}
                   <button className="px-6 py-3 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors">
                     View Full Profile
                   </button>
@@ -88,20 +88,17 @@ const DoctorHomePage = () => {
           </div>
 
           {/* Additional Sections (example) */}
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white p-6 rounded-xl shadow-sm">
               <h3 className="text-lg font-semibold mb-4">Patient Reviews</h3>
-              {/* Review content would go here */}
             </div>
             <div className="bg-white p-6 rounded-xl shadow-sm">
               <h3 className="text-lg font-semibold mb-4">Services Offered</h3>
-              {/* Services content would go here */}
             </div>
             <div className="bg-white p-6 rounded-xl shadow-sm">
               <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-              {/* Links content would go here */}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

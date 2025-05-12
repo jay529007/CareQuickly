@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Navigate, Outlet, useParams } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { clearState, loadState } from "../store/localstorage";
 import { toast } from "react-toastify";
+import { fetchDoctor } from "./doctorSlice";
 
 const ProtectedRoutes = ({ allowedRoles }) => {
   const param = useParams();
   const authdata = loadState();
   const type = authdata?.type || null;
-  const [redirectPath, setRedirectPath] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (!type) {
       clearState();
@@ -20,26 +20,22 @@ const ProtectedRoutes = ({ allowedRoles }) => {
       // Handle unauthorized access based on role
       switch (type) {
         case "admin":
-          setRedirectPath("/admin/dashboard");
+          navigate("/admin/dashboard");
           break;
         case "doctor":
           toast.error("No Access - Doctors cannot access this route.");
-          setRedirectPath("/doctor/dashboard");
+          navigate("/doctor/dashboard");
           break;
         case "user":
           toast.error("No Access - Users cannot access this route.");
-          setRedirectPath("/home");
+          navigate("/home");
           break;
         default:
           clearState();
-          setRedirectPath("/login");
+          navigate("/login");
       }
     }
   }, [param, type, allowedRoles]);
-
-  // Redirect based on the computed path
-  if (redirectPath) return <Navigate to={redirectPath} />;
-
   return <Outlet />;
 };
 
