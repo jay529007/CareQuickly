@@ -19,6 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 import DoctorsAppointments from "./pages/doctor/DoctorsAppointments";
 import DoctorProfile from "./pages/doctor/DoctorProfile";
 import UpdateProfile from "./pages/doctor/updateProfile";
+import PasswordChange from "./pages/PasswordChange";
 
 const router = createBrowserRouter([
   // ── Public ─────────────────────────────────────────────────────
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
           { path: "/home", element: <UserHome /> }, // GET /
           { path: "/appointment/calendar", element: <Appointment /> },
           { path: "/appointment/details", element: <UserDashboard /> },
+          { path: "/account/change-password", element: <PasswordChange /> },
 
           // ── Doctor + Admin ─────────────────────────
           {

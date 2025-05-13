@@ -127,6 +127,15 @@ const Slidbar = ({ setSlidebarOpen }) => {
                 </li>
               </>
             )}
+            <li>
+              <Link
+                to={`/account/change-password`}
+                onClick={() => setSlidebarOpen(false)}
+                className={SLidebarButton}
+              >
+                Change Password
+              </Link>
+            </li>
           </ul>
 
           {/* Footer Button */}
