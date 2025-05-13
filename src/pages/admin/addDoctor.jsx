@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import Input from "../../components/re-usablecomponets/InputFeild";
 import { Link } from "react-router-dom";
@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { addDoctor, updateDoctorSlot } from "../../functions/doctorAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDoctor } from "../../functions/doctorSlice";
+import VerifyPassword from "../../components/verify";
 const qualificationOptions = [
   "MBBS",
   "MD Dermatology",
@@ -16,7 +17,10 @@ const qualificationOptions = [
 ];
 
 const AddDoctor = ({ isDoctor }) => {
+  const [modelOn, setModelOn] = useState(false);
   const dispatch = useDispatch();
+  const formDataRef = useRef(null);
+
   const doctors = useSelector((doctor) => doctor.doctors.doctors);
   useEffect(() => {
     dispatch(fetchDoctor());
@@ -31,27 +35,40 @@ const AddDoctor = ({ isDoctor }) => {
     reset,
     formState: { errors },
   } = useForm({ defaultValues: currentDoctor ?? {} });
+
+  useEffect(() => {
+    if (currentDoctor) {
+      reset(currentDoctor); // pre-fill the form with fetched doctor data
+    }
+  }, [currentDoctor, reset]);
+
   //   const password = watch("password");
   const onSubmit = (data) => {
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(data.password, salt);
     if (!isDoctor) {
+      const salt = bcrypt.genSaltSync(10);
+      const hash = bcrypt.hashSync(data.password, salt);
       data.password = hash;
     }
-    console.log(data);
     try {
       if (!isDoctor) {
         addDoctor(data);
         toast.success("Registered Successfully");
+        reset();
+      } else {
+        formDataRef.current = data;
+        setModelOn(true);
       }
-      if (isDoctor) {
-        updateDoctorSlot(isDoctor, data);
-        toast.success("Updated Successfully");
-      }
-      reset();
     } catch (error) {
       toast.error(error);
       reset();
+    }
+  };
+  const handleVerifiedSubmit = () => {
+    if (formDataRef.current) {
+      updateDoctorSlot(isDoctor, formDataRef.current);
+      toast.success("Updated Successfully");
+      setModelOn(false);
+      formDataRef.current = null;
     }
   };
 
@@ -86,7 +103,7 @@ const AddDoctor = ({ isDoctor }) => {
         <div className="flex justify-center py-4 items-center min-h-screen">
           <div className="w-full max-w-4xl bg-white p-10 rounded-3xl shadow-2xl border border-[#E2E8F0]">
             <h2 className="text-3xl font-extrabold text-center text-[#2B6CB0] mb-8">
-              Add Doctor
+              {isDoctor ? "Update Profile" : "Add Doctor"}
             </h2>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -356,19 +373,21 @@ const AddDoctor = ({ isDoctor }) => {
               </div>
 
               {/* Password */}
-              <div>
-                <Input
-                  label="Password"
-                  type="password"
-                  {...register("password", {
-                    required: "Password is required",
-                  })}
-                  className="w-full p-2 border rounded"
-                />
-                {errors.password && (
-                  <p className="text-red-500">{errors.password.message}</p>
-                )}
-              </div>
+              {!isDoctor && (
+                <div>
+                  <Input
+                    label="Password"
+                    type="password"
+                    {...register("password", {
+                      required: "Password is required",
+                    })}
+                    className="w-full p-2 border rounded"
+                  />
+                  {errors.password && (
+                    <p className="text-red-500">{errors.password.message}</p>
+                  )}
+                </div>
+              )}
 
               {/* DOB & Gender */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -445,6 +464,14 @@ const AddDoctor = ({ isDoctor }) => {
             </form>
           </div>
         </div>
+        {isDoctor && modelOn && (
+          <VerifyPassword
+            setModelOn={setModelOn}
+            isDoctor={isDoctor}
+            currentDoctor={currentDoctor}    
+            handleVerifiedSubmit={handleVerifiedSubmit}
+          />
+        )}
       </div>
     </>
   );
