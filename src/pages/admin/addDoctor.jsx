@@ -64,16 +64,20 @@ const AddDoctor = ({ isDoctor }) => {
     }
   };
   const handleVerifiedSubmit = () => {
-    if (formDataRef.current) {
-      updateDoctorSlot(isDoctor, formDataRef.current);
-      toast.success("Updated Successfully");
-      setModelOn(false);
-      formDataRef.current = null;
+    try {
+      if (formDataRef.current) {
+        updateDoctorSlot(isDoctor, formDataRef.current);
+        toast.success("Updated Successfully");
+        setModelOn(false);
+        formDataRef.current = null;
+      }
+    } catch (error) {
+      toast.error("Something Went Wrong");
+      toast.info("Please try again");
+      console.error("updating Doctor" + error);
     }
   };
 
-  const errorClass =
-    "text-[#D14343] text-sm w-fit p-1 font-medium uppercase mt-2 bg-red-50 rounded";
   return (
     <>
       <div className=" bg-[#EBF8FF] ">
@@ -468,7 +472,7 @@ const AddDoctor = ({ isDoctor }) => {
           <VerifyPassword
             setModelOn={setModelOn}
             isDoctor={isDoctor}
-            currentDoctor={currentDoctor}    
+            currentDoctor={currentDoctor}
             handleVerifiedSubmit={handleVerifiedSubmit}
           />
         )}
