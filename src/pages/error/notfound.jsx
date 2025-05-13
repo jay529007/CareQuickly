@@ -21,7 +21,7 @@ export const Notfound = () => {
   };
   return (
     <>
-      <section className="text-center flex flex-col justify-center items-center h-96">
+      <section className="text-center flex flex-col justify-center items-center h-[100dvh]">
         <FaExclamationTriangle className="text-yellow-400 text-6xl mb-4" />
         {/* <i className="fas fa-exclamation-triangle text-yellow-400 fa-4x mb-4"></i> */}
         <h1 className="text-6xl font-bold mb-4">404 Not Found</h1>

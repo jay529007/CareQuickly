@@ -1,12 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { clearState, loadState } from "../store/localstorage";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../functions/userSlice";
 import { fetchDoctor } from "../functions/doctorSlice";
 import { toast } from "react-toastify";
+import Slidbar from "./slidbar";
+// import Slidbar from "./slidbar";
 
 const Navbar = () => {
+  const [SlidebarOpen, setSlidebarOpen] = useState(false);
   const navigate = useNavigate();
   const authdata = loadState();
   const type = authdata?.type || null;
@@ -103,7 +106,10 @@ const Navbar = () => {
           </button>
         </ul>
         {/* image */}
-        <div className="flex items-center justify-center border-4 border-white rounded-full overflow-hidden shadow-lg w-12 h-12 md:w-14 md:h-14 bg-blue-100 text-blue-600 font-bold text-xl">
+        <div
+          className="flex items-center justify-center border-4 border-white rounded-full overflow-hidden shadow-lg w-12 h-12 md:w-14 md:h-14 bg-blue-100 text-blue-600 font-bold text-xl"
+          onClick={() => setSlidebarOpen(true)}
+        >
           {isDoctor && currentDoctor?.image ? (
             <img
               src={currentDoctor.image}
@@ -117,13 +123,12 @@ const Navbar = () => {
             />
           ) : (
             <span className="flex items-center justify-center w-full h-full">
-              {isDoctor
-                ? currentDoctor?.name?.charAt(0) || "D"
-                : currentUser?.name?.charAt(0) || "U"}
+              {currentUser?.name?.charAt(0) || "u"}
             </span>
           )}
         </div>
       </nav>
+      {SlidebarOpen && <Slidbar setSlidebarOpen={setSlidebarOpen} />}
     </>
   );
 };

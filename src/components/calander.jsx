@@ -40,7 +40,7 @@ const MyCalendar = () => {
   const navigate = useNavigate();
   // fetching currentusers  Appointments
   const authdata = loadState();
-    const id = authdata.id;
+  const id = authdata.id;
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users?.users);
   useEffect(() => {
@@ -454,8 +454,9 @@ const MyCalendar = () => {
       reset();
       navigate("/dashboard");
     } catch (error) {
-      console.error("Booking failed", error);
-      toast.error("Booking failed—please try again");
+      console.error("Appointment Booking failed", error);
+      toast.error("Appointment Booking failed ");
+      toast.info("Please try again");
       reset();
     }
   };
