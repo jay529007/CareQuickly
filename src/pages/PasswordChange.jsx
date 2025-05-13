@@ -85,6 +85,7 @@ const PasswordChange = () => {
           reset();
           if (isUser) {
             navigate("/home");
+            
           } else {
             navigate("/admin/dashboard");
           }
