@@ -163,7 +163,8 @@ const MyCalendar = () => {
   const FilterdDoctersbySpecialty = doctors.filter(
     (doctor) => doctor.specialty === selectedSpecialty
   );
-  // --------------------------- disable clicks according days -------------------------
+
+  // --------------------------- disable time -------------------------
   //  Find any block for today
   const blocked = (selectedDoctor?.unavailableslots || []).find(
     (slot) => slot.date === isoDate
@@ -171,7 +172,8 @@ const MyCalendar = () => {
 
   const AvailableslotValue = slotsTimeValue.filter((time) => {
     if (!blocked) return true; // no block today → keep all
-    return time !== blocked.start && time !== blocked.end;
+    return !(time <= blocked.end && time >= blocked.start);
+    // return time !== blocked.start && time !== blocked.end;
   });
 
   const Availableslot = AvailableslotValue.map((time) => {
@@ -635,6 +637,7 @@ const MyCalendar = () => {
                     Select Stating Time
                   </label>
                   <select
+                    disabled={!selectedDoctor}
                     className="mt-2.5 block  bg-white w-full p-2  border rounded-md"
                     {...register("appointments.slot.start", {
                       required: "Select the Time",
@@ -665,6 +668,7 @@ const MyCalendar = () => {
                     Select Ending Time
                   </label>
                   <select
+                    disabled={!selectedDoctor}
                     className="mt-2.5 block  bg-white w-full p-2  border rounded-md"
                     {...register("appointments.slot.end", {
                       required: "Select the time",
