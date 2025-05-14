@@ -28,6 +28,19 @@ export const localizer = dateFnsLocalizer({
   locales,
 });
 
+const slotsTimeValue = [
+  "10:00",
+  "11:00",
+  "12:00",
+  "13:00",
+  "14:00",
+  "15:00",
+  "16:00",
+  "17:00",
+  "18:00",
+  "19:00",
+];
+
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 const MyCalendar = () => {
   const [currentView, setCurrentView] = useState("month");
@@ -58,6 +71,8 @@ const MyCalendar = () => {
     const endHour = end.getHours();
     return startHour >= 10 && endHour <= 19;
   };
+
+  const isoDate = format(selectedDate, "yyyy-MM-dd");
 
   // Formatting Appointments for Calendar
   useEffect(() => {
@@ -148,6 +163,26 @@ const MyCalendar = () => {
   const FilterdDoctersbySpecialty = doctors.filter(
     (doctor) => doctor.specialty === selectedSpecialty
   );
+  // --------------------------- disable clicks according days -------------------------
+  //  Find any block for today
+  const blocked = (selectedDoctor?.unavailableslots || []).find(
+    (slot) => slot.date === isoDate
+  );
+
+  const AvailableslotValue = slotsTimeValue.filter((time) => {
+    if (!blocked) return true; // no block today → keep all
+    return time !== blocked.start && time !== blocked.end;
+  });
+
+  const Availableslot = AvailableslotValue.map((time) => {
+    const parsed = parse(time, "HH:mm", new Date());
+
+    // 2. Re-format it as 12-hour with AM/PM
+    const time12 = format(parsed, "hh:mm a");
+    return time12;
+  });
+
+  // -----------------------------------------------------------------------------------------
 
   const handleDoctorChange = (e) => {
     const doctor = FilterdDoctersbySpecialty.find(
@@ -608,15 +643,15 @@ const MyCalendar = () => {
                     <option hidden value="">
                       Select Time
                     </option>
-                    <option value="10:00">10:00 AM</option>
-                    <option value="11:00">11:00 AM</option>
-                    <option value="12:00">12:00 AM</option>
-                    <option value="13:00">01:00 PM</option>
-                    <option value="14:00">02:00 PM</option>
-                    <option value="15:00">03:00 PM</option>
-                    <option value="16:00">04:00 PM</option>
-                    <option value="17:00">05:00 PM</option>
-                    <option value="18:00">06:00 PM</option>
+                    {AvailableslotValue.map((value, i) => {
+                      // i is the index into both arrays
+                      const display = Availableslot[i];
+                      return (
+                        <option key={value} value={value}>
+                          {display}
+                        </option>
+                      );
+                    })}
                   </select>
                   {errors.appointments?.slot.start && (
                     <p className={errorClass}>
@@ -638,6 +673,16 @@ const MyCalendar = () => {
                     <option hidden value="">
                       Select Time
                     </option>
+                    {AvailableslotValue.map((value, i) => {
+                      // i is the index into both arrays
+                      const display = Availableslot[i];
+                      return (
+                        <option key={value} value={value}>
+                          {display}
+                        </option>
+                      );
+                    })}
+                    {/* 
                     <option value="11:00">11:00 AM</option>
                     <option value="12:00">12:00 AM</option>
                     <option value="13:00">01:00 PM</option>
@@ -646,7 +691,7 @@ const MyCalendar = () => {
                     <option value="16:00">04:00 PM</option>
                     <option value="17:00">05:00 PM</option>
                     <option value="18:00">06:00 PM</option>
-                    <option value="19:00">07:00 PM</option>
+                    <option value="19:00">07:00 PM</option> */}
                   </select>
                   {errors.appointments?.slot.end && (
                     <p className={errorClass}>

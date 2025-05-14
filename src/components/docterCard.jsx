@@ -1,10 +1,11 @@
 import React from "react";
 import { loadState } from "../store/localstorage";
+import { useNavigate } from "react-router-dom";
 
 const DocterCard = ({ doctor }) => {
   const authdata = loadState();
   const id = authdata.id;
-
+  const navigate = useNavigate();
   return (
     <>
       <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition">
@@ -16,17 +17,20 @@ const DocterCard = ({ doctor }) => {
           <p className="text-sm text-gray-500 mb-4">
             {doctor.specialty} · {doctor.experience} years experience
           </p>
-          {/* <button
-            disabled={!id}
-            className={` w-full px-4 py-2  rounded-lg ${
-              id 
-              
-                ? "bg-blue-500 text-white cursor-pointer"
-                : "bg-gray-300 text-gray-600 cursor-not-allowed"
-            } `}
+          <button
+            onClick={() =>
+              !id
+                ? navigate("/login")
+                : (console.log(doctor.name),
+                  console.log(doctor.specialty),
+                  // setShowModal(true),
+                  navigate("/appointment/calendar"))
+            }
+            className=" w-full px-4 py-2  rounded-lg bg-blue-500 text-white cursor-pointer"
           >
-            {id ? "Book Now" : "Login to Book"}
-          </button> */}
+            {/* {id ? "Book Now" : "Login to Book"} */}
+            Book Appointments
+          </button>
         </div>
       </div>
     </>
