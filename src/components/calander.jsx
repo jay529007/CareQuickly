@@ -175,11 +175,10 @@ const MyCalendar = () => {
     return !(time <= blocked.end && time >= blocked.start);
     // return time !== blocked.start && time !== blocked.end;
   });
-
+  // converting in 12 hours formate
   const Availableslot = AvailableslotValue.map((time) => {
     const parsed = parse(time, "HH:mm", new Date());
 
-    // 2. Re-format it as 12-hour with AM/PM
     const time12 = format(parsed, "hh:mm a");
     return time12;
   });
@@ -305,20 +304,20 @@ const MyCalendar = () => {
       return true;
     }
 
-    const availStart = parseInt(doctorslot.start.slice(0, 2), 10);
-    const availEnd = parseInt(doctorslot.end.slice(0, 2), 10);
+    const blockedStart = parseInt(doctorslot.start.slice(0, 2), 10);
+    const blockedEnd = parseInt(doctorslot.end.slice(0, 2), 10);
 
     const reqStart = parseInt(format(start, "HH"), 10);
     const reqEnd = parseInt(format(end, "HH"), 10);
 
     // return true if the requested interval lies outside the availability window
-    return reqStart < availStart || reqEnd > availEnd;
+    return reqStart < blockedEnd && blockedStart < reqEnd;
+    // requestedStart < blockedEnd && blockedStart < requestedEnd;
   }
 
   const handleEventDrop = async ({ event, start, end }) => {
-    const dropDate = format(start, "yyyy-MM-dd");
-    const doctorslot = selectedDoctor?.availableslots?.find(
-      (s) => s.date === dropDate
+    const doctorslot = selectedDoctor?.unavailableslots?.find(
+      (s) => s.date === isoDate
     );
 
     // conflict with other appointments?
@@ -456,9 +455,9 @@ const MyCalendar = () => {
         end: formdata.appointments.slot.end,
       },
     };
-    const isSlotAv = isSlotAvailable(formdata.appointments?.slot);
+    // const isSlotAv = isSlotAvailable(formdata.appointments?.slot);
 
-    const isSlotbl = isSlotBlock(formdata.appointments?.slot);
+    // const isSlotbl = isSlotBlock(formdata.appointments?.slot);
 
     const updatedAppointments = [
       ...(currentUser.appointments || []),
@@ -470,17 +469,17 @@ const MyCalendar = () => {
       appointments: updatedAppointments,
     };
 
-    if (!isSlotAv) {
-      toast.info(`${newAppointment.doctor} is not available`);
-      toast.info("Please Choose any other Slot");
-      reset();
-      return;
-    }
-    if (isSlotbl) {
-      toast.info("Slot is already Booked");
-      reset();
-      return;
-    }
+    // if (!isSlotAv) {
+    //   toast.info(`${newAppointment.doctor} is not available`);
+    //   toast.info("Please Choose any other Slot");
+    //   reset();
+    //   return;
+    // }
+    // if (isSlotbl) {
+    //   toast.info("Slot is already Booked");
+    //   reset();
+    //   return;
+    // }
 
     try {
       await updateUser(currentUser.id, updatedUserData);
@@ -489,7 +488,7 @@ const MyCalendar = () => {
       // Close modal
       setShowModal(false);
       reset();
-      navigate("/dashboard");
+      navigate("/appointment/details");
     } catch (error) {
       console.error("Appointment Booking failed", error);
       toast.error("Appointment Booking failed ");

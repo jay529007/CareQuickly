@@ -42,11 +42,11 @@ const UserDashboard = () => {
     try {
       await updateUser(currentUser.id, updatedUser);
       dispatch(fetchUsers());
-      toast.success("Booking cancelled successfully!");
+      toast.success("Appointments Booking cancelled successfully!");
       setSelectedBooking(null);
     } catch (error) {
-      console.error("Cancel booking failed:", error);
-      toast.error("Failed to cancel booking. Please try again.");
+      console.error("Cancel Appointments booking failed:", error);
+      toast.error("Failed to cancel Appointments booking. Please try again.");
     }
   };
 
