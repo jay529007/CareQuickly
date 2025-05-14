@@ -24,4 +24,4 @@ db.json
 *.sln
 *.sw?
 db.json
-db.json
+*.json

@@ -10,17 +10,19 @@ import { clearState, loadState } from "../store/localstorage";
 const GuestUserHome = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const authdata = loadState();
-  const type = authdata.type;
-  if (type === "user") {
-    navigate("/home");
-  } else if (type === "admin") {
-    navigate("/admin/dashboard");
-  } else if (type === "doctor") {
-  } else {
-    navigate("/");
-    clearState();
-  }
+  // const authdata = loadState();
+  // const type = authdata.type;
+  // if (type === "user") {
+  //   navigate("/home");
+  // } else if (type === "admin") {
+  //   navigate("/admin/dashboard");
+  // } 
+  // // else if (type === "doctor") {
+  // // } 
+  // // else {
+  //   // navigate("/");
+  //   // clearState();
+  // // }
 
   const doctors = useSelector((state) => state.doctors.doctors);
   useEffect(() => {
