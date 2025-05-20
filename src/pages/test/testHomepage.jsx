@@ -3,12 +3,6 @@ import { FaCalendarAlt, FaUserMd, FaBell, FaArrowRight } from "react-icons/fa";
 import { MdHealthAndSafety, MdAccessibility } from "react-icons/md";
 import { RiCustomerService2Fill } from "react-icons/ri";
 
-// Sample images (replace with your actual image paths)
-// import heroDoctor from "../heroDoctor";
-// import happyPatient from "./images/happy-patient.jpg";
-// import medicalTeam from "./images/medical-team.jpg";
-// import appScreenshot from "./images/app-screenshot.jpg";
-
 function TestHomepage() {
   return (
     <div className="min-h-screen flex flex-col font-sans">
@@ -157,7 +151,7 @@ function TestHomepage() {
                 for your needs.
               </p>
               <img
-                src="https://doctor-apoinment-system.vercel.app/happyPatient.jpg"
+                src="https://doctor-apoinment-system.vercel.app/happyPatient1.jpg"
                 alt="Happy patient"
                 className="w-full h-48 object-cover rounded-lg"
               />
@@ -171,11 +165,11 @@ function TestHomepage() {
               <p className="text-gray-600 mb-6">
                 Select available time slots that work with your schedule.
               </p>
-              {/* <img
-                src={appScreenshot}
+              <img
+                src="https://doctor-apoinment-system.vercel.app/Appointment-Calendar.jpg"
                 alt="Appointment booking"
                 className="w-full h-48 object-cover rounded-lg"
-              /> */}
+              />
             </div>
 
             <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition border border-gray-100 text-center">
@@ -188,7 +182,7 @@ function TestHomepage() {
                 mind.
               </p>
               <img
-                src="https://doctor-apoinment-system.vercel.app/medicalTeam (2).jpg"
+                src="https://doctor-apoinment-system.vercel.app/medicalTeam1.jpg"
                 alt="Medical team"
                 className="w-full h-48 object-cover rounded-lg"
               />
@@ -264,6 +258,7 @@ function TestHomepage() {
             <div className="lg:w-1/2">
               <div className="bg-white p-2 rounded-xl shadow-lg">
                 <img
+                  // src="""
                   src="https://doctor-apoinment-system.vercel.app/happyPatient.jpg"
                   alt="Doctor consultation"
                   className="w-full h-auto rounded-lg"
