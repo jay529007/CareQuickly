@@ -61,7 +61,11 @@ const Navbar = () => {
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-              C
+              <img
+                src="https://doctor-apoinment-system.vercel.app//CareQuickly Logo.png"
+                alt="CareQuickly"
+                className="w-full h-64 object-cover"
+              />
             </div>
             <h1 className="text-2xl font-bold text-blue-800">CareQuickly</h1>
           </div>
