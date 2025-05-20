@@ -1,8 +1,9 @@
 import { FiX } from "react-icons/fi";
-import { Link } from "react-router-dom";
-import { loadState } from "../store/localstorage";
+import { Link, useNavigate } from "react-router-dom";
+import { clearState, loadState } from "../store/localstorage";
 
 const Slidbar = ({ setSlidebarOpen }) => {
+  const navigate = useNavigate();
   const authdata = loadState();
   const type = authdata?.type || null;
   const id = authdata?.id || null;
@@ -141,7 +142,11 @@ const Slidbar = ({ setSlidebarOpen }) => {
           {/* Footer Button */}
           <div className="absolute bottom-4 left-4 right-4">
             <button
-              onClick={() => setSlidebarOpen(false)}
+              onClick={() => {
+                setSlidebarOpen(false);
+                clearState();
+                navigate("/");
+              }}
               className="w-full py-2 text-center bg-gray-100 duration-150 text-black hover:text-white rounded hover:bg-red-600"
             >
               Logout

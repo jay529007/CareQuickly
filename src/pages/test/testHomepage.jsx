@@ -7,7 +7,7 @@ function TestHomepage() {
   return (
     <div className="min-h-screen flex flex-col font-sans">
       {/* Modern Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
+      {/* <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
@@ -62,7 +62,7 @@ function TestHomepage() {
             </Link>
           </div>
         </div>
-      </header>
+      </header> */}
 
       {/* Hero Section with Doctor Image */}
       <section className="relative">
@@ -104,7 +104,7 @@ function TestHomepage() {
       {/* Stats Section */}
       <section className="bg-blue-50 py-16">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             <div className="bg-white p-6 rounded-xl shadow-sm">
               <div className="text-4xl font-bold text-blue-600 mb-2">
                 5,000+
@@ -140,7 +140,7 @@ function TestHomepage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition border border-gray-100 text-center">
               <div className="bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span className="text-blue-600 text-3xl">1</span>

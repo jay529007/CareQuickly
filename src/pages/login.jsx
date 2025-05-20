@@ -68,7 +68,7 @@ const LoginPage = () => {
         // Role-based logs (or redirection)
         if (userType === "user") {
           console.log("User logged in", matchUser);
-          navigate("/home");
+          navigate("/");
         } else if (userType === "admin") {
           console.log("Admin logged in", matchUser);
           navigate("/admin/dashboard");

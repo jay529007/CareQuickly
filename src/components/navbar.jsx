@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { clearState, loadState } from "../store/localstorage";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../functions/userSlice";
@@ -56,78 +56,143 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Navbar */}
-      <nav className="bg-white shadow-md px-6 py-4 flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-blue-700">DocBook</h1>
-        </div>
-        <ul className="flex items-center rounded-2xl space-x-6 text-gray-700 font-medium">
-          {isUser ? (
-            <div className="space-x-6">
-              <NavLink to="/home" className={Linkclass}>
-                Home
-              </NavLink>
-              <NavLink to="/appointment/calendar" className={Linkclass}>
-                Appointment
-              </NavLink>
-              <NavLink to="/appointment/details" className={Linkclass}>
-                Dashboard
-              </NavLink>
+      <header className="bg-white shadow-sm sticky top-0 z-50">
+        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+              MD
             </div>
-          ) : isAdmin ? (
-            <div className="space-x-6">
-              <NavLink to="/patient/details" className={Linkclass}>
-                Patient Details
-              </NavLink>
-              <NavLink to="/admin/dashboard" className={Linkclass}>
-                Dashboard
-              </NavLink>
-            </div>
-          ) : (
-            isDoctor && (
-              <div className="space-x-6">
-                <NavLink to="/doctor/dashboard" className={Linkclass}>
+            <h1 className="text-2xl font-bold text-blue-800">MediBook</h1>
+          </div>
+
+          <nav className="hidden lg:flex space-x-8">
+            {!isDoctor && !isAdmin ? (
+              <>
+                <Link
+                  to="/home"
+                  className="text-blue-800 font-medium hover:text-blue-600 transition relative group"
+                >
                   Home
-                </NavLink>
-                <NavLink to="/doctor/appointments" className={Linkclass}>
-                  Appointments
-                </NavLink>
-                <NavLink to={`/doctor/profile/${id}`} className={Linkclass}>
-                  Profile
-                </NavLink>
-              </div>
-            )
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
+                </Link>
+                <Link
+                  to="/testservices"
+                  className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
+                >
+                  Services
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
+                </Link>
+                <Link
+                  to="/testdoctor"
+                  className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
+                >
+                  Doctors
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
+                </Link>
+                {isUser && (
+                  <Link
+                    to="/appointment/details"
+                    className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
+                  >
+                    Dashboard
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
+                  </Link>
+                )}
+                <Link
+                  to="/contact"
+                  className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
+                >
+                  Contact
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
+                </Link>
+              </>
+            ) : isAdmin ? (
+              <>
+                <Link
+                  to="/patient/details"
+                  className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
+                >
+                  Patient Details
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
+                </Link>
+                <Link
+                  to="/admin/Dashboard"
+                  className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
+                >
+                  Dashboard
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
+                </Link>
+              </>
+            ) : (
+              isDoctor && (
+                <>
+                  <Link
+                    to="/doctor/dashboard"
+                    className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
+                  >
+                    Home
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
+                  </Link>
+                  <Link
+                    to="/doctor/appointments"
+                    className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
+                  >
+                    Appointments
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
+                  </Link>
+                  <Link
+                    to={`/doctor/profile/${id}`}
+                    className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
+                  >
+                    profile
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
+                  </Link>
+                </>
+              )
+            )}
+          </nav>
+          {/* image */}
+          {id && type && (
+            <div
+              className="flex items-center justify-center border-4 border-white rounded-full overflow-hidden shadow-lg w-12 h-12 md:w-14 md:h-14 bg-blue-100 text-blue-600 font-bold text-xl"
+              onClick={() => setSlidebarOpen(true)}
+            >
+              {isDoctor && currentDoctor?.image ? (
+                <img
+                  src={currentDoctor.image}
+                  alt={`Dr. ${currentDoctor.name}`}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "";
+                    e.target.className = "hidden"; // Hide broken image
+                  }}
+                />
+              ) : (
+                <span className="flex items-center justify-center w-full h-full">
+                  {currentUser?.name?.charAt(0) || "u"}
+                </span>
+              )}
+            </div>
           )}
-          <button
-            onClick={Logout}
-            className="hover:bg-red-600 rounded-2xl py-2 px-3.5 hover:text-white cursor-pointer text-red-600 transition-all duration-150d "
-          >
-            Logout
-          </button>
-        </ul>
-        {/* image */}
-        <div
-          className="flex items-center justify-center border-4 border-white rounded-full overflow-hidden shadow-lg w-12 h-12 md:w-14 md:h-14 bg-blue-100 text-blue-600 font-bold text-xl"
-          onClick={() => setSlidebarOpen(true)}
-        >
-          {isDoctor && currentDoctor?.image ? (
-            <img
-              src={currentDoctor.image}
-              alt={`Dr. ${currentDoctor.name}`}
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = "";
-                e.target.className = "hidden"; // Hide broken image
-              }}
-            />
-          ) : (
-            <span className="flex items-center justify-center w-full h-full">
-              {currentUser?.name?.charAt(0) || "u"}
-            </span>
+          {!id && !type && (
+            <div className="flex items-center space-x-4">
+              <Link
+                to="/login"
+                className="text-blue-600 font-medium hover:text-blue-800 transition"
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-5 py-2 rounded-full font-medium hover:shadow-lg transition-all"
+              >
+                Sign Up
+              </Link>
+            </div>
           )}
         </div>
-      </nav>
+      </header>
       {SlidebarOpen && <Slidbar setSlidebarOpen={setSlidebarOpen} />}
     </>
   );

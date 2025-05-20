@@ -28,7 +28,7 @@ const ProtectedRoutes = ({ allowedRoles }) => {
           break;
         case "user":
           toast.error("No Access - Users cannot access this route.");
-          navigate("/home");
+          navigate("/");
           break;
         default:
           clearState();

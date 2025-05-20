@@ -29,54 +29,47 @@ const router = createBrowserRouter([
   // ── Public ─────────────────────────────────────────────────────
   { path: "/login", element: <LoginPage /> },
   { path: "/register", element: <Register /> },
-  { path: "/", element: <TestHomepage /> },
-  { path: "/testdoctor", element: <TestDoctorpage /> },
-  { path: "/testdoctor/:id", element: <TestDoctorProfile /> },
-  { path: "/testservices", element: <TestServices /> },
   // { path: "/", element: <GuestUserHome /> },
   { path: "*", element: <Notfound /> },
-
-  // ── Authenticated ──────────────────────────────────────────────
   {
-    // guard for any authenticated role
-    element: <ProtectedRoutes allowedRoles={["user", "doctor", "admin"]} />,
+    path: "/", // at “/”
+    element: <Mainlayout />, // show navbar/layout
     children: [
+      { path: "/", element: <TestHomepage /> },
+      { path: "/testdoctor", element: <TestDoctorpage /> },
+      { path: "/testdoctor/:id", element: <TestDoctorProfile /> },
+      { path: "/testservices", element: <TestServices /> },
+      { path: "/appointment/calendar", element: <Appointment /> },
+      { path: "/appointment/details", element: <UserDashboard /> },
+      { path: "/account/change-password", element: <PasswordChange /> },
+
+      // ── Authenticated ──────────────────────────────────────────────
+
+      // ── Doctor + Admin ─────────────────────────
       {
-        path: "/", // at “/”
-        element: <Mainlayout />, // show navbar/layout
+        element: <ProtectedRoutes allowedRoles={["doctor", "admin"]} />,
         children: [
-          { path: "/home", element: <UserHome /> }, // GET /
-          { path: "/appointment/calendar", element: <Appointment /> },
-          { path: "/appointment/details", element: <UserDashboard /> },
-          { path: "/account/change-password", element: <PasswordChange /> },
-
-          // ── Doctor + Admin ─────────────────────────
+          { path: "/doctor/dashboard", element: <DoctorHomePage /> },
           {
-            element: <ProtectedRoutes allowedRoles={["doctor", "admin"]} />,
-            children: [
-              { path: "/doctor/dashboard", element: <DoctorHomePage /> },
-              {
-                path: "/doctor/appointments",
-                element: <DoctorsAppointments />,
-              },
-              { path: "/doctor/Profile/:id", element: <DoctorProfile /> },
-              {
-                path: "/doctor/Profile/update/:id",
-                element: <UpdateProfile />,
-              },
-            ],
+            path: "/doctor/appointments",
+            element: <DoctorsAppointments />,
           },
-
-          // ── Admin Only ─────────────────────────────
+          { path: "/doctor/Profile/:id", element: <DoctorProfile /> },
           {
-            element: <ProtectedRoutes allowedRoles={["admin"]} />,
-            children: [
-              { path: "/admin/dashboard", element: <AdminHome /> },
-              { path: "/patient/details", element: <UserDetails /> },
-              { path: "/admin/doctors/new", element: <AddDoctor /> },
-              { path: "/admin/doctors/:id", element: <DoctorProfilePage /> },
-            ],
+            path: "/doctor/Profile/update/:id",
+            element: <UpdateProfile />,
           },
+        ],
+      },
+
+      // ── Admin Only ─────────────────────────────
+      {
+        element: <ProtectedRoutes allowedRoles={["admin"]} />,
+        children: [
+          { path: "/admin/dashboard", element: <AdminHome /> },
+          { path: "/patient/details", element: <UserDetails /> },
+          { path: "/admin/doctors/new", element: <AddDoctor /> },
+          { path: "/admin/doctors/:id", element: <DoctorProfilePage /> },
         ],
       },
     ],
