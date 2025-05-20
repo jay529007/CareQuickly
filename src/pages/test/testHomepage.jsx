@@ -188,7 +188,7 @@ function TestHomepage() {
                 mind.
               </p>
               <img
-                src="https://doctor-apoinment-system.vercel.app/medicalTeam(2).jpg"
+                src="https://doctor-apoinment-system.vercel.app/medicalTeam (2).jpg"
                 alt="Medical team"
                 className="w-full h-48 object-cover rounded-lg"
               />
