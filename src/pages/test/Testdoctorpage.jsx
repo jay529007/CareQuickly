@@ -27,7 +27,7 @@ export default function TestDoctorpage() {
         {/* Specialty Filter */}
         <div className="mb-12 flex flex-wrap gap-4 justify-center">
           <button
-            onClick={() => setSpecialists("")}
+            onClick={() => setSpecialists()}
             className="px-6 py-2 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 transition"
           >
             All
@@ -62,7 +62,8 @@ export default function TestDoctorpage() {
                 </p>
                 <div className="flex items-center text-gray-600 mb-4">
                   <span className="mr-2">
-                    ⭐ {doctor.experience}+ Years Experience
+                    <b>{doctor.experience - 1}+</b>
+                    Years Experience
                   </span>
                 </div>
                 <div className="flex flex-wrap gap-2 mb-4">

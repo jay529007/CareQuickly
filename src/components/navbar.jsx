@@ -51,9 +51,10 @@ const Navbar = () => {
 
   const Linkclass = ({ isActive }) =>
     isActive
-      ? "hover:bg-blue-600 cursor-pointer py-2.5 px-3.5 rounded-2xl bg-blue-500 text-white transition-all duration-150 "
-      : "hover:bg-gray-200 bg-gray-100 text-gray-700 py-2.5 px-3 rounded-2xl transition-all duration-150 ";
-
+      ? "text-blue-800 font-medium hover:text-blue-600 transition relative group"
+      : "text-gray-600 font-medium hover:text-blue-600 transition relative group";
+  const animatenavbar =
+    "absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300";
   return (
     <>
       <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -68,85 +69,55 @@ const Navbar = () => {
           <nav className="hidden lg:flex space-x-8">
             {!isDoctor && !isAdmin ? (
               <>
-                <Link
-                  to="/"
-                  className="text-blue-800 font-medium hover:text-blue-600 transition relative group"
-                >
+                <NavLink to="/" className={Linkclass}>
                   Home
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
-                </Link>
-                <Link
-                  to="/testservices"
-                  className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
-                >
+                  <span className={animatenavbar} />
+                </NavLink>
+                <NavLink to="/testservices" className={Linkclass}>
                   Services
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
-                </Link>
-                <Link
-                  to="/testdoctor"
-                  className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
-                >
+                  <span className={animatenavbar} />
+                </NavLink>
+                <NavLink to="/testdoctor" className={Linkclass}>
                   Doctors
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
-                </Link>
+                  <span className={animatenavbar} />
+                </NavLink>
                 {isUser && (
-                  <Link
-                    to="/appointment/details"
-                    className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
-                  >
-                    Appointment Details
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
-                  </Link>
+                  <NavLink to="/appointment/details" className={Linkclass}>
+                    Dashboard
+                    <span className={animatenavbar} />
+                  </NavLink>
                 )}
-                <Link
-                  to="/"
-                  className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
-                >
+                <NavLink to="/" className={Linkclass}>
                   Contact
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
-                </Link>
+                  <span className={animatenavbar} />
+                </NavLink>
               </>
             ) : isAdmin ? (
               <>
-                <Link
-                  to="/patient/details"
-                  className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
-                >
+                <NavLink to="/patient/details" className={Linkclass}>
                   Patient Details
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
-                </Link>
-                <Link
-                  to="/admin/Dashboard"
-                  className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
-                >
+                  <span className={animatenavbar} />
+                </NavLink>
+                <NavLink to="/admin/Dashboard" className={Linkclass}>
                   Dashboard
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
-                </Link>
+                  <span className={animatenavbar} />
+                </NavLink>
               </>
             ) : (
               isDoctor && (
                 <>
-                  <Link
-                    to="/doctor/dashboard"
-                    className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
-                  >
+                  <NavLink to="/doctor/dashboard" className={Linkclass}>
                     Home
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
-                  </Link>
-                  <Link
-                    to="/doctor/appointments"
-                    className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
-                  >
+                    <span className={animatenavbar} />
+                  </NavLink>
+                  <NavLink to="/doctor/appointments" className={Linkclass}>
                     Appointments
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
-                  </Link>
-                  <Link
-                    to={`/doctor/profile/${id}`}
-                    className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
-                  >
+                    <span className={animatenavbar} />
+                  </NavLink>
+                  <NavLink to={`/doctor/profile/${id}`} className={Linkclass}>
                     profile
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
-                  </Link>
+                    <span className={animatenavbar} />
+                  </NavLink>
                 </>
               )
             )}
