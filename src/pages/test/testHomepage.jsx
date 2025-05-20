@@ -6,63 +6,6 @@ import { RiCustomerService2Fill } from "react-icons/ri";
 function TestHomepage() {
   return (
     <div className="min-h-screen flex flex-col font-sans">
-      {/* Modern Header */}
-      {/* <header className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-              MD
-            </div>
-            <h1 className="text-2xl font-bold text-blue-800">MediBook</h1>
-          </div>
-
-          <nav className="hidden lg:flex space-x-8">
-            <Link
-              to="/"
-              className="text-blue-800 font-medium hover:text-blue-600 transition relative group"
-            >
-              Home
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
-            </Link>
-            <Link
-              to="/testservices"
-              className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
-            >
-              Services
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
-            </Link>
-            <Link
-              to="/testdoctor"
-              className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
-            >
-              Doctors
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
-            </Link>
-            <Link
-              to="/contact"
-              className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
-            >
-              Contact
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
-            </Link>
-          </nav>
-
-          <div className="flex items-center space-x-4">
-            <Link
-              to="/login"
-              className="text-blue-600 font-medium hover:text-blue-800 transition"
-            >
-              Login
-            </Link>
-            <Link
-              to="/register"
-              className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-5 py-2 rounded-full font-medium hover:shadow-lg transition-all"
-            >
-              Sign Up
-            </Link>
-          </div>
-        </div>
-      </header> */}
 
       {/* Hero Section with Doctor Image */}
       <section className="relative">
@@ -197,7 +140,7 @@ function TestHomepage() {
           <div className="flex flex-col lg:flex-row items-center gap-12">
             <div className="lg:w-1/2">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
-                Why Choose <span className="text-blue-600">MediBook</span>
+                Why Choose <span className="text-blue-600">CareQuickly</span>
               </h2>
               <p className="text-gray-600 text-lg mb-8">
                 We're revolutionizing healthcare access with technology that
@@ -303,9 +246,9 @@ function TestHomepage() {
             <div>
               <div className="flex items-center space-x-3 mb-6">
                 <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
-                  MD
+                  C
                 </div>
-                <h3 className="text-xl font-bold">MediBook</h3>
+                <h3 className="text-xl font-bold">CareQuickly</h3>
               </div>
               <p className="text-gray-400 mb-6">
                 Making healthcare accessible and convenient for everyone.
@@ -458,7 +401,7 @@ function TestHomepage() {
               <address className="not-italic text-gray-400 space-y-3">
                 <p>123 Medical Drive</p>
                 <p>Health City, HC 12345</p>
-                <p>Email: info@medibook.com</p>
+                <p>Email: info@CareQuickly.com</p>
                 <p>Phone: (01234) 567890</p>
               </address>
             </div>
@@ -466,7 +409,7 @@ function TestHomepage() {
 
           <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © 2023 MediBook. All rights reserved.
+              © 2023 CareQuickly. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Link

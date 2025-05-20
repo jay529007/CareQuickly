@@ -42,6 +42,7 @@ const router = createBrowserRouter([
       { path: "/appointment/calendar", element: <Appointment /> },
       { path: "/appointment/details", element: <UserDashboard /> },
       { path: "/account/change-password", element: <PasswordChange /> },
+      { path: "/doctor/Profile/:id", element: <DoctorProfile /> },
 
       // ── Authenticated ──────────────────────────────────────────────
 
@@ -54,7 +55,6 @@ const router = createBrowserRouter([
             path: "/doctor/appointments",
             element: <DoctorsAppointments />,
           },
-          { path: "/doctor/Profile/:id", element: <DoctorProfile /> },
           {
             path: "/doctor/Profile/update/:id",
             element: <UpdateProfile />,

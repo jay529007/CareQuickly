@@ -14,7 +14,7 @@ const Nouserfound = () => {
     } else if (type === "doctor") {
       navigate("/doctor/dashboard");
     } else if (type === "user") {
-      navigate("/home");
+      navigate("/");
     } else {
       navigate("/");
       clearState();

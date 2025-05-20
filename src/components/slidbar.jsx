@@ -39,7 +39,7 @@ const Slidbar = ({ setSlidebarOpen }) => {
               <>
                 <li>
                   <Link
-                    to="/home"
+                    to="/"
                     onClick={() => setSlidebarOpen(false)}
                     className={SLidebarButton}
                   >
@@ -49,10 +49,19 @@ const Slidbar = ({ setSlidebarOpen }) => {
                 <li>
                   <Link
                     onClick={() => setSlidebarOpen(false)}
-                    to="/appointment/calendar"
+                    to="/testservices"
                     className={SLidebarButton}
                   >
-                    Appointments
+                    Services
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    onClick={() => setSlidebarOpen(false)}
+                    to="/testdoctor"
+                    className={SLidebarButton}
+                  >
+                    Doctor
                   </Link>
                 </li>
                 <li>

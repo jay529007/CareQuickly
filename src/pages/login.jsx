@@ -91,7 +91,7 @@ const LoginPage = () => {
     }
   };
   useEffect(() => {
-    if (authdata.type === "user") navigate("/home");
+    if (authdata.type === "user") navigate("/");
     else if (authdata.type === "admin") navigate("/admin/dashboard");
     else if (authdata.type === "doctor") navigate("/doctor/dashboard");
   }, [params]);

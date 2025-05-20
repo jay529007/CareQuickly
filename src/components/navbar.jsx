@@ -60,16 +60,16 @@ const Navbar = () => {
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-              MD
+              C
             </div>
-            <h1 className="text-2xl font-bold text-blue-800">MediBook</h1>
+            <h1 className="text-2xl font-bold text-blue-800">CareQuickly</h1>
           </div>
 
           <nav className="hidden lg:flex space-x-8">
             {!isDoctor && !isAdmin ? (
               <>
                 <Link
-                  to="/home"
+                  to="/"
                   className="text-blue-800 font-medium hover:text-blue-600 transition relative group"
                 >
                   Home
@@ -94,12 +94,12 @@ const Navbar = () => {
                     to="/appointment/details"
                     className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
                   >
-                    Dashboard
+                    Appointment Details
                     <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
                   </Link>
                 )}
                 <Link
-                  to="/contact"
+                  to="/"
                   className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
                 >
                   Contact

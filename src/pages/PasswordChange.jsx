@@ -84,7 +84,7 @@ const PasswordChange = () => {
           setVerifyPassword(false);
           reset();
           if (isUser) {
-            navigate("/home");
+            navigate("/");
             
           } else {
             navigate("/admin/dashboard");
