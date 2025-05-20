@@ -20,12 +20,20 @@ import DoctorsAppointments from "./pages/doctor/DoctorsAppointments";
 import DoctorProfile from "./pages/doctor/DoctorProfile";
 import UpdateProfile from "./pages/doctor/updateProfile";
 import PasswordChange from "./pages/PasswordChange";
+import TestHomepage from "./pages/test/testHomepage";
+import TestDoctorpage from "./pages/test/Testdoctorpage";
+import TestDoctorProfile from "./pages/test/TestDoctorProfile";
+import TestServices from "./pages/test/TestServices";
 
 const router = createBrowserRouter([
   // ── Public ─────────────────────────────────────────────────────
   { path: "/login", element: <LoginPage /> },
   { path: "/register", element: <Register /> },
-  { path: "/", element: <GuestUserHome /> },
+  { path: "/", element: <TestHomepage /> },
+  { path: "/testdoctor", element: <TestDoctorpage /> },
+  { path: "/testdoctor/:id", element: <TestDoctorProfile /> },
+  { path: "/testservices", element: <TestServices /> },
+  // { path: "/", element: <GuestUserHome /> },
   { path: "*", element: <Notfound /> },
 
   // ── Authenticated ──────────────────────────────────────────────
