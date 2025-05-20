@@ -3,7 +3,7 @@ import { FaCalendarAlt, FaUserMd, FaBell, FaArrowRight } from "react-icons/fa";
 import { MdHealthAndSafety, MdAccessibility } from "react-icons/md";
 import { RiCustomerService2Fill } from "react-icons/ri";
 
-function TestHomepage() {
+const Homepage = () => {
   return (
     <div className="min-h-screen flex flex-col font-sans">
       {/* Hero Section with Doctor Image */}
@@ -244,14 +244,14 @@ function TestHomepage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
             <div>
               <div className="flex items-center space-x-2">
-                <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center  font-bold text-xl">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center  font-bold text-xl">
                   <img
                     src="https://doctor-apoinment-system.vercel.app//CareQuickly-Logo.png"
                     alt="CareQuickly"
                     className="object-cover"
                   />
                 </div>
-                <h1 className="text-2xl font-bold text-[#083b66]">
+                <h1 className="text-2xl font-bold text-[#55c6c9]">
                   CareQuickly
                 </h1>
               </div>
@@ -441,6 +441,6 @@ function TestHomepage() {
       </footer>
     </div>
   );
-}
+};
 
-export default TestHomepage;
+export default Homepage;

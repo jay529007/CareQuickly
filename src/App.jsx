@@ -20,10 +20,9 @@ import DoctorsAppointments from "./pages/doctor/DoctorsAppointments";
 import DoctorProfile from "./pages/doctor/DoctorProfile";
 import UpdateProfile from "./pages/doctor/updateProfile";
 import PasswordChange from "./pages/PasswordChange";
-import TestHomepage from "./pages/test/testHomepage";
-import TestDoctorpage from "./pages/test/Testdoctorpage";
-import TestDoctorProfile from "./pages/test/TestDoctorProfile";
-import TestServices from "./pages/test/TestServices";
+import Homepage from "./pages/user/Homepage";
+import AllDoctorDisplaypage from "./pages/user/AllDoctorDisplaypage";
+import AllServices from "./pages/user/AllServices";
 
 const router = createBrowserRouter([
   // ── Public ─────────────────────────────────────────────────────
@@ -35,10 +34,9 @@ const router = createBrowserRouter([
     path: "/", // at “/”
     element: <Mainlayout />, // show navbar/layout
     children: [
-      { path: "/", element: <TestHomepage /> },
-      { path: "/testdoctor", element: <TestDoctorpage /> },
-      { path: "/testdoctor/:id", element: <TestDoctorProfile /> },
-      { path: "/testservices", element: <TestServices /> },
+      { path: "/", element: <Homepage /> },
+      { path: "/doctors", element: <AllDoctorDisplaypage /> },
+      { path: "/services", element: <AllServices /> },
       { path: "/appointment/calendar", element: <Appointment /> },
       { path: "/appointment/details", element: <UserDashboard /> },
       { path: "/account/change-password", element: <PasswordChange /> },

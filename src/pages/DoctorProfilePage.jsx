@@ -30,7 +30,7 @@ const DoctorProfilePage = ({ isDoctor }) => {
             (isUser && (
               <div className="mb-6">
                 <Link
-                  to={isAdmin ? "/admin/dashboard" : isUser && "/testdoctor"}
+                  to={isAdmin ? "/admin/dashboard" : isUser && "/doctors"}
                   className="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors font-medium group"
                 >
                   <svg

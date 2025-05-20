@@ -1,6 +1,6 @@
 import React from "react";
 import { loadState } from "../store/localstorage";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const DocterCard = ({ doctor }) => {
   const authdata = loadState();
@@ -18,18 +18,10 @@ const DocterCard = ({ doctor }) => {
             {doctor.specialty} · {doctor.experience} years experience
           </p>
           <button
-            onClick={() =>
-              !id
-                ? navigate("/login")
-                : (console.log(doctor.name),
-                  console.log(doctor.specialty),
-                  // setShowModal(true),
-                  navigate("/appointment/calendar"))
-            }
-            className=" w-full px-4 py-2  rounded-lg bg-blue-500 text-white cursor-pointer"
+            className=" w-full  px-4 py-2  rounded-lg bg-blue-500 text-white cursor-pointer"
+            onClick={() => navigate(`/doctor/Profile/${doctor.id}`)}
           >
-            {/* {id ? "Book Now" : "Login to Book"} */}
-            Book Appointments
+            View More
           </button>
         </div>
       </div>

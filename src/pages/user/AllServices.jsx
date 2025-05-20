@@ -1,4 +1,4 @@
-export default function TestServices() {
+const AllServices = () => {
   const services = [
     {
       title: "Dermatology",
@@ -48,4 +48,5 @@ export default function TestServices() {
       </div>
     </div>
   );
-}
+};
+export default AllServices;

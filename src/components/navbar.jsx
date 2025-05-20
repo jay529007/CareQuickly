@@ -60,7 +60,7 @@ const Navbar = () => {
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+            <div className="w-12 h-12  rounded-full flex items-center justify-center text-white font-bold text-xl">
               <img
                 src="https://doctor-apoinment-system.vercel.app//CareQuickly-Logo.png"
                 alt="CareQuickly"
@@ -77,11 +77,11 @@ const Navbar = () => {
                   Home
                   <span className={animatenavbar} />
                 </NavLink>
-                <NavLink to="/testservices" className={Linkclass}>
+                <NavLink to="/services" className={Linkclass}>
                   Services
                   <span className={animatenavbar} />
                 </NavLink>
-                <NavLink to="/testdoctor" className={Linkclass}>
+                <NavLink to="/doctors" className={Linkclass}>
                   Doctors
                   <span className={animatenavbar} />
                 </NavLink>
