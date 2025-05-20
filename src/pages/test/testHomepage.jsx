@@ -74,7 +74,7 @@ function TestHomepage() {
       <section className="relative">
         <div className="absolute inset-0 bg-blue-900 opacity-30"></div>
         <img
-          src="./heroDoctor"
+          src="https://doctor-apoinment-system.vercel.app/heroDoctor.jpg"
           alt="Doctor with patient"
           className="w-full h-[600px] object-cover"
         />
@@ -157,7 +157,7 @@ function TestHomepage() {
                 for your needs.
               </p>
               <img
-                src="./happyPatient"
+                src="https://doctor-apoinment-system.vercel.app/happyPatient.jpg"
                 alt="Happy patient"
                 className="w-full h-48 object-cover rounded-lg"
               />
@@ -188,7 +188,7 @@ function TestHomepage() {
                 mind.
               </p>
               <img
-                src="./medicalTeam"
+                src="https://doctor-apoinment-system.vercel.app/medicalTeam.jpg"
                 alt="Medical team"
                 className="w-full h-48 object-cover rounded-lg"
               />
@@ -264,7 +264,7 @@ function TestHomepage() {
             <div className="lg:w-1/2">
               <div className="bg-white p-2 rounded-xl shadow-lg">
                 <img
-                  src="./happyPatient"
+                  src="https://doctor-apoinment-system.vercel.app/happyPatient.jpg"
                   alt="Doctor consultation"
                   className="w-full h-auto rounded-lg"
                 />
