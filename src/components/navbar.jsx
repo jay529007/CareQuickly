@@ -87,7 +87,7 @@ const Navbar = () => {
                 </NavLink>
                 {isUser && (
                   <NavLink to="/appointment/details" className={Linkclass}>
-                    Dashboard
+                    Appointment Details
                     <span className={animatenavbar} />
                   </NavLink>
                 )}
