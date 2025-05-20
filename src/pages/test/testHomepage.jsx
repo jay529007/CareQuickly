@@ -25,14 +25,14 @@ function TestHomepage() {
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
             </Link>
             <Link
-              to="/services"
+              to="/testservices"
               className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
             >
               Services
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
             </Link>
             <Link
-              to="/doctors"
+              to="/testdoctor"
               className="text-gray-600 font-medium hover:text-blue-600 transition relative group"
             >
               Doctors
@@ -84,13 +84,13 @@ function TestHomepage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
-                  to="/doctors"
+                  to="/testdoctor"
                   className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-bold text-lg flex items-center justify-center transition"
                 >
-                  Find a Doctor <FaArrowRight className="ml-2" />
+                  Find Link Doctor <FaArrowRight className="ml-2" />
                 </Link>
                 <Link
-                  to="/services"
+                  to="/testservices"
                   className="bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-lg font-bold text-lg flex items-center justify-center transition"
                 >
                   Our Services
@@ -166,7 +166,7 @@ function TestHomepage() {
                 Select available time slots that work with your schedule.
               </p>
               <img
-                src="https://doctor-apoinment-system.vercel.app/Appointment-Calendar.jpg"
+                src="https://doctor-apoinment-system.vercel.app/Appointment-Calendar.png"
                 alt="Appointment booking"
                 className="w-full h-48 object-cover rounded-lg"
               />
@@ -281,10 +281,10 @@ function TestHomepage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              to="/doctors"
+              to="/testdoctor"
               className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-bold text-lg transition"
             >
-              Find a Doctor Now
+              Find Link Doctor Now
             </Link>
             <Link
               to="/register"
@@ -311,8 +311,8 @@ function TestHomepage() {
                 Making healthcare accessible and convenient for everyone.
               </p>
               <div className="flex space-x-4">
-                <a
-                  href="#"
+                <Link
+                  to="/"
                   className="text-gray-400 hover:text-white transition"
                 >
                   <span className="sr-only">Facebook</span>
@@ -327,9 +327,9 @@ function TestHomepage() {
                       clipRule="evenodd"
                     />
                   </svg>
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  to="/"
                   className="text-gray-400 hover:text-white transition"
                 >
                   <span className="sr-only">Twitter</span>
@@ -340,9 +340,9 @@ function TestHomepage() {
                   >
                     <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
                   </svg>
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  to="/"
                   className="text-gray-400 hover:text-white transition"
                 >
                   <span className="sr-only">Instagram</span>
@@ -357,7 +357,7 @@ function TestHomepage() {
                       clipRule="evenodd"
                     />
                   </svg>
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -374,7 +374,7 @@ function TestHomepage() {
                 </li>
                 <li>
                   <Link
-                    to="/services"
+                    to="/testservices"
                     className="text-gray-400 hover:text-white transition"
                   >
                     Services
@@ -382,7 +382,7 @@ function TestHomepage() {
                 </li>
                 <li>
                   <Link
-                    to="/doctors"
+                    to="/testdoctor"
                     className="text-gray-400 hover:text-white transition"
                   >
                     Doctors
@@ -390,7 +390,7 @@ function TestHomepage() {
                 </li>
                 <li>
                   <Link
-                    to="/about"
+                    to="/"
                     className="text-gray-400 hover:text-white transition"
                   >
                     About Us
@@ -398,7 +398,7 @@ function TestHomepage() {
                 </li>
                 <li>
                   <Link
-                    to="/contact"
+                    to="/"
                     className="text-gray-400 hover:text-white transition"
                   >
                     Contact
@@ -412,7 +412,7 @@ function TestHomepage() {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    to="/services/dermatology"
+                    to="/"
                     className="text-gray-400 hover:text-white transition"
                   >
                     Dermatology
@@ -420,7 +420,7 @@ function TestHomepage() {
                 </li>
                 <li>
                   <Link
-                    to="/services/dentistry"
+                    to="/"
                     className="text-gray-400 hover:text-white transition"
                   >
                     Dentistry
@@ -428,7 +428,7 @@ function TestHomepage() {
                 </li>
                 <li>
                   <Link
-                    to="/services/cardiology"
+                    to="/"
                     className="text-gray-400 hover:text-white transition"
                   >
                     Cardiology
@@ -436,7 +436,7 @@ function TestHomepage() {
                 </li>
                 <li>
                   <Link
-                    to="/services/neurology"
+                    to="/"
                     className="text-gray-400 hover:text-white transition"
                   >
                     Neurology
@@ -444,7 +444,7 @@ function TestHomepage() {
                 </li>
                 <li>
                   <Link
-                    to="/services/physician"
+                    to="/"
                     className="text-gray-400 hover:text-white transition"
                   >
                     General Physician
@@ -459,7 +459,7 @@ function TestHomepage() {
                 <p>123 Medical Drive</p>
                 <p>Health City, HC 12345</p>
                 <p>Email: info@medibook.com</p>
-                <p>Phone: (800) 123-4567</p>
+                <p>Phone: (01234) 567890</p>
               </address>
             </div>
           </div>
@@ -470,19 +470,19 @@ function TestHomepage() {
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Link
-                to="/privacy"
+                to="/"
                 className="text-gray-400 hover:text-white text-sm transition"
               >
                 Privacy Policy
               </Link>
               <Link
-                to="/terms"
+                to="/"
                 className="text-gray-400 hover:text-white text-sm transition"
               >
                 Terms of Service
               </Link>
               <Link
-                to="/cookies"
+                to="/"
                 className="text-gray-400 hover:text-white text-sm transition"
               >
                 Cookie Policy
