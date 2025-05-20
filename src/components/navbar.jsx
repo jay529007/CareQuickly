@@ -59,15 +59,15 @@ const Navbar = () => {
     <>
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2">
             <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
               <img
-                src="https://doctor-apoinment-system.vercel.app//CareQuickly Logo.png"
+                src="https://doctor-apoinment-system.vercel.app//CareQuickly-Logo.png"
                 alt="CareQuickly"
-                className="w-full h-64 object-cover"
+                className="object-cover"
               />
             </div>
-            <h1 className="text-2xl font-bold text-blue-800">CareQuickly</h1>
+            <h1 className="text-2xl font-bold text-[#083b66]">CareQuickly</h1>
           </div>
 
           <nav className="hidden lg:flex space-x-8">
