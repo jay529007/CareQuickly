@@ -151,7 +151,7 @@ function TestHomepage() {
                 for your needs.
               </p>
               <img
-                src="https://doctor-apoinment-system.vercel.app/happyPatient1.jpg"
+                src="https://doctor-apoinment-system.vercel.app/Doctorsteam.png"
                 alt="Happy patient"
                 className="w-full h-48 object-cover rounded-lg"
               />
