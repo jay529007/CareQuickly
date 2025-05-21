@@ -187,7 +187,16 @@ const AddDoctor = ({ isDoctor }) => {
                       <input
                         type="tel"
                         {...register("phone", {
-                          /* keep validation */
+                          required: "Enter your number",
+                          pattern: {
+                            value: /^[6-9]/,
+                            message: "Number must start with 6 - 9",
+                          },
+                          validate: {
+                            isTenDigits: (value) =>
+                              value.length === 10 ||
+                              "Phone number must be 10 digits",
+                          },
                         })}
                         className="w-full px-4 py-3 pl-20 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300"
                         placeholder="9876543210"
@@ -233,6 +242,10 @@ const AddDoctor = ({ isDoctor }) => {
                     <div className="space-y-4">
                       <input
                         type="range"
+                        min="0"
+                        max="20"
+                        step="0"
+                        defaultValue="0"
                         {...register("experience", {
                           /* validation */
                         })}
@@ -258,8 +271,14 @@ const AddDoctor = ({ isDoctor }) => {
                             })(),
                           }}
                         >
-                          {watch("experience")} years —{" "}
-                          {/* keep your text logic */}
+                          {watch("experience")} years {" -"}
+                          {(() => {
+                            const val = Number(watch("experience"));
+                            if (val <= 5) return "Good experience";
+                            if (val <= 10) return "Great experience";
+                            if (val <= 15) return "Excellent experience";
+                            return "Veteran in the field";
+                          })()}
                         </div>
                       )}
                     </div>
