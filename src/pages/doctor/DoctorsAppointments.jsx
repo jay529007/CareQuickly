@@ -28,12 +28,11 @@ const DoctorAppointments = () => {
   useEffect(() => {
     dispatch(fetchUsers());
   }, []);
-  // const currentDoctorName = "Dr. Rohan Mehta"
   //   ---------------------------- Filtering Appointments ----------------------------
   // Process and filter appointments
   const filteredAppointments = users
     .flatMap((patient) =>
-      patient.appointments
+      (patient.appointments ?? [])
         .filter((appt) => appt.doctor === currentDoctor?.name)
         .map((appt) => ({
           ...appt,
@@ -123,7 +122,7 @@ const DoctorAppointments = () => {
           <StatCard
             title="Upcoming"
             value={
-              filteredAppointments.filter(
+              filteredAppointments?.filter(
                 (a) => a.status === "Confirmed" && a.datetime >= new Date()
               ).length
             }
@@ -132,7 +131,7 @@ const DoctorAppointments = () => {
           <StatCard
             title="Cancelled"
             value={
-              filteredAppointments.filter((a) => a.status === "Cancelled")
+              filteredAppointments?.filter((a) => a.status === "Cancelled")
                 .length
             }
             icon={<FiX className="text-red-500" />}
@@ -140,7 +139,7 @@ const DoctorAppointments = () => {
           <StatCard
             title="Completed"
             value={
-              filteredAppointments.filter(
+              filteredAppointments?.filter(
                 (a) => a.status === "Confirmed" && a.datetime < new Date()
               ).length
             }

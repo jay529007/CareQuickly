@@ -1,7 +1,6 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Mainlayout from "./pages/mainlayout";
-import GuestUserHome from "./pages/guestUserHome";
 import UserDashboard from "./pages/user/userDashboard";
 import LoginPage from "./pages/login";
 import Register from "./pages/register";
@@ -23,13 +22,14 @@ import PasswordChange from "./pages/PasswordChange";
 import Homepage from "./pages/user/Homepage";
 import AllDoctorDisplaypage from "./pages/user/AllDoctorDisplaypage";
 import AllServices from "./pages/user/AllServices";
+import Nouserfound from "./pages/error/no-userfound";
 
 const router = createBrowserRouter([
   // ── Public ─────────────────────────────────────────────────────
   { path: "/login", element: <LoginPage /> },
   { path: "/register", element: <Register /> },
-  // { path: "/", element: <GuestUserHome /> },
   { path: "*", element: <Notfound /> },
+  { path: "/nouserfound", element: <Nouserfound /> },
   {
     path: "/", // at “/”
     element: <Mainlayout />, // show navbar/layout
