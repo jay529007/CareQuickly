@@ -1,6 +1,7 @@
 import { FiX } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { clearState, loadState } from "../store/localstorage";
+import { toast } from "react-toastify";
 
 const Slidbar = ({ setSlidebarOpen }) => {
   const navigate = useNavigate();
@@ -11,6 +12,19 @@ const Slidbar = ({ setSlidebarOpen }) => {
   const isUser = type === "user";
   const isAdmin = type === "admin";
   const isDoctor = type === "doctor";
+  const Logout = () => {
+    try {
+      clearState();
+      toast.success("Logged out successfully!");
+      setSlidebarOpen(false);
+      // setTimeout(() => window.location.reload(), 1000);
+      setTimeout(() => navigate("/"), 1000);
+    } catch (error) {
+      toast.error("Failed to log out. Please try again.");
+      console.error("Logout error:", error);
+    }
+  };
+
   const SLidebarButton =
     "block px-3 py-2 rounded text-black cursor-pointer hover:bg-blue-500 hover:text-white transition-all duration-100 ";
   return (
@@ -151,11 +165,7 @@ const Slidbar = ({ setSlidebarOpen }) => {
           {/* Footer Button */}
           <div className="absolute bottom-4 left-4 right-4">
             <button
-              onClick={() => {
-                setSlidebarOpen(false);
-                clearState();
-                navigate("/");
-              }}
+              onClick={() => Logout()}
               className="w-full py-2 text-center bg-gray-100 duration-150 text-black hover:text-white rounded hover:bg-red-600"
             >
               Logout

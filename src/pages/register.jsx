@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import Input from "../components/re-usablecomponets/InputFeild";
 import { Link } from "react-router-dom";
@@ -7,8 +7,29 @@ import { addUser } from "../functions/userAPI";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { MdContactEmergency } from "react-icons/md";
+import {
+  FiUser,
+  FiMail,
+  FiPhone,
+  FiLock,
+  FiCalendar,
+  FiChevronDown,
+  FiAlertCircle,
+  FiMapPin,
+  FiPlus,
+  FiArrowRight,
+} from "react-icons/fi";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    confirm: false,
+  });
+  const togglePassword = (field) => {
+    setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
@@ -37,203 +58,363 @@ const Register = () => {
   };
 
   const errorClass =
-    "text-[#D14343] text-sm w-fit p-1 font-medium uppercase mt-2 bg-red-50 rounded";
+    "flex items-center text-red-600 text-sm bg-red-50 px-3 py-2 rounded-lg";
 
   return (
     <>
-      <div className="flex justify-center items-center min-h-screen bg-[#EBF8FF] px-4 py-4">
-        <div className="w-full max-w-4xl bg-white p-10 rounded-3xl shadow-2xl border border-[#E2E8F0]">
-          <h2 className="text-3xl font-extrabold text-center text-[#2B6CB0] mb-8">
-            Create your account
-          </h2>
-
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-            {/* Full Name */}
-            <div>
-              <Input
-                label="Full Name"
-                type="text"
-                {...register("name", { required: "Name is required" })}
-              />
-              {errors.name && (
-                <p className={errorClass}>{errors.name.message}</p>
-              )}
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-xl w-full max-w-3xl transition-all duration-300 transform hover:shadow-2xl">
+          <div className="p-8 space-y-6">
+            {/* Header */}
+            <div className="text-center space-y-2">
+              <div className="mx-auto bg-gradient-to-br from-blue-600 to-indigo-700 w-fit p-3 rounded-2xl shadow-lg">
+                <FiUser className="text-white w-8 h-8" />
+              </div>
+              <h2 className="text-3xl font-bold text-gray-800 mt-4">
+                Create Your Account
+              </h2>
+              <p className="text-gray-500">
+                Join our community in just a few steps
+              </p>
             </div>
-            {/* Email + Phone */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <Input
-                  label="Email"
-                  type="email"
-                  {...register("email", {
-                    required: "Email is required",
-                    pattern: {
-                      value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                      message: "Invalid email address",
-                    },
-                  })}
-                />
-                {errors.email && (
-                  <p className={errorClass}>{errors.email.message}</p>
-                )}
-              </div>
 
-              <div>
-                <Input
-                  label="Phone Number"
-                  type="number"
-                  placeholder="10-digit number"
-                  {...register("number", {
-                    required: "Enter your number",
-                    pattern: {
-                      value: /^[6-9]/,
-                      message: "Number must start with 6 - 9",
-                    },
-                    validate: {
-                      isTenDigits: (value) =>
-                        value.length === 10 || "Phone number must be 10 digits",
-                    },
-                  })}
-                />
-                {errors.number && (
-                  <p className={errorClass}>{errors.number.message}</p>
-                )}
-              </div>
-            </div>
-            {/* Password + Confirm */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <Input
-                  label="Password"
-                  type="password"
-                  placeholder="Create a password"
-                  {...register("password", {
-                    required: "Password is required",
-                  })}
-                />
-                {errors.password && (
-                  <p className={errorClass}>{errors.password.message}</p>
-                )}
-              </div>
-
-              <div>
-                <Input
-                  label="Confirm Password"
-                  type="password"
-                  placeholder="Repeat password"
-                  {...register("confirmPassword", {
-                    required: "Confirm Password is required",
-                    validate: (value) =>
-                      value === password || "Passwords do not match",
-                  })}
-                />
-                {errors.confirmPassword && (
-                  <p className={errorClass}>{errors.confirmPassword.message}</p>
-                )}
-              </div>
-            </div>
-            {/* DOB + Gender */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <Input
-                  label="Date of Birth"
-                  type="date"
-                  {...register("dob", {
-                    required: "Date of birth is required",
-                  })}
-                />
-                {errors.dob && (
-                  <p className={errorClass}>{errors.dob.message}</p>
-                )}
-              </div>
-
-              {/* Gender (Dropdown) */}
-              <div>
-                <label
-                  htmlFor="gender"
-                  className="block mb-2 text-slate-700 font-semibold"
-                >
-                  Gender
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* Full Name */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center">
+                  <FiUser className="mr-2 text-gray-500" />
+                  Full Name
                 </label>
-                <select
-                  className="bg-[#F7FAFC] border border-[#CBD5E0] text-[#4A5568] text-sm rounded-lg focus:ring-1 focus:ring-[#000000] focus:border-[#000000] block w-full p-2.5"
-                  {...register("gender", { required: "Gender is required" })}
-                >
-                  <option hidden value="">
-                    Select Gender
-                  </option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </select>
-                {errors.gender && (
-                  <p className={errorClass}>{errors.gender.message}</p>
+                <div className="relative">
+                  <input
+                    type="text"
+                    {...register("name", { required: "Name is required" })}
+                    className="w-full px-4 py-3 pl-11 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 placeholder-gray-400"
+                    placeholder="John Doe"
+                  />
+                  <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+                {errors.name && (
+                  <div className={errorClass}>
+                    <FiAlertCircle className="mr-2" />
+                    {errors.name.message}
+                  </div>
                 )}
               </div>
-            </div>
-            {/* Emergency Contact */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <Input
-                  label="Emergency Contact Name"
-                  {...register("emergency_contact.name")}
+
+              {/* Email + Phone */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 flex items-center">
+                    <FiMail className="mr-2 text-gray-500" />
+                    Email Address
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="email"
+                      {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                          value:
+                            /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                          message: "Invalid email address",
+                        },
+                      })}
+                      className="w-full px-4 py-3 pl-11 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 placeholder-gray-400"
+                      placeholder="name@example.com"
+                    />
+                    <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                  </div>
+                  {errors.email && (
+                    <div className={errorClass}>
+                      <FiAlertCircle className="mr-2" />
+                      {errors.email.message}
+                    </div>
+                  )}
+                </div>
+
+                {/* Phone Number */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 flex items-center">
+                    <FiPhone className="mr-2 text-gray-500" />
+                    Phone Number
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      {...register("number", {
+                        required: "Phone number is required",
+                        pattern: {
+                          value: /^[6-9]/,
+                          message: "Number must start with 6 - 9",
+                        },
+                        validate: {
+                          isTenDigits: (value) =>
+                            value.length === 10 ||
+                            "Phone number must be 10 digits",
+                        },
+                      })}
+                      className="w-full px-4 py-3 pl-11 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 placeholder-gray-400"
+                      placeholder="9876543210"
+                    />
+                    <FiPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                  </div>
+                  {errors.number && (
+                    <div className={errorClass}>
+                      <FiAlertCircle className="mr-2" />
+                      {errors.number.message}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Password + Confirm */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 flex items-center">
+                    <FiLock className="mr-2 text-gray-500" />
+                    Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPassword.password ? "text" : "password"}
+                      {...register("password", {
+                        required: "Password is required",
+                      })}
+                      className="w-full px-4 py-3 pl-11 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 placeholder-gray-400"
+                      placeholder="••••••••"
+                    />
+                    <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                      onClick={() => togglePassword("password")}
+                    >
+                      {showPassword.password ? (
+                        <FaEyeSlash className="text-gray-400 hover:text-gray-600" />
+                      ) : (
+                        <FaEye className="text-gray-400 hover:text-gray-600" />
+                      )}
+                    </button>
+                  </div>
+                  {errors.password && (
+                    <div className={errorClass}>
+                      <FiAlertCircle className="mr-2" />
+                      {errors.password.message}
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 flex items-center">
+                    <FiLock className="mr-2 text-gray-500" />
+                    Confirm Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPassword.confirm ? "text" : "password"}
+                      {...register("confirmPassword", {
+                        required: "Confirm password is required",
+                        validate: (value) =>
+                          value === password || "Passwords don't match",
+                      })}
+                      className="w-full px-4 py-3 pl-11 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 placeholder-gray-400"
+                      placeholder="••••••••"
+                    />
+                    <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                      onClick={() => togglePassword("confirm")}
+                    >
+                      {showPassword.confirm ? (
+                        <FaEyeSlash className="text-gray-400 hover:text-gray-600" />
+                      ) : (
+                        <FaEye className="text-gray-400 hover:text-gray-600" />
+                      )}
+                    </button>
+                  </div>
+                  {errors.confirmPassword && (
+                    <div className={errorClass}>
+                      <FiAlertCircle className="mr-2" />
+                      {errors.confirmPassword.message}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* DOB + Gender */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 flex items-center">
+                    <FiCalendar className="mr-2 text-gray-500" />
+                    Date of Birth
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="date"
+                      {...register("dob", { required: "DOB is required" })}
+                      className="w-full px-4 py-3 pl-11 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 placeholder-gray-400"
+                    />
+                    <FiCalendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                  </div>
+                  {errors.dob && (
+                    <div className={errorClass}>
+                      <FiAlertCircle className="mr-2" />
+                      {errors.dob.message}
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 flex items-center">
+                    <FiUser className="mr-2  text-gray-500" />
+                    Gender
+                  </label>
+                  <div className="relative">
+                    <select
+                      {...register("gender", {
+                        required: "Gender is required",
+                      })}
+                      className="w-full px-4 py-3 pl-11 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 appearance-none bg-white"
+                    >
+                      <option hidden value="">
+                        Select Gender
+                      </option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                    <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <FiChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                  </div>
+                  {errors.gender && (
+                    <div className={errorClass}>
+                      <FiAlertCircle className="mr-2" />
+                      {errors.gender.message}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Emergency Contact */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 flex items-center">
+                    <MdContactEmergency className="mr-2 text-gray-500" />
+                    Emergency Contact Name
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      {...register("emergency_contact?.name")}
+                      className="w-full px-4 py-3 pl-11 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 placeholder-gray-400"
+                      // placeholder=""
+                    />
+                    <MdContactEmergency className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                  </div>
+                  {errors.emergency_contact?.name && (
+                    <div className={errorClass}>
+                      <FiAlertCircle className="mr-2" />
+                      {errors.emergency_contact?.name.message}
+                    </div>
+                  )}
+                </div>
+                {/* Emergency Contact Phone */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 flex items-center">
+                    <MdContactEmergency className="mr-2 text-gray-500" />
+                    Emergency Contact Phone
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      {...register("emergency_contact.phone", {
+                        pattern: {
+                          value: /^[6-9]/,
+                          message: "Number must start with 6 - 9",
+                        },
+                        validate: {
+                          isTenDigits: (value) =>
+                            value?.toString().length === 10 ||
+                            "Phone number must be 10 digits",
+                        },
+                      })}
+                      className="w-full px-4 py-3 pl-11 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 placeholder-gray-400"
+                      placeholder="9876543210"
+                    />
+                    <MdContactEmergency className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                  </div>
+                  {errors.emergency_contact?.phone && (
+                    <div className={errorClass}>
+                      <FiAlertCircle className="mr-2" />
+                      {errors.emergency_contact.phone.message}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Address */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center">
+                  <FiMapPin className="mr-2 text-gray-500" />
+                  Address
+                </label>
+                <textarea
+                  rows="3"
+                  {...register("address", {
+                    minLength: {
+                      value: 10,
+                      message: "Too short (min 10 chars)",
+                    },
+                  })}
+                  className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 placeholder-gray-400"
+                  placeholder="Enter your full address"
+                />
+                {errors.address && (
+                  <div className="flex items-center text-red-600 text-sm bg-red-50 px-3 py-2 rounded-lg">
+                    <FiAlertCircle className={errorClass} />
+                    {errors.address.message}
+                  </div>
+                )}
+              </div>
+
+              {/* Medical History */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center">
+                  <FiPlus className="mr-2 text-gray-500" />
+                  Medical History (Optional)
+                </label>
+                <textarea
+                  rows="3"
+                  {...register("medical_history")}
+                  className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 placeholder-gray-400"
+                  placeholder="List any medical conditions or allergies"
                 />
               </div>
 
-              <div>
-                <Input
-                  label="Emergency Contact Number"
-                  type="text"
-                  {...register("emergency_contact.phone")}
-                />
-              </div>
-            </div>
-            {/*  Address */}
-            <label className="block mb-2 text-slate-700 font-semibold">
-              Address
-            </label>
-            <textarea
-              rows="3"
-              className="bg-[#F7FAFC] border border-[#CBD5E0]
-            text-[#4A5568] text-sm rounded-lg focus:ring-[#3182CE]
-            focus:border-[#3182CE] block w-full p-3"
-              {...register("address", {
-                minLength: {
-                  value: 10,
-                  message: "Too short! Add more detail.",
-                },
-              })}
-            />
-            {/* Medical History */}
-            <div>
-              <label className="block mb-2 text-gray-700 font-semibold">
-                Medical History
-              </label>
-              <textarea
-                rows="3"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
-                {...register("medical_history")}
-              />
-            </div>
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="w-full py-3 bg-[#3182CE] hover:bg-[#2C5282] transition duration-300 text-white font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-[#90CDF4]"
-            >
-              Register
-            </button>
-          </form>
-
-          <div className="mt-8 text-center">
-            <p className="text-sm text-[#718096]">
-              Already have an account?{" "}
-              <Link
-                to="/login"
-                className="text-[#3182CE] hover:underline font-semibold"
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className="w-full py-4 bg-gradient-to-br from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
               >
-                Login here
-              </Link>
-            </p>
+                Create Account
+                <FiArrowRight className="inline-block ml-2" />
+              </button>
+
+              {/* Footer Links */}
+              <div className="text-center text-sm text-gray-600">
+                <p>
+                  Already have an account?{" "}
+                  <Link
+                    to="/login"
+                    className="text-blue-600 hover:text-indigo-700 font-semibold transition-colors"
+                  >
+                    Login here
+                  </Link>
+                </p>
+              </div>
+            </form>
           </div>
         </div>
       </div>

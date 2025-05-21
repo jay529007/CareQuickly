@@ -36,19 +36,6 @@ const Navbar = () => {
     currentDoctor = doctors.find((doctor) => doctor.id === id);
   }
 
-  const Logout = () => {
-    try {
-      clearState();
-      toast.success("Logged out successfully!");
-      console.log("logout");
-      // setTimeout(() => window.location.reload(), 1000);
-      setTimeout(() => navigate("/"), 1000);
-    } catch (error) {
-      toast.error("Failed to log out. Please try again.");
-      console.error("Logout error:", error);
-    }
-  };
-
   const Linkclass = ({ isActive }) =>
     isActive
       ? "text-blue-800 font-medium hover:text-blue-600 transition relative group"

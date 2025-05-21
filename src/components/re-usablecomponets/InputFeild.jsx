@@ -9,7 +9,7 @@ const Input = ({ label, type = "text", className = "", ...props }, ref) => {
 
       <input
         type={type}
-        className={`bg-white border border-[#CBD5E0] text-[#4A5568] text-sm rounded-lg focus:ring-1 focus:ring-[#3182CE] focus:border-[#3182CE] block w-full p-2.5 ${className}`}
+        className={`w-full px-4 py-3 pl-11 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 placeholder-gray-400 ${className}`}
         ref={ref}
         {...props}
       />

@@ -2,8 +2,28 @@ import { Link } from "react-router-dom";
 import { FaCalendarAlt, FaUserMd, FaBell, FaArrowRight } from "react-icons/fa";
 import { MdHealthAndSafety, MdAccessibility } from "react-icons/md";
 import { RiCustomerService2Fill } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchDoctor } from "../../functions/doctorSlice";
+import { fetchUsers } from "../../functions/userSlice";
 
 const Homepage = () => {
+  const dispatch = useDispatch();
+
+  const users = useSelector((state) => state.users.users);
+  const doctors = useSelector((state) => state.doctors.doctors);
+  useEffect(() => {
+    dispatch(fetchUsers());
+    dispatch(fetchDoctor());
+  }, []);
+  const Specialty = [...new Set(doctors?.map((doctor) => doctor.specialty))];
+
+  const doctorsCount = Array.isArray(doctors) ? doctors.length : 0;
+  const UsersCount = Array.isArray(users) ? users.length : 0;
+  const SpecialistdoctorsCount = Array.isArray(Specialty)
+    ? Specialty.length
+    : 0;
+
   return (
     <div className="min-h-screen flex flex-col font-sans">
       {/* Hero Section with Doctor Image */}
@@ -26,13 +46,13 @@ const Homepage = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
-                  to="/testdoctor"
+                  to="/doctors"
                   className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-bold text-lg flex items-center justify-center transition"
                 >
                   Find Link Doctor <FaArrowRight className="ml-2" />
                 </Link>
                 <Link
-                  to="/testservices"
+                  to="/services"
                   className="bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-lg font-bold text-lg flex items-center justify-center transition"
                 >
                   Our Services
@@ -49,12 +69,14 @@ const Homepage = () => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             <div className="bg-white p-6 rounded-xl shadow-sm">
               <div className="text-4xl font-bold text-blue-600 mb-2">
-                5,000+
+                {UsersCount}+
               </div>
               <div className="text-gray-600">Happy Patients</div>
             </div>
             <div className="bg-white p-6 rounded-xl shadow-sm">
-              <div className="text-4xl font-bold text-blue-600 mb-2">200+</div>
+              <div className="text-4xl font-bold text-blue-600 mb-2">
+                {doctorsCount}+
+              </div>
               <div className="text-gray-600">Specialist Doctors</div>
             </div>
             <div className="bg-white p-6 rounded-xl shadow-sm">
@@ -62,7 +84,9 @@ const Homepage = () => {
               <div className="text-gray-600">Service Availability</div>
             </div>
             <div className="bg-white p-6 rounded-xl shadow-sm">
-              <div className="text-4xl font-bold text-blue-600 mb-2">15+</div>
+              <div className="text-4xl font-bold text-blue-600 mb-2">
+                {SpecialistdoctorsCount}+
+              </div>
               <div className="text-gray-600">Medical Specialties</div>
             </div>
           </div>
@@ -223,7 +247,7 @@ const Homepage = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              to="/testdoctor"
+              to="/doctors"
               className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-bold text-lg transition"
             >
               Find Link Doctor Now
@@ -322,7 +346,7 @@ const Homepage = () => {
                 </li>
                 <li>
                   <Link
-                    to="/testservices"
+                    to="/services"
                     className="text-gray-400 hover:text-white transition"
                   >
                     Services
@@ -330,7 +354,7 @@ const Homepage = () => {
                 </li>
                 <li>
                   <Link
-                    to="/testdoctor"
+                    to="/doctors"
                     className="text-gray-400 hover:text-white transition"
                   >
                     Doctors
