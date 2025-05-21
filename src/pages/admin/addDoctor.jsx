@@ -185,7 +185,8 @@ const AddDoctor = ({ isDoctor }) => {
                         <FiPhone className="text-gray-400" />
                       </div>
                       <input
-                        type="tel"
+                        type="number"
+                        max="10"
                         {...register("phone", {
                           required: "Enter your number",
                           pattern: {
