@@ -161,7 +161,9 @@ const Navbar = () => {
           )}
         </div>
       </header>
-      {SlidebarOpen && <Slidbar setSlidebarOpen={setSlidebarOpen} />}
+      {SlidebarOpen && (
+        <Slidbar type={type} id={id} setSlidebarOpen={setSlidebarOpen} />
+      )}
     </>
   );
 };

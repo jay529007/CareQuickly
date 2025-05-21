@@ -37,12 +37,19 @@ const router = createBrowserRouter([
       { path: "/", element: <Homepage /> },
       { path: "/doctors", element: <AllDoctorDisplaypage /> },
       { path: "/services", element: <AllServices /> },
-      { path: "/appointment/calendar", element: <Appointment /> },
-      { path: "/appointment/details", element: <UserDashboard /> },
-      { path: "/account/change-password", element: <PasswordChange /> },
       { path: "/doctor/Profile/:id", element: <DoctorProfile /> },
 
       // ── Authenticated ──────────────────────────────────────────────
+
+      // ── User + Doctor + Admin ─────────────────────────
+      {
+        element: <ProtectedRoutes allowedRoles={["doctor", "user", "admin"]} />,
+        children: [
+          { path: "/appointment/details", element: <UserDashboard /> },
+          { path: "/appointment/calendar", element: <Appointment /> },
+          { path: "/account/change-password", element: <PasswordChange /> },
+        ],
+      },
 
       // ── Doctor + Admin ─────────────────────────
       {

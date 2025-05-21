@@ -3,11 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { clearState, loadState } from "../store/localstorage";
 import { toast } from "react-toastify";
 
-const Slidbar = ({ setSlidebarOpen }) => {
+const Slidbar = ({ setSlidebarOpen, type, id }) => {
   const navigate = useNavigate();
-  const authdata = loadState();
-  const type = authdata?.type || null;
-  const id = authdata?.id || null;
 
   const isUser = type === "user";
   const isAdmin = type === "admin";
@@ -151,15 +148,29 @@ const Slidbar = ({ setSlidebarOpen }) => {
                 </li>
               </>
             )}
-            <li>
-              <Link
-                to={`/account/change-password`}
-                onClick={() => setSlidebarOpen(false)}
-                className={SLidebarButton}
-              >
-                Change Password
-              </Link>
-            </li>
+            {isUser || isAdmin || isAdmin ? (
+              <li>
+                <Link
+                  to={`/account/change-password`}
+                  onClick={() => setSlidebarOpen(false)}
+                  className={SLidebarButton}
+                >
+                  Change Password
+                </Link>
+              </li>
+            ) : (
+              <li>
+                <Link
+                  to={`/login`}
+                  onClick={() => {
+                    clearState(), setSlidebarOpen(false);
+                  }}
+                  className={SLidebarButton}
+                >
+                  Go And Login
+                </Link>
+              </li>
+            )}
           </ul>
 
           {/* Footer Button */}
