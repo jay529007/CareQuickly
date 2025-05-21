@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import { clearState, loadState } from "../store/localstorage";
+import { useEffect, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { loadState } from "../store/localstorage";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../functions/userSlice";
 import { fetchDoctor } from "../functions/doctorSlice";
-import { toast } from "react-toastify";
 import Slidbar from "./slidbar";
-// import Slidbar from "./slidbar";
 
 const Navbar = () => {
   const [SlidebarOpen, setSlidebarOpen] = useState(false);
-  const navigate = useNavigate();
   const authdata = loadState();
   const type = authdata?.type || null;
   const id = authdata?.id || null;
@@ -46,16 +43,25 @@ const Navbar = () => {
     <>
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <div className="w-12 h-12  rounded-full flex items-center justify-center text-white font-bold text-xl">
+          <Link
+            to={
+              isAdmin
+                ? "/admin/Dashboard"
+                : isDoctor
+                ? "/doctor/dashboard"
+                : "/"
+            }
+            className="flex items-center space-x-2"
+          >
+            <div className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl">
               <img
-                src="https://doctor-apoinment-system.vercel.app//CareQuickly-Logo.png"
-                alt="CareQuickly"
-                className="object-cover"
+                src="https://doctor-apoinment-system.vercel.app/CareQuickly-Logo.png"
+                alt="CareQuickly Logo"
+                className="object-cover w-full h-full"
               />
             </div>
             <h1 className="text-2xl font-bold text-[#083b66]">CareQuickly</h1>
-          </div>
+          </Link>
 
           <nav className="hidden lg:flex space-x-8">
             {!isDoctor && !isAdmin ? (
