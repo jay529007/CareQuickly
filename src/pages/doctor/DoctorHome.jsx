@@ -41,17 +41,18 @@ const DoctorHomePage = () => {
 
   // ------------------------------------ Total Patients ------------------------------------
 
-  const patientIds = new Set();
+  const patientnames = new Set();
 
   users.forEach((user) => {
     const hasToday = user.appointments?.some(
-      (appt) => appt.doctor === currentDoctor.name 
+      (appt) => appt.doctor === currentDoctor.name
       // && appt.slot.date === today
     );
-    if (hasToday) patientIds.add(user.id);
+    if (hasToday) patientnames.add(user.name);
   });
 
-  const totalPatientsToday = patientIds.size;
+  const totalPatientsToday = patientnames.size;
+  console.log(currentDoctorAppointments);
 
   // ------------------------------- Upcoming appointments -------------------------------
   const now = new Date();
@@ -232,20 +233,38 @@ const DoctorHomePage = () => {
             Recent Appointments
           </h2>
           <div className="space-y-4">
-            {[1, 2, 3].map((item) => (
-              <div
-                key={item}
-                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
-              >
-                <div>
-                  <p className="font-medium text-gray-800">Patient Name</p>
-                  <p className="text-sm text-gray-500">10:00 AM - 10:30 AM</p>
+            {currentDoctorAppointments ? (
+              currentDoctorAppointments?.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                >
+                  <div>
+                    <p className="font-medium text-gray-800">
+                      {patientnames || "N/A"}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {item?.slot?.start || "N/A"} - {item?.slot?.end || "N/A"}
+                    </p>
+                  </div>
+                  <span
+                    className={`px-3 py-1 bg-green-100  rounded-full text-sm ${
+                      item.status === "Confirmed"
+                        ? "bg-green-100 text-green-700"
+                        : item.status === "Pending"
+                        ? "bg-yellow-100  text-yellow-700"
+                        : item.status === "Cancelled"
+                        ? "bg-red-100  text-red-700"
+                        : "bg-gray-100 text-gray-700"
+                    }`}
+                  >
+                    {item?.status || "N/A"}
+                  </span>
                 </div>
-                <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
-                  Confirmed
-                </span>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="font-bold underline">No Recent Appointments</p>
+            )}
           </div>
         </div>
       </div>

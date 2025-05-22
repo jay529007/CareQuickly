@@ -23,6 +23,7 @@ import Homepage from "./pages/user/Homepage";
 import AllDoctorDisplaypage from "./pages/user/AllDoctorDisplaypage";
 import AllServices from "./pages/user/AllServices";
 import Nouserfound from "./pages/error/no-userfound";
+import DoctorLeave from "./pages/doctor/DoctorLeave";
 
 const router = createBrowserRouter([
   // ── Public ─────────────────────────────────────────────────────
@@ -63,6 +64,10 @@ const router = createBrowserRouter([
           {
             path: "/doctor/Profile/update/:id",
             element: <UpdateProfile />,
+          },
+          {
+            path: "/doctor/leave/:id",
+            element: <DoctorLeave />,
           },
         ],
       },
