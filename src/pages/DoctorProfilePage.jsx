@@ -217,7 +217,7 @@ const DoctorProfilePage = ({ isDoctor }) => {
                 {currentDoctor?.about && (
                   <div className="mt-6 pt-6 border-t">
                     <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                      About Dr. {currentDoctor?.name.split(" ")[1]}
+                      About Dr. {currentDoctor?.name?.split(" ")[1]}
                     </h3>
                     <p className="text-gray-700 leading-relaxed">
                       {currentDoctor?.about}

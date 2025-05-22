@@ -71,7 +71,7 @@ const VerifyPassword = ({
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                New Password
+                Password
               </label>
               <div className="relative">
                 <input
@@ -96,7 +96,7 @@ const VerifyPassword = ({
               type="submit"
               className="w-full py-4 bg-gradient-to-br from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
-              Update Password
+               Verify
             </button>
 
             {/* Security Tips */}
