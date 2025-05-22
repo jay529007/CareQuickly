@@ -11,38 +11,89 @@ import {
   FiBell,
   FiArrowUpRight,
 } from "react-icons/fi";
+import { fetchUsers } from "../../functions/userSlice";
+import { format } from "date-fns";
 
 const DoctorHomePage = () => {
   const authdata = loadState();
   const doctorId = authdata.id;
   const dispatch = useDispatch();
   const doctors = useSelector((state) => state.doctors.doctors);
-
+  const users = useSelector((state) => state.users.users);
   useEffect(() => {
     dispatch(fetchDoctor());
+    dispatch(fetchUsers());
   }, [dispatch]);
+  const today = format(new Date(), "yyyy-MM-dd");
 
   const currentDoctor = doctors?.find((doctor) => doctor.id === doctorId);
 
-  // Dummy data for demonstration
+  // Flatten all appointments across users
+  const allAppointments = users?.flatMap((user) => user.appointments || []);
+
+  // Filter appointments by current doctor
+  const currentDoctorAppointments = allAppointments?.filter(
+    (appointment) => appointment.doctor === currentDoctor?.name
+  );
+
+  // ------------------------------------ Total slots ------------------------------------
+  const totalSlots = currentDoctorAppointments?.length || 0;
+
+  // ------------------------------------ Total Patients ------------------------------------
+
+  const patientIds = new Set();
+
+  users.forEach((user) => {
+    const hasToday = user.appointments?.some(
+      (appt) => appt.doctor === currentDoctor.name 
+      // && appt.slot.date === today
+    );
+    if (hasToday) patientIds.add(user.id);
+  });
+
+  const totalPatientsToday = patientIds.size;
+
+  // ------------------------------- Upcoming appointments -------------------------------
+  const now = new Date();
+
+  // Filter only future appointments (start time after now)
+  const upcomingAppointments = currentDoctorAppointments?.filter(
+    (appointment) => {
+      const appointmentDateTime = new Date(
+        `${appointment.slot.date}T${appointment.slot.start}`
+      );
+      return appointmentDateTime >= now;
+    }
+  );
+
+  // Optional: Sort upcoming appointments by date/time
+  const sortedUpcomingAppointments = upcomingAppointments?.sort(
+    (a, b) =>
+      new Date(`${a.slot.date}T${a.slot.start}`) -
+      new Date(`${b.slot.date}T${b.slot.start}`)
+  );
+
+  const upcomingCount = sortedUpcomingAppointments?.length || 0;
+
+  //  data for demonstration
   const stats = [
     {
       title: "Upcoming Appointments",
-      value: "12",
+      value: `${upcomingCount}`,
       icon: FiCalendar,
       color: "bg-blue-100",
       text: "text-blue-600",
     },
     {
       title: "Total Patients",
-      value: "1.2k",
+      value: `${totalPatientsToday}`,
       icon: FiUser,
       color: "bg-green-100",
       text: "text-green-600",
     },
     {
       title: "Availability",
-      value: "6 slots",
+      value: `${totalSlots} slots`,
       icon: FiClock,
       color: "bg-purple-100",
       text: "text-purple-600",
@@ -57,7 +108,11 @@ const DoctorHomePage = () => {
   ];
 
   const quickActions = [
-    { title: "Update Profile", icon: FiUser, link: "/doctor/profile" },
+    {
+      title: "Update Profile",
+      icon: FiUser,
+      link: `/doctor/Profile/update/${doctorId}`,
+    },
     {
       title: "Set Availability",
       icon: FiCalendar,
