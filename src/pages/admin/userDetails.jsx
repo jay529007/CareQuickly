@@ -89,7 +89,7 @@ const UserDetails = () => {
   }, [filteredallAppointments, sortAsc]);
   const toggleSort = () => setSortAsc((s) => !s);
   return (
-    <div className="p-6">
+    <div className="md:mx-[7%] 2xl:mx-[20%] p-2">
       <div className="flex justify-between pr-2">
         <h1 className="text-3xl font-bold mb-6">User Details</h1>
         <div>

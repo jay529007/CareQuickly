@@ -94,7 +94,7 @@ const AdminHome = () => {
   };
 
   return (
-    <div className="mx-[10%] py-10 flex flex-col justify-between">
+    <div className="mx-[10%] 2xl:mx-[21%] py-10 flex flex-col justify-between">
       {/* add new appointment */}
       <div className="self-end">
         <button

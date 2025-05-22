@@ -12,11 +12,12 @@ import { useForm } from "react-hook-form";
 import { updateUser } from "../functions/userAPI";
 import { fetchDoctor } from "../functions/doctorSlice";
 import { dateFnsLocalizer } from "react-big-calendar";
-import { format, parse, startOfWeek, getDay } from "date-fns";
+import { format, parse, startOfWeek, getDay, setDate } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import { toast } from "react-toastify";
 import { isAfter, startOfDay } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import { createSerializableStateInvariantMiddleware } from "@reduxjs/toolkit";
 
 const locales = { "en-US": enUS };
 
@@ -27,6 +28,13 @@ export const localizer = dateFnsLocalizer({
   getDay,
   locales,
 });
+
+const hospitalHours = {
+  open: "10:00",
+  close: "19:00",
+  lunch: { start: "12:00", end: "14:00" },
+  workingDays: [1, 2, 3, 4, 5, 6], // Mon–Sat (0 = Sun)
+};
 
 const slotsTimeValue = [
   "10:00",
@@ -183,7 +191,7 @@ const MyCalendar = () => {
     return time12;
   });
 
-  // -----------------------------------------------------------------------------------------
+  // ----------------------------------------------------------------------------------------
 
   const handleDoctorChange = (e) => {
     const doctor = FilterdDoctersbySpecialty.find(
@@ -243,6 +251,30 @@ const MyCalendar = () => {
       },
     };
   };
+  // -------------------  TESTING  -----------------------------------
+  const isSlotWithinHospitalHours = (start, end) => {
+    const open = parseInt(hospitalHours.open.slice(0, 2), 10);
+    const close = parseInt(hospitalHours.close.slice(0, 2), 10);
+    const s = parseInt(format(start, "HH"), 10);
+    const e = parseInt(format(end, "HH"), 10);
+    return s >= open && e <= close;
+  };
+
+  const isSlotDuringLunch = (start, end) => {
+    const lunchStart = parseInt(hospitalHours.lunch.start.slice(0, 2), 10);
+    const lunchEnd = parseInt(hospitalHours.lunch.end.slice(0, 2), 10);
+    const s = parseInt(format(start, "HH"), 10);
+    const e = parseInt(format(end, "HH"), 10);
+    return s < lunchEnd && lunchStart < e;
+  };
+
+  const isSlotInsideBlockedTime = (start, end, blocked) => {
+    const bStart = parseInt(blocked.start.slice(0, 2), 10);
+    const bEnd = parseInt(blocked.end.slice(0, 2), 10);
+    const s = parseInt(format(start, "HH"), 10);
+    const e = parseInt(format(end, "HH"), 10);
+    return s < bEnd && bStart < e;
+  };
 
   // -------------------  dnd and form logic -----------------------------------
   const selectedDoctorslot = selectedDoctor?.availableslots?.find(
@@ -289,7 +321,6 @@ const MyCalendar = () => {
 
     const reqStartHour = parseInt(format(start, "HH"), 10);
     const reqEndHour = parseInt(format(end, "HH"), 10);
-
     return confirmedSlots.some((apt) => {
       const blockedStart = parseInt(apt?.slot?.start.slice(0, 2), 10);
       const blockedEnd = parseInt(apt?.slot?.end.slice(0, 2), 10);
@@ -298,7 +329,7 @@ const MyCalendar = () => {
     });
   };
 
-  function isDnDSlotUnavailable(start, end, doctorslot) {
+  const isDnDSlotUnavailable = (start, end, doctorslot) => {
     if (!doctorslot) {
       // no availability record = unavailable
       return true;
@@ -313,7 +344,7 @@ const MyCalendar = () => {
     // return true if the requested interval lies outside the availability window
     return reqStart < blockedEnd && blockedStart < reqEnd;
     // requestedStart < blockedEnd && blockedStart < requestedEnd;
-  }
+  };
 
   const handleEventDrop = async ({ event, start, end }) => {
     const doctorslot = selectedDoctor?.unavailableslots?.find(
@@ -371,6 +402,7 @@ const MyCalendar = () => {
       toast.error("Could not move appointment");
     }
   };
+  // document.onkeydown:("esc", setShowModal(false));
 
   const handleEventResize = async ({ event, start, end }) => {
     const dropDate = format(start, "yyyy-MM-dd");
@@ -455,6 +487,17 @@ const MyCalendar = () => {
         end: formdata.appointments.slot.end,
       },
     };
+    const start = parse(formdata.appointments.slot.start, "HH:mm", new Date());
+    const end = parse(formdata.appointments.slot.end, "HH:mm", new Date());
+
+    const isWorkingDay = hospitalHours.workingDays.includes(
+      getDay(selectedDate)
+    );
+    const isInHospitalTime = isSlotWithinHospitalHours(start, end);
+    const isDuringLunchBreak = isSlotDuringLunch(start, end);
+    const isBlockedByDoctor =
+      blocked && isSlotInsideBlockedTime(start, end, blocked);
+
     // const isSlotAv = isSlotAvailable(formdata.appointments?.slot);
 
     // const isSlotbl = isSlotBlock(formdata.appointments?.slot);
@@ -468,7 +511,6 @@ const MyCalendar = () => {
       ...currentUser,
       appointments: updatedAppointments,
     };
-
     // if (!isSlotAv) {
     //   toast.info(`${newAppointment.doctor} is not available`);
     //   toast.info("Please Choose any other Slot");
@@ -480,20 +522,39 @@ const MyCalendar = () => {
     //   reset();
     //   return;
     // }
+    if (!isWorkingDay) {
+      toast.info("Hospital is closed on this day");
+      return;
+    }
+
+    if (!isInHospitalTime) {
+      toast.info("Please choose a time within hospital working hours");
+      return;
+    }
+
+    if (isDuringLunchBreak) {
+      toast.info("Cannot book during lunch hours");
+      return;
+    }
+
+    if (isBlockedByDoctor) {
+      toast.info("Doctor is unavailable at this time");
+      return;
+    }
 
     try {
       await updateUser(currentUser.id, updatedUserData);
       dispatch(fetchUsers());
       toast.success("Successfully Booked Appointment");
       // Close modal
-      setShowModal(false);
       reset();
+      setShowModal(false);
       navigate("/appointment/details");
     } catch (error) {
       console.error("Appointment Booking failed", error);
+      reset();
       toast.error("Appointment Booking failed ");
       toast.info("Please try again");
-      reset();
     }
   };
 
@@ -707,7 +768,10 @@ const MyCalendar = () => {
               {/* buttons */}
               <div className="flex justify-end gap-2">
                 <button
-                  onClick={() => setShowModal(false)}
+                  onClick={() => {
+                    reset();
+                    setShowModal(false);
+                  }}
                   className="bg-gray-300 px-3 py-1 rounded"
                 >
                   Cancel

@@ -186,7 +186,6 @@ const AddDoctor = ({ isDoctor }) => {
                       </div>
                       <input
                         type="number"
-                        max="10"
                         {...register("phone", {
                           required: "Enter your number",
                           pattern: {

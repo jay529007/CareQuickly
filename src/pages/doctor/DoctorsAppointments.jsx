@@ -90,8 +90,8 @@ const DoctorAppointments = () => {
               Appointment Dashboard
             </h1>
             <p className="text-gray-600">
-              {`${filter} appointments for ${currentDoctor?.name}`}
-            </p>
+              {`${filter} appointments     for ${currentDoctor?.name}`}
+            </p>  
           </div>
 
           <div className="flex flex-wrap gap-2 mt-4 md:mt-0">

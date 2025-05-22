@@ -6,8 +6,15 @@
       "phone": "9876543210",
       "specialty": "Dermatologist",
       "education": "AIIMS, University of Delhi",
-      "qualifications": ["MBBS", "MD Dermatology"],
-      "languages": ["English", "Hindi", "Spanish"],
+      "qualifications": [
+        "MBBS",
+        "MD Dermatology"
+      ],
+      "languages": [
+        "English",
+        "Hindi",
+        "Spanish"
+      ],
       "password": "$2b$10$NNt5EDLyaC615dgrG2orP.daKmvcYQG1QkrP4IvfUMgH2T9OQOrwC",
       "dateOfBirth": "1983-07-12",
       "gender": "Female",
@@ -17,8 +24,16 @@
       "id": "xEpTWag",
       "availableslots": [],
       "unavailableslots": [
-        { "date": "2025-04-10", "start": "11:00", "end": "12:00" },
-        { "date": "2025-05-14", "start": "11:00", "end": "13:00" }
+        {
+          "date": "2025-04-10",
+          "start": "11:00",
+          "end": "12:00"
+        },
+        {
+          "date": "2025-05-14",
+          "start": "11:00",
+          "end": "13:00"
+        }
       ]
     },
     {
@@ -28,8 +43,14 @@
       "phone": "9876501234",
       "specialty": "Dermatologist",
       "education": "Grant Medical College, Mumbai",
-      "qualifications": ["MBBS", "MD Dermatology"],
-      "languages": ["English", "Hindi"],
+      "qualifications": [
+        "MBBS",
+        "MD Dermatology"
+      ],
+      "languages": [
+        "English",
+        "Hindi"
+      ],
       "password": "doctor",
       "dateOfBirth": "1985-06-15",
       "gender": "Male",
@@ -46,8 +67,14 @@
       "phone": "9876505678",
       "specialty": "Dentist",
       "education": "Manipal College of Dental Sciences",
-      "qualifications": ["BDS", "MDS Prosthodontics"],
-      "languages": ["English", "Hindi"],
+      "qualifications": [
+        "BDS",
+        "MDS Prosthodontics"
+      ],
+      "languages": [
+        "English",
+        "Hindi"
+      ],
       "password": "$2b$10$samplepasswordhash2",
       "dateOfBirth": "1987-09-22",
       "gender": "Male",
@@ -64,8 +91,14 @@
       "phone": "9876509876",
       "specialty": "General Physician",
       "education": "BJ Medical College, Pune",
-      "qualifications": ["MBBS"],
-      "languages": ["English", "Hindi", "Marathi"],
+      "qualifications": [
+        "MBBS"
+      ],
+      "languages": [
+        "English",
+        "Hindi",
+        "Marathi"
+      ],
       "password": "$2b$10$samplepasswordhash3",
       "dateOfBirth": "1980-03-10",
       "gender": "Female",
@@ -82,8 +115,16 @@
       "phone": "9876598765",
       "specialty": "Cardiologist",
       "education": "CMC Vellore",
-      "qualifications": ["MBBS", "MD", "DM Cardiology"],
-      "languages": ["English", "Hindi", "Malayalam"],
+      "qualifications": [
+        "MBBS",
+        "MD",
+        "DM Cardiology"
+      ],
+      "languages": [
+        "English",
+        "Hindi",
+        "Malayalam"
+      ],
       "password": "$2b$10$samplepasswordhash4",
       "dateOfBirth": "1975-11-02",
       "gender": "Male",
@@ -100,8 +141,15 @@
       "phone": "9876587654",
       "specialty": "Surgeons",
       "education": "KEM Hospital, Mumbai",
-      "qualifications": ["MBBS", "MS Surgery"],
-      "languages": ["English", "Hindi", "Gujarati"],
+      "qualifications": [
+        "MBBS",
+        "MS Surgery"
+      ],
+      "languages": [
+        "English",
+        "Hindi",
+        "Gujarati"
+      ],
       "password": "$2b$10$samplepasswordhash5",
       "dateOfBirth": "1990-08-05",
       "gender": "Female",
@@ -118,8 +166,14 @@
       "phone": "9876576543",
       "specialty": "Neurologists",
       "education": "NIMHANS, Bangalore",
-      "qualifications": ["MBBS", "DM Neurology"],
-      "languages": ["English", "Hindi"],
+      "qualifications": [
+        "MBBS",
+        "DM Neurology"
+      ],
+      "languages": [
+        "English",
+        "Hindi"
+      ],
       "password": "$2b$10$samplepasswordhash6",
       "dateOfBirth": "1988-01-30",
       "gender": "Male",
@@ -426,6 +480,30 @@
             "date": "2025-04-30",
             "start": "10:00",
             "end": "12:00"
+          }
+        },
+        {
+          "id": "3ea41eb8-9a07-470a-a69c-edc41d0748c5",
+          "service": "Dermatologist",
+          "doctor": "Dr. K. Sharma",
+          "status": "Pending",
+          "notes": "",
+          "slot": {
+            "date": "2025-05-22",
+            "start": "13:00",
+            "end": "17:00"
+          }
+        },
+        {
+          "id": "deffa1de-d09f-46a5-8316-3699da9ca076",
+          "service": "Cardiologist",
+          "doctor": "Dr. Arvind Nair",
+          "status": "Pending",
+          "notes": "",
+          "slot": {
+            "date": "2025-05-22",
+            "start": "15:00",
+            "end": "15:00"
           }
         }
       ]
