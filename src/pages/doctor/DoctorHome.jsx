@@ -28,6 +28,17 @@ const DoctorHomePage = () => {
 
   const currentDoctor = doctors?.find((doctor) => doctor.id === doctorId);
 
+  if (!currentDoctor || !users || !Array.isArray(users)) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-6 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="text-gray-600 mt-4">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   // Flatten all appointments across users
   const allAppointments = users?.flatMap((user) => user.appointments || []);
 
@@ -45,10 +56,10 @@ const DoctorHomePage = () => {
 
   users.forEach((user) => {
     const hasToday = user.appointments?.some(
-      (appt) => appt.doctor === currentDoctor.name
+      (appt) => appt.doctor === currentDoctor?.name
       // && appt.slot.date === today
     );
-    if (hasToday) patientnames.add(user.name);
+    if (hasToday) patientnames.add(user?.name);
   });
 
   const totalPatientsToday = patientnames.size;
