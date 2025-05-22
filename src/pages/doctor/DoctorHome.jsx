@@ -128,10 +128,10 @@ const DoctorHomePage = () => {
     {
       title: "Set Availability",
       icon: FiCalendar,
-      link: "/doctor/availability",
+      link: `/doctor/leave/${doctorId}`,
     },
     { title: "View Appointments", icon: FiClock, link: "/doctor/appointments" },
-    { title: "Notifications", icon: FiBell, link: "/doctor/notifications" },
+    { title: "Notifications", icon: FiBell, link: "/doctor/dashboard" },
   ];
 
   return (

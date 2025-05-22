@@ -115,10 +115,10 @@ const Navbar = () => {
                     profile
                     <span className={animatenavbar} />
                   </NavLink>
-                  <NavLink to={`/doctor/leave/${id}`} className={Linkclass}>
+                  {/* <NavLink to={`/doctor/leave/${id}`} className={Linkclass}>
                     Leave
                     <span className={animatenavbar} />
-                  </NavLink>
+                  </NavLink> */}
                 </>
               )
             )}
