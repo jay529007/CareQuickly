@@ -111,14 +111,14 @@ const DoctorLeave = () => {
 
       console.log("Updated Doctor:", updatedDoctor);
       await updateDoctorSlot(updatedDoctor.id, updatedDoctor);
-      
-      toast.success("Slot updated successfully");
+    //   toast.info("Leave Will be Approved Shortly");
+      toast.success("Leave Scheduled");
       reset();
       setShowForm(false);
       dispatch(fetchDoctor());
     } catch (error) {
-      console.error("Slot update failed:", error);
-      toast.error("Something went wrong while updating the slot.");
+      console.error("Leave Scheduling failed:", error);
+      toast.error("Something went wrong while Scheduling.");
       setShowForm(false);
       reset();
     }
@@ -142,13 +142,13 @@ const DoctorLeave = () => {
             Mark your unavailable dates and time slots
           </p>
         </div>
-        <button
+        {/* <button
           onClick={() => setShowForm(true)}
           className="bg-blue-600 text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition-colors"
         >
           <Plus className="w-5 h-5" />
           New Leave
-        </button>
+        </button> */}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
