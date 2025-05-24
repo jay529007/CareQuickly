@@ -44,7 +44,7 @@ const router = createBrowserRouter([
 
       // ── User + Doctor + Admin ─────────────────────────
       {
-        element: <ProtectedRoutes allowedRoles={["doctor", "user", "admin"]} />,
+        element: <ProtectedRoutes allowedRoles={["user", "admin"]} />,
         children: [
           { path: "/appointment/details", element: <UserDashboard /> },
           { path: "/appointment/calendar", element: <Appointment /> },
