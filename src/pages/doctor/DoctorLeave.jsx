@@ -9,13 +9,14 @@ import {
   subMonths,
   parse,
 } from "date-fns";
-import { Calendar, Edit, Trash, Plus } from "react-feather";
+import { Calendar, Edit, Trash, Plus, Flag } from "react-feather";
 import { useDispatch, useSelector } from "react-redux";
 import { loadState } from "../../store/localstorage";
 import { fetchDoctor } from "../../functions/doctorSlice";
 import { useForm } from "react-hook-form";
 import { updateDoctorSlot } from "../../functions/doctorAPI";
 import { toast } from "react-toastify";
+import { Trash2 } from "react-feather";
 
 const slotsTimeValue = [
   "10:00",
@@ -35,6 +36,8 @@ const DoctorLeave = () => {
   const [showForm, setShowForm] = useState(false);
   const [SelectedDate, setSelectedDate] = useState();
   const [editingLeave, setEditingLeave] = useState(null);
+  const [pendingDelete, setPendingDelete] = useState(false);
+  const [DeleteConfirmation, setDeleteConfirmation] = useState(false);
 
   const authdata = loadState();
   const doctorId = authdata.id;
@@ -61,10 +64,34 @@ const DoctorLeave = () => {
 
   // ------------------------------ edit delete ------------------------------
 
-  const editleave = (info) => {
-    console.log(info);
-  };
+  const deleteleave = async (info) => {
+    try {
+      const existingSlots = currentDoctor.unavailableslots || [];
+      const filteredSlots = existingSlots.filter(
+        (slot) => slot.date !== info.date
+      );
+      const updatedDoctor = {
+        ...currentDoctor,
+        unavailableslots: filteredSlots,
+      };
+      setPendingDelete(true);
+      if (DeleteConfirmation) {
+        await updateDoctorSlot(updatedDoctor.id, updatedDoctor);
+        //   toast.info("Leave Will be Approved Shortly");
 
+        toast.success("Leave deleted");
+        reset();
+        setShowForm(false);
+      }
+      dispatch(fetchDoctor());
+    } catch (error) {
+      console.error("Deleting Leave failed:", error);
+      toast.error("Something went wrong while Deleting.");
+      setShowForm(false);
+      setDeleteConfirmation(false);
+      reset();
+    }
+  };
   const {
     register,
     handleSubmit,
@@ -128,7 +155,7 @@ const DoctorLeave = () => {
 
       updatedDoctor.unavailableslots = existingSlots;
 
-      console.log("Updated Doctor:", updatedDoctor);
+      // console.log("Updated Doctor:", updatedDoctor);
       await updateDoctorSlot(updatedDoctor.id, updatedDoctor);
       //   toast.info("Leave Will be Approved Shortly");
       toast.success("Leave Scheduled");
@@ -288,7 +315,10 @@ const DoctorLeave = () => {
                       >
                         <Edit className="w-4 h-4" />
                       </button>
-                      <button className="text-slate-600 hover:text-red-600 p-1">
+                      <button
+                        onClick={() => deleteleave(leave)}
+                        className="text-slate-600 hover:text-red-600 p-1"
+                      >
                         <Trash className="w-4 h-4" />
                       </button>
                     </div>
@@ -299,6 +329,50 @@ const DoctorLeave = () => {
           </div>
         </div>
       </div>
+
+      {pendingDelete && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden">
+            <div className="p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 rounded-full bg-red-100 text-red-600">
+                  <Trash2 className="w-5 h-5" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Confirm Deletion
+                </h3>
+              </div>
+
+              <p className="text-gray-600">
+                Are you sure you want to delete your leave on{" "}
+                <span className="font-medium">{pendingDelete.date}</span>?
+              </p>
+
+              <div className="mt-6 flex justify-end gap-3">
+                <button
+                  onClick={() => {
+                    setDeleteConfirmation(true);
+                    setPendingDelete(false);
+                  }}
+                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    setPendingDelete(false);
+                    setDeleteConfirmation(false);
+                  }}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Delete Leave
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Add Leave Modal */}
       {showForm && (
