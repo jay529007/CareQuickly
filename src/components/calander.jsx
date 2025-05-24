@@ -498,10 +498,6 @@ const MyCalendar = () => {
     const isBlockedByDoctor =
       blocked && isSlotInsideBlockedTime(start, end, blocked);
 
-    // const isSlotAv = isSlotAvailable(formdata.appointments?.slot);
-
-    // const isSlotbl = isSlotBlock(formdata.appointments?.slot);
-
     const updatedAppointments = [
       ...(currentUser.appointments || []),
       newAppointment,
@@ -511,17 +507,7 @@ const MyCalendar = () => {
       ...currentUser,
       appointments: updatedAppointments,
     };
-    // if (!isSlotAv) {
-    //   toast.info(`${newAppointment.doctor} is not available`);
-    //   toast.info("Please Choose any other Slot");
-    //   reset();
-    //   return;
-    // }
-    // if (isSlotbl) {
-    //   toast.info("Slot is already Booked");
-    //   reset();
-    //   return;
-    // }
+  
     if (!isWorkingDay) {
       toast.info("Hospital is closed on this day");
       return;

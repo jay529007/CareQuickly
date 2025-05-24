@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { fetchDoctor } from "../functions/doctorSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Nouserfound from "./error/no-userfound";
 import { loadState } from "../store/localstorage";
-import { toast } from "react-toastify";
 
 const DoctorProfilePage = ({ isDoctor }) => {
   const dispatch = useDispatch();
@@ -12,8 +11,6 @@ const DoctorProfilePage = ({ isDoctor }) => {
   useEffect(() => {
     dispatch(fetchDoctor());
   }, []);
-  const navingate = useNavigate();
-  //   console.log(doctors[id]);
   const { id } = useParams();
   const authdata = loadState();
   const isUser = authdata.type === "user";

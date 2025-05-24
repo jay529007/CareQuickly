@@ -34,10 +34,15 @@ const DoctorLeave = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [showForm, setShowForm] = useState(false);
   const [SelectedDate, setSelectedDate] = useState();
+  const [editingLeave, setEditingLeave] = useState(null);
+
   const authdata = loadState();
   const doctorId = authdata.id;
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(fetchDoctor());
+  }, [dispatch]);
   const doctors = useSelector((state) => state.doctors.doctors);
   const currentDoctor = doctors?.find((doctor) => doctor.id === doctorId);
   const Unavailableslots = currentDoctor?.unavailableslots || [];
@@ -54,6 +59,12 @@ const DoctorLeave = () => {
     return time12;
   });
 
+  // ------------------------------ edit delete ------------------------------
+
+  const editleave = (info) => {
+    console.log(info);
+  };
+
   const {
     register,
     handleSubmit,
@@ -62,9 +73,20 @@ const DoctorLeave = () => {
     formState: { errors },
   } = useForm();
 
+  // for prefild form
   useEffect(() => {
-    dispatch(fetchDoctor());
-  }, [dispatch]);
+    if (!showForm) return;
+
+    if (editingLeave) {
+      // Edit mode: populate fields
+      setValue("unavailableslots.start", editingLeave.start);
+      setValue("unavailableslots.end", editingLeave.end);
+      setValue("unavailableslots.reason", editingLeave.reason);
+    } else {
+      // Add mode: clear fields
+      reset();
+    }
+  }, [showForm, editingLeave]);
 
   // Memoize days to avoid recalculation on every render
   const daysInMonth = useMemo(() => {
@@ -72,10 +94,7 @@ const DoctorLeave = () => {
     const monthEnd = endOfMonth(currentMonth);
     return eachDayOfInterval({ start: monthStart, end: monthEnd });
   }, [currentMonth]);
-  const handleAddLeave = () => {
-    // Add leave logic here
-    setShowForm(false);
-  };
+
   const navigateMonth = (direction) => {
     setCurrentMonth(
       direction === "next"
@@ -111,7 +130,7 @@ const DoctorLeave = () => {
 
       console.log("Updated Doctor:", updatedDoctor);
       await updateDoctorSlot(updatedDoctor.id, updatedDoctor);
-    //   toast.info("Leave Will be Approved Shortly");
+      //   toast.info("Leave Will be Approved Shortly");
       toast.success("Leave Scheduled");
       reset();
       setShowForm(false);
@@ -208,6 +227,7 @@ const DoctorLeave = () => {
                   onClick={() => {
                     setSelectedDate(day);
                     setShowForm(true);
+                    setEditingLeave(null);
                   }}
                 >
                   <div className="font-medium">{format(day, "d")}</div>
@@ -255,8 +275,17 @@ const DoctorLeave = () => {
                         </div>
                       )}
                     </div>
-                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button className="text-slate-600 hover:text-blue-600 p-1">
+                    <div className="flex gap-2 ">
+                      {/* <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity"> */}
+                      <button
+                        onClick={() => {
+                          setEditingLeave(leave); // leave is the object from Unavailableslots
+                          setSelectedDate(new Date(leave.date));
+                          setShowForm(true);
+                        }}
+                        className="text-blue-600 p-1"
+                        // className="text-slate-600 hover:text-blue-600 p-1"
+                      >
                         <Edit className="w-4 h-4" />
                       </button>
                       <button className="text-slate-600 hover:text-red-600 p-1">
@@ -282,19 +311,6 @@ const DoctorLeave = () => {
                   Date:
                 </label>
                 <p className="text-sm mb-1">{format(SelectedDate, "PPP")}</p>
-
-                {/* <input
-                  type="date"
-                  value={formatedSelectedDate}
-                  disabled
-                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  {...register("date", { required: "Date is required" })}
-                />
-                {errors.date && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.date.message}
-                  </p>
-                )} */}
               </div>
 
               {/* time */}
