@@ -36,8 +36,8 @@ const DoctorLeave = () => {
   const [showForm, setShowForm] = useState(false);
   const [SelectedDate, setSelectedDate] = useState();
   const [editingLeave, setEditingLeave] = useState(null);
-  const [pendingDelete, setPendingDelete] = useState(false);
-  const [DeleteConfirmation, setDeleteConfirmation] = useState(false);
+  // At top of component
+  const [pendingDelete, setPendingDelete] = useState(null);
 
   const authdata = loadState();
   const doctorId = authdata.id;
@@ -66,32 +66,24 @@ const DoctorLeave = () => {
 
   const deleteleave = async (info) => {
     try {
-      const existingSlots = currentDoctor.unavailableslots || [];
-      const filteredSlots = existingSlots.filter(
+      const filteredSlots = (currentDoctor.unavailableslots || []).filter(
         (slot) => slot.date !== info.date
       );
+
       const updatedDoctor = {
         ...currentDoctor,
         unavailableslots: filteredSlots,
       };
-      setPendingDelete(true);
-      if (DeleteConfirmation) {
-        await updateDoctorSlot(updatedDoctor.id, updatedDoctor);
-        //   toast.info("Leave Will be Approved Shortly");
 
-        toast.success("Leave deleted");
-        reset();
-        setShowForm(false);
-      }
+      await updateDoctorSlot(currentDoctor.id, updatedDoctor);
+      toast.success("Leave deleted");
       dispatch(fetchDoctor());
     } catch (error) {
       console.error("Deleting Leave failed:", error);
-      toast.error("Something went wrong while Deleting.");
-      setShowForm(false);
-      setDeleteConfirmation(false);
-      reset();
+      toast.error("Something went wrong while deleting.");
     }
   };
+
   const {
     register,
     handleSubmit,
@@ -316,7 +308,7 @@ const DoctorLeave = () => {
                         <Edit className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => deleteleave(leave)}
+                        onClick={() => setPendingDelete(leave)}
                         className="text-slate-600 hover:text-red-600 p-1"
                       >
                         <Trash className="w-4 h-4" />
@@ -335,33 +327,26 @@ const DoctorLeave = () => {
           <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden">
             <div className="p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 rounded-full bg-red-100 text-red-600">
-                  <Trash2 className="w-5 h-5" />
-                </div>
+                <Flag className="w-5 h-5 text-red-600" />
                 <h3 className="text-lg font-semibold text-gray-900">
                   Confirm Deletion
                 </h3>
               </div>
-
               <p className="text-gray-600">
                 Are you sure you want to delete your leave on{" "}
                 <span className="font-medium">{pendingDelete.date}</span>?
               </p>
-
               <div className="mt-6 flex justify-end gap-3">
                 <button
-                  onClick={() => {
-                    setDeleteConfirmation(true);
-                    setPendingDelete(false);
-                  }}
+                  onClick={() => setPendingDelete(null)}
                   className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
-                  onClick={() => {
-                    setPendingDelete(false);
-                    setDeleteConfirmation(false);
+                  onClick={async () => {
+                    await deleteleave(pendingDelete);
+                    setPendingDelete(null);
                   }}
                   className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
                 >
