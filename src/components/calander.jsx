@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Calendar } from "react-big-calendar";
-import "react-big-calendar/lib/css/react-big-calendar.css";
 import Input from "../components/re-usablecomponets/InputFeild";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,14 +12,13 @@ import { useForm } from "react-hook-form";
 import { updateUser } from "../functions/userAPI";
 import { fetchDoctor } from "../functions/doctorSlice";
 import { dateFnsLocalizer } from "react-big-calendar";
-import { format, parse, startOfWeek, getDay, setDate } from "date-fns";
-import enUS from "date-fns/locale/en-US";
+import { format, parse, startOfWeek, getDay } from "date-fns";
+import { enIN } from "date-fns/locale";
 import { toast } from "react-toastify";
 import { isAfter, startOfDay } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { createSerializableStateInvariantMiddleware } from "@reduxjs/toolkit";
 
-const locales = { "en-US": enUS };
+const locales = { "en-IN": enIN };
 
 export const localizer = dateFnsLocalizer({
   format,
@@ -69,7 +68,13 @@ const MyCalendar = () => {
   }, []);
   const currentUser = users.find((user) => user.id === id);
   const allAppointments = currentUser?.appointments;
-
+  format(new Date(), "P", { locale: locales["en-IN"] });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
   // for navigating in toolbar
   const handleViewChange = (view) => setCurrentView(view);
 
@@ -173,16 +178,45 @@ const MyCalendar = () => {
   );
 
   // --------------------------- disable time -------------------------
+  const dayOfWeek = getDay(selectedDate);
   //  Find any block for today
-  const blocked = (selectedDoctor?.unavailableslots || []).find(
+  const todayBlock = (selectedDoctor?.unavailableslots || []).find(
     (slot) => slot.date === isoDate
   );
 
-  const AvailableslotValue = slotsTimeValue.filter((time) => {
-    if (!blocked) return true; // no block today → keep all
-    return !(time <= blocked.end && time >= blocked.start);
-    // return time !== blocked.start && time !== blocked.end;
-  });
+  // parse hours to integers once
+  const openH = parseInt(hospitalHours.open.slice(0, 2), 10);
+  const closeH = parseInt(hospitalHours.close.slice(0, 2), 10);
+  const lunchStart = parseInt(hospitalHours.lunch.start.slice(0, 2), 10);
+  const lunchEnd = parseInt(hospitalHours.lunch.end.slice(0, 2), 10);
+
+  const AvailableslotValue = (() => {
+    // 1) if not a working day, no slots at all
+    if (!hospitalHours.workingDays.includes(dayOfWeek)) {
+      return [];
+    }
+
+    return slotsTimeValue.filter((time) => {
+      const h = parseInt(time.slice(0, 2), 10);
+
+      // 2) outside hospital hours?
+      if (h < openH || h >= closeH) return false;
+
+      // 3) during lunch break?
+      if (h >= lunchStart && h < lunchEnd) return false;
+
+      // 4) overlapping doctor’s personal block?
+      if (todayBlock) {
+        const bs = parseInt(todayBlock.start.slice(0, 2), 10);
+        const be = parseInt(todayBlock.end.slice(0, 2), 10);
+        if (h >= bs && h < be) return false;
+      }
+
+      // otherwise it’s fine
+      return true;
+    });
+  })();
+
   // converting in 12 hours formate
   const Availableslot = AvailableslotValue.map((time) => {
     const parsed = parse(time, "HH:mm", new Date());
@@ -190,6 +224,15 @@ const MyCalendar = () => {
     const time12 = format(parsed, "hh:mm a");
     return time12;
   });
+  useEffect(() => {
+    if (!selectedDoctor) return;
+    // console.log(AvailableslotValue);
+    if (AvailableslotValue.length <= 2) {
+      toast.info(`${selectedDoctor.name} is on leave`);
+      setShowModal(false);
+      reset();
+    }
+  }, [AvailableslotValue.length, selectedDoctor, reset, setShowModal]);
 
   // ----------------------------------------------------------------------------------------
 
@@ -204,11 +247,6 @@ const MyCalendar = () => {
     const now = startOfDay(new Date());
     return isAfter(event.start, now);
   };
-
-  // const isDisabledDate = (date) => {
-  //   const today = startOfDay(new Date());
-  //   return isBefore(date, today);
-  // };
 
   const dayPropGetter = (date) => {
     if (date.getDay() === 0) {
@@ -251,7 +289,7 @@ const MyCalendar = () => {
       },
     };
   };
-  // -------------------  TESTING  -----------------------------------
+  // -------------------  Unavailable slotes form  -----------------------------------
   const isSlotWithinHospitalHours = (start, end) => {
     const open = parseInt(hospitalHours.open.slice(0, 2), 10);
     const close = parseInt(hospitalHours.close.slice(0, 2), 10);
@@ -268,212 +306,248 @@ const MyCalendar = () => {
     return s < lunchEnd && lunchStart < e;
   };
 
-  const isSlotInsideBlockedTime = (start, end, blocked) => {
-    const bStart = parseInt(blocked.start.slice(0, 2), 10);
-    const bEnd = parseInt(blocked.end.slice(0, 2), 10);
+  const isSlotInsideBlockedTime = (start, end, unavailableslots) => {
+    const bStart = parseInt(unavailableslots.start.slice(0, 2), 10);
+    const bEnd = parseInt(unavailableslots.end.slice(0, 2), 10);
     const s = parseInt(format(start, "HH"), 10);
     const e = parseInt(format(end, "HH"), 10);
     return s < bEnd && bStart < e;
   };
 
+  // -------------------  TESTING DND -----------------------------------
+  // function isDnDSlotUnavailable(start, end, blockedLeave) {
+  //   // 1) Not a hospital working day?
+  //   const day = getDay(start);
+  //   if (!hospitalHours.workingDays.includes(day)) return true;
+
+  //   // 2) Outside 10:00–19:00?
+  //   if (!isSlotWithinHospitalHours(start, end)) return true;
+
+  //   // 3) During lunch?
+  //   if (isSlotDuringLunch(start, end)) return true;
+
+  //   // 4) During doctor’s personal unavailableslots time?
+  //   if (blockedLeave && isSlotInsideBlockedTime(start, end, blockedLeave))
+  //     return true;
+
+  //   return false;
+  // }
+
+  // const handleEventDrop = async ({ event, start, end }) => {
+  //   // find doctor‐blocked leave for that date
+  //   const iso = format(start, "yyyy-MM-dd");
+  //   const blockedLeave = selectedDoctor.unavailableslots.find(
+  //     (s) => s.date === iso
+  //   );
+
+  //   // find confirmed appointments that day
+  //   const dayAppointments = currentUser.appointments.filter(
+  //     (a) => a.slot.date === iso && a.status === "Confirmed"
+  //   );
+
+  //   if (isDnDBlocked(start, end, dayAppointments)) {
+  //     return toast.error("That time slot is already booked.");
+  //   }
+
+  //   if (isDnDSlotUnavailable(start, end, blockedLeave)) {
+  //     return toast.info(
+  //       "That time is outside hospital hours or during leave/lunch."
+  //     );
+  //   }
+
+  //   // …proceed with update…
+  // };
+
   // -------------------  dnd and form logic -----------------------------------
-  const selectedDoctorslot = selectedDoctor?.availableslots?.find(
-    (slots) => slots.date === format(selectedDate, "yyyy-MM-dd")
-  );
+  // const selectedDoctorslot = selectedDoctor?.availableslots?.find(
+  //   (slots) => slots.date === format(selectedDate, "yyyy-MM-dd")
+  // );
 
   // Function to check if requested slot fits inside available slot
-  const isSlotAvailable = (requestedSlot) => {
-    const availableStart = parseInt(selectedDoctorslot?.start.slice(0, 2));
-    const availableEnd = parseInt(selectedDoctorslot?.end.slice(0, 2));
-    const requestedStart = parseInt(requestedSlot?.start.slice(0, 2));
-    const requestedEnd = parseInt(requestedSlot?.end.slice(0, 2));
-    return availableStart <= requestedStart && availableEnd >= requestedEnd;
-  };
-  const seletcedUserSlot = currentUser?.appointments?.filter((slot) => {
-    return slot.slot.date === format(selectedDate, "yyyy-MM-dd");
-  });
+  // const isSlotAvailable = (requestedSlot) => {
+  //   const availableStart = parseInt(selectedDoctorslot?.start.slice(0, 2));
+  //   const availableEnd = parseInt(selectedDoctorslot?.end.slice(0, 2));
+  //   const requestedStart = parseInt(requestedSlot?.start.slice(0, 2));
+  //   const requestedEnd = parseInt(requestedSlot?.end.slice(0, 2));
+  //   return availableStart <= requestedStart && availableEnd >= requestedEnd;
+  // };
+  // const seletcedUserSlot = currentUser?.appointments?.filter((slot) => {
+  //   return slot.slot.date === format(selectedDate, "yyyy-MM-dd");
+  // });
 
-  const isSlotBlock = (requestedSlot) => {
-    if (!seletcedUserSlot?.length) return false;
-    // filter   confirmed
-    const confirmedSlots = seletcedUserSlot?.filter(
-      (slot) => slot.status === "Confirmed"
-    );
-    if (confirmedSlots.length === 0) return false;
+  // const isSlotBlock = (requestedSlot) => {
+  //   if (!seletcedUserSlot?.length) return false;
+  //   // filter   confirmed
+  //   const confirmedSlots = seletcedUserSlot?.filter(
+  //     (slot) => slot.status === "Confirmed"
+  //   );
+  //   if (confirmedSlots.length === 0) return false;
 
-    const isBlocked = confirmedSlots.some((apt) => {
-      // extracting the hour in numeric from
-      const blockedStart = parseInt(apt?.slot?.start.slice(0, 2), 10);
-      const blockedEnd = parseInt(apt.slot.end.slice(0, 2), 10);
+  //   const isBlocked = confirmedSlots.some((apt) => {
+  //     // extracting the hour in numeric from
+  //     const blockedStart = parseInt(apt?.slot?.start.slice(0, 2), 10);
+  //     const blockedEnd = parseInt(apt.slot.end.slice(0, 2), 10);
 
-      const reqStart = parseInt(requestedSlot?.start.slice(0, 2), 10);
-      const reqEnd = parseInt(requestedSlot.end.slice(0, 2), 10);
+  //     const reqStart = parseInt(requestedSlot?.start.slice(0, 2), 10);
+  //     const reqEnd = parseInt(requestedSlot.end.slice(0, 2), 10);
 
-      return reqStart < blockedEnd && blockedStart < reqEnd;
-    });
-    return isBlocked;
-  };
+  //     return reqStart < blockedEnd && blockedStart < reqEnd;
+  //   });
+  //   return isBlocked;
+  // };
 
   // dnd
+  // const isDnDBlocked = (start, end, confirmedSlots) => {
+  //   if (!confirmedSlots?.length) return false;
 
-  const isDnDBlocked = (start, end, confirmedSlots) => {
-    if (!confirmedSlots?.length) return false;
+  //   const reqStartHour = parseInt(format(start, "HH"), 10);
+  //   const reqEndHour = parseInt(format(end, "HH"), 10);
+  //   return confirmedSlots.some((apt) => {
+  //     const blockedStart = parseInt(apt?.slot?.start.slice(0, 2), 10);
+  //     const blockedEnd = parseInt(apt?.slot?.end.slice(0, 2), 10);
 
-    const reqStartHour = parseInt(format(start, "HH"), 10);
-    const reqEndHour = parseInt(format(end, "HH"), 10);
-    return confirmedSlots.some((apt) => {
-      const blockedStart = parseInt(apt?.slot?.start.slice(0, 2), 10);
-      const blockedEnd = parseInt(apt?.slot?.end.slice(0, 2), 10);
+  //     return reqStartHour < blockedEnd && blockedStart < reqEndHour;
+  //   });
+  // };
 
-      return reqStartHour < blockedEnd && blockedStart < reqEndHour;
-    });
-  };
+  // const isDnDSlotUnavailable = (start, end, doctorslot) => {
+  //   if (!doctorslot) {
+  //     // no availability record = unavailable
+  //     return true;
+  //   }
 
-  const isDnDSlotUnavailable = (start, end, doctorslot) => {
-    if (!doctorslot) {
-      // no availability record = unavailable
-      return true;
-    }
+  //   const blockedStart = parseInt(doctorslot.start.slice(0, 2), 10);
+  //   const blockedEnd = parseInt(doctorslot.end.slice(0, 2), 10);
 
-    const blockedStart = parseInt(doctorslot.start.slice(0, 2), 10);
-    const blockedEnd = parseInt(doctorslot.end.slice(0, 2), 10);
+  //   const reqStart = parseInt(format(start, "HH"), 10);
+  //   const reqEnd = parseInt(format(end, "HH"), 10);
 
-    const reqStart = parseInt(format(start, "HH"), 10);
-    const reqEnd = parseInt(format(end, "HH"), 10);
+  //   // return true if the requested interval lies outside the availability window
+  //   return reqStart < blockedEnd && blockedStart < reqEnd;
+  //   // requestedStart < blockedEnd && blockedStart < requestedEnd;
+  // };
 
-    // return true if the requested interval lies outside the availability window
-    return reqStart < blockedEnd && blockedStart < reqEnd;
-    // requestedStart < blockedEnd && blockedStart < requestedEnd;
-  };
+  // const handleEventDrop = async ({ event, start, end }) => {
+  //   const doctorslot = selectedDoctor?.unavailableslots?.find(
+  //     (s) => s.date === isoDate
+  //   );
 
-  const handleEventDrop = async ({ event, start, end }) => {
-    const doctorslot = selectedDoctor?.unavailableslots?.find(
-      (s) => s.date === isoDate
-    );
+  //   // conflict with other appointments?
+  //   const slotsForDay = currentUser?.appointments?.filter(
+  //     (slot) => slot.slot.date === format(start, "yyyy-MM-dd")
+  //   );
+  //   const confirmedSlots = slotsForDay?.filter(
+  //     (slot) => slot.status === "Confirmed"
+  //   );
 
-    // conflict with other appointments?
-    const slotsForDay = currentUser?.appointments?.filter(
-      (slot) => slot.slot.date === format(start, "yyyy-MM-dd")
-    );
-    const confirmedSlots = slotsForDay?.filter(
-      (slot) => slot.status === "Confirmed"
-    );
+  //   if (isDnDBlocked(start, end, confirmedSlots)) {
+  //     toast.error("Slot is already booked");
+  //     return;
+  //   }
 
-    if (isDnDBlocked(start, end, confirmedSlots)) {
-      toast.error("Slot is already booked");
-      return;
-    }
+  //   // outside doctor's available window
+  //   if (isDnDSlotUnavailable(start, end, doctorslot)) {
+  //     toast.info("Doctor is not available at that time");
+  //     return;
+  //   }
+  //   if (!isWithinAllowedHours(start, end)) {
+  //     alert("You can only book between 10:00 AM and 7:00 PM");
+  //     return;
+  //   }
 
-    // outside doctor's available window
-    if (isDnDSlotUnavailable(start, end, doctorslot)) {
-      toast.info("Doctor is not available at that time");
-      return;
-    }
-    if (!isWithinAllowedHours(start, end)) {
-      alert("You can only book between 10:00 AM and 7:00 PM");
-      return;
-    }
+  //   const updatedSlot = {
+  //     date: format(start, "yyyy-MM-dd"),
+  //     start: format(start, "HH:mm"),
+  //     end: format(end, "HH:mm"),
+  //   };
 
-    const updatedSlot = {
-      date: format(start, "yyyy-MM-dd"),
-      start: format(start, "HH:mm"),
-      end: format(end, "HH:mm"),
-    };
+  //   const updatedAppointments = currentUser.appointments.map((appt) =>
+  //     appt.id === event.id ? { ...appt, slot: updatedSlot } : appt
+  //   );
 
-    const updatedAppointments = currentUser.appointments.map((appt) =>
-      appt.id === event.id ? { ...appt, slot: updatedSlot } : appt
-    );
+  //   const updatedUserData = {
+  //     ...currentUser,
+  //     appointments: updatedAppointments,
+  //   };
 
-    const updatedUserData = {
-      ...currentUser,
-      appointments: updatedAppointments,
-    };
+  //   try {
+  //     await updateUser(currentUser.id, updatedUserData);
+  //     dispatch(fetchUsers());
+  //     // Update UI
+  //     setEvents((prev) =>
+  //       prev.map((evt) => (evt.id === event.id ? { ...evt, start, end } : evt))
+  //     );
+  //     toast.success("Appointment moved");
+  //   } catch (error) {
+  //     console.error("Drag update failed", error);
+  //     toast.error("Could not move appointment");
+  //   }
+  // };
 
-    try {
-      await updateUser(currentUser.id, updatedUserData);
-      dispatch(fetchUsers());
-      // Update UI
-      setEvents((prev) =>
-        prev.map((evt) => (evt.id === event.id ? { ...evt, start, end } : evt))
-      );
-      toast.success("Appointment moved");
-    } catch (error) {
-      console.error("Drag update failed", error);
-      toast.error("Could not move appointment");
-    }
-  };
-  // document.onkeydown:("esc", setShowModal(false));
+  // const handleEventResize = async ({ event, start, end }) => {
+  //   const dropDate = format(start, "yyyy-MM-dd");
+  //   const doctorslot = selectedDoctor?.availableslots?.find(
+  //     (s) => s.date === dropDate
+  //   );
 
-  const handleEventResize = async ({ event, start, end }) => {
-    const dropDate = format(start, "yyyy-MM-dd");
-    const doctorslot = selectedDoctor?.availableslots?.find(
-      (s) => s.date === dropDate
-    );
+  //   // conflict with other appointments?
+  //   const slotsForDay = currentUser?.appointments?.filter(
+  //     (slot) => slot.slot.date === format(start, "yyyy-MM-dd")
+  //   );
+  //   const confirmedSlots = slotsForDay?.filter(
+  //     (slot) => slot.status === "Confirmed"
+  //   );
 
-    // conflict with other appointments?
-    const slotsForDay = currentUser?.appointments?.filter(
-      (slot) => slot.slot.date === format(start, "yyyy-MM-dd")
-    );
-    const confirmedSlots = slotsForDay?.filter(
-      (slot) => slot.status === "Confirmed"
-    );
+  //   if (isDnDBlocked(start, end, confirmedSlots)) {
+  //     toast.error("Slot is already booked");
+  //     return;
+  //   }
+  //   // outside doctor's available window
+  //   if (isDnDSlotUnavailable(start, end, doctorslot)) {
+  //     toast.info("Doctor is not available at that time");
+  //     return;
+  //   }
 
-    if (isDnDBlocked(start, end, confirmedSlots)) {
-      toast.error("Slot is already booked");
-      return;
-    }
-    // outside doctor's available window
-    if (isDnDSlotUnavailable(start, end, doctorslot)) {
-      toast.info("Doctor is not available at that time");
-      return;
-    }
+  //   if (!isWithinAllowedHours(start, end)) {
+  //     alert("You can only book between 10:00 AM and 7:00 PM");
+  //     return;
+  //   }
 
-    if (!isWithinAllowedHours(start, end)) {
-      alert("You can only book between 10:00 AM and 7:00 PM");
-      return;
-    }
+  //   // find the original appointment so we can keep its original date
+  //   const originalAppt = currentUser.appointments.find(
+  //     (a) => a.id === event.id
+  //   );
+  //   const updatedSlot = {
+  //     date: originalAppt.slot.date, //  preserve original date
+  //     start: format(start, "HH:mm"),
+  //     end: format(end, "HH:mm"),
+  //   };
 
-    // find the original appointment so we can keep its original date
-    const originalAppt = currentUser.appointments.find(
-      (a) => a.id === event.id
-    );
-    const updatedSlot = {
-      date: originalAppt.slot.date, //  preserve original date
-      start: format(start, "HH:mm"),
-      end: format(end, "HH:mm"),
-    };
+  //   const updatedAppointments = currentUser.appointments.map((appt) =>
+  //     appt.id === event.id ? { ...appt, slot: updatedSlot } : appt
+  //   );
 
-    const updatedAppointments = currentUser.appointments.map((appt) =>
-      appt.id === event.id ? { ...appt, slot: updatedSlot } : appt
-    );
+  //   const updatedUserData = {
+  //     ...currentUser,
+  //     appointments: updatedAppointments,
+  //   };
 
-    const updatedUserData = {
-      ...currentUser,
-      appointments: updatedAppointments,
-    };
+  //   try {
+  //     await updateUser(currentUser.id, updatedUserData);
+  //     dispatch(fetchUsers());
 
-    try {
-      await updateUser(currentUser.id, updatedUserData);
-      dispatch(fetchUsers());
+  //     // Update UI
+  //     const updated = events.map((evt) =>
+  //       evt.id === event.id ? { ...evt, start, end } : evt
+  //     );
+  //     onEventsChange(updated);
+  //     toast.success("Appointment resized");
+  //   } catch (error) {
+  //     console.error("Resize update failed", err);
+  //     toast.error("Could not resize appointment");
+  //   }
+  // };
 
-      // Update UI
-      const updated = events.map((evt) =>
-        evt.id === event.id ? { ...evt, start, end } : evt
-      );
-      onEventsChange(updated);
-      toast.success("Appointment resized");
-    } catch (error) {
-      console.error("Resize update failed", err);
-      toast.error("Could not resize appointment");
-    }
-  };
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
   const onSubmit = async (formdata) => {
     const newAppointment = {
       id: uuidv4(),
@@ -495,8 +569,8 @@ const MyCalendar = () => {
     );
     const isInHospitalTime = isSlotWithinHospitalHours(start, end);
     const isDuringLunchBreak = isSlotDuringLunch(start, end);
-    const isBlockedByDoctor =
-      blocked && isSlotInsideBlockedTime(start, end, blocked);
+    const isBlocked =
+      unavailableslots && isSlotInsideBlockedTime(start, end, unavailableslots);
 
     const updatedAppointments = [
       ...(currentUser.appointments || []),
@@ -507,7 +581,7 @@ const MyCalendar = () => {
       ...currentUser,
       appointments: updatedAppointments,
     };
-  
+
     if (!isWorkingDay) {
       toast.info("Hospital is closed on this day");
       return;
@@ -523,7 +597,7 @@ const MyCalendar = () => {
       return;
     }
 
-    if (isBlockedByDoctor) {
+    if (isBlocked) {
       toast.info("Doctor is unavailable at this time");
       return;
     }
@@ -558,8 +632,8 @@ const MyCalendar = () => {
         step={60}
         timeslots={1}
         dayLayoutAlgorithm="no-overlap"
-        onEventDrop={handleEventDrop}
-        onEventResize={handleEventResize}
+        // onEventDrop={handleEventDrop}
+        // onEventResize={handleEventResize}
         resizable
         startAccessor="start"
         endAccessor="end"

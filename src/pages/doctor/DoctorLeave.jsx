@@ -294,16 +294,15 @@ const DoctorLeave = () => {
                         </div>
                       )}
                     </div>
-                    <div className="flex gap-2 ">
-                      {/* <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity"> */}
+
+                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={() => {
                           setEditingLeave(leave); // leave is the object from Unavailableslots
                           setSelectedDate(new Date(leave.date));
                           setShowForm(true);
                         }}
-                        className="text-blue-600 p-1"
-                        // className="text-slate-600 hover:text-blue-600 p-1"
+                        className="text-slate-600 hover:text-blue-600 p-1"
                       >
                         <Edit className="w-4 h-4" />
                       </button>
