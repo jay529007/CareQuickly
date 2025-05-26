@@ -7,7 +7,6 @@ const Nouserfound = () => {
   const navigate = useNavigate();
   const authdata = loadState();
   const type = authdata.type;
-
   const gotoLoading = () => {
     if (type === "admin") {
       navigate("/admin/dashboard");

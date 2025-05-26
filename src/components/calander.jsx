@@ -15,7 +15,7 @@ import { dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { enIN } from "date-fns/locale";
 import { toast } from "react-toastify";
-import { isAfter, startOfDay } from "date-fns";
+import { isAfter, startOfDay, isBefore, isSameDay } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
 const locales = { "en-IN": enIN };
@@ -66,7 +66,7 @@ const MyCalendar = () => {
   useEffect(() => {
     dispatch(fetchUsers());
   }, []);
-  const currentUser = users.find((user) => user.id === id);
+  const currentUser = users?.find((user) => user.id === id);
   const allAppointments = currentUser?.appointments;
   format(new Date(), "P", { locale: locales["en-IN"] });
   const {
@@ -164,7 +164,62 @@ const MyCalendar = () => {
       </div>
     </div>
   );
+  // --------------------------- disable clicks according days -------------------------
+  const isDraggable = (event) => {
+    const now = startOfDay(new Date());
+    return isAfter(event.start, now);
+  };
 
+  function dayPropGetter(date) {
+    const today = startOfDay(new Date());
+    const isPast = isBefore(date, today);
+    const dow = getDay(date);
+    const isToday = isSameDay(date, today);
+
+    // find if this date is a leave day
+    const iso = format(date, "yyyy-MM-dd");
+    const onLeave = !!selectedDoctor?.unavailableslots?.find(
+      (s) => s.date === iso
+    );
+
+    let style = {};
+    if (dow === 0) style.backgroundColor = "#f0f0f0";
+    if (isPast) style.backgroundColor = "#ececef"; // very light grey
+    else if (isToday) style.backgroundColor = "#e3f2fd  "; // light blue
+    if (onLeave) style.backgroundColor = "#fde8e8"; // pale red
+
+    return { style };
+  }
+
+  // changeing color events
+  const eventStyleGetter = (event) => {
+    let backgroundColor;
+
+    if (event.status === "Confirmed") {
+      backgroundColor = "#1fc640";
+    } else if (event.status === "Pending") {
+      backgroundColor = "#F6C23E";
+    } else if (event.status === "Cancelled") {
+      backgroundColor = "red";
+    } else {
+      backgroundColor = "gray";
+    }
+    if (!isDraggable(event)) {
+      backgroundColor = "gray";
+    }
+
+    return {
+      style: {
+        backgroundColor,
+        color: "white",
+        // backgroundColor: "red",
+        pointerEvents: event.status === "Pending" ? "auto" : "none",
+        borderRadius: "5px",
+        border: "none",
+        padding: "2px 5px",
+      },
+    };
+  };
   const errorClass =
     "text-red-500 text-sm w-fit p-1 font-medium uppercase mt-2 bg-gray-200/50";
 
@@ -180,7 +235,7 @@ const MyCalendar = () => {
   // --------------------------- disable time -------------------------
   const dayOfWeek = getDay(selectedDate);
   //  Find any block for today
-  const todayBlock = (selectedDoctor?.unavailableslots || []).find(
+  const todayBlock = (selectedDoctor?.unavailableslots || [])?.find(
     (slot) => slot.date === isoDate
   );
 
@@ -230,6 +285,7 @@ const MyCalendar = () => {
     if (AvailableslotValue.length <= 2) {
       toast.info(`${selectedDoctor.name} is on leave`);
       setShowModal(false);
+      setselectedDoctor("");
       reset();
     }
   }, [AvailableslotValue.length, selectedDoctor, reset, setShowModal]);
@@ -237,58 +293,12 @@ const MyCalendar = () => {
   // ----------------------------------------------------------------------------------------
 
   const handleDoctorChange = (e) => {
-    const doctor = FilterdDoctersbySpecialty.find(
+    const doctor = FilterdDoctersbySpecialty?.find(
       (doctor) => doctor.name === e.target.value
     );
     setselectedDoctor(doctor);
   };
-  // --------------------------- disable clicks according days -------------------------
-  const isDraggable = (event) => {
-    const now = startOfDay(new Date());
-    return isAfter(event.start, now);
-  };
 
-  const dayPropGetter = (date) => {
-    if (date.getDay() === 0) {
-      return {
-        style: {
-          backgroundColor: "#e0e0e0",
-          pointerEvents: "none",
-          cursor: "not-allowed",
-        },
-      };
-    }
-    return {};
-  };
-
-  // changeing color events
-  const eventStyleGetter = (event) => {
-    let backgroundColor;
-
-    if (event.status === "Confirmed") {
-      backgroundColor = "#1fc640";
-    } else if (event.status === "Pending") {
-      backgroundColor = "orange";
-    } else if (event.status === "Cancelled") {
-      backgroundColor = "red";
-    } else {
-      backgroundColor = "gray";
-    }
-    if (!isDraggable(event)) {
-      backgroundColor = "gray";
-    }
-
-    return {
-      style: {
-        backgroundColor,
-        color: "white",
-        pointerEvents: event.status === "Pending" ? "auto" : "none",
-        borderRadius: "5px",
-        border: "none",
-        padding: "2px 5px",
-      },
-    };
-  };
   // -------------------  Unavailable slotes form  -----------------------------------
   const isSlotWithinHospitalHours = (start, end) => {
     const open = parseInt(hospitalHours.open.slice(0, 2), 10);
@@ -313,240 +323,167 @@ const MyCalendar = () => {
     const e = parseInt(format(end, "HH"), 10);
     return s < bEnd && bStart < e;
   };
+  // ---------------------------------------dnd ---------------------------------------
+  // Add this function near your other utility functions (before handleEventDrop)
+  const isSlotInvalid = ({ start, end, date, todayBlock, hospitalHours }) => {
+    const dayOfWeek = date.getDay();
 
-  // -------------------  TESTING DND -----------------------------------
-  // function isDnDSlotUnavailable(start, end, blockedLeave) {
-  //   // 1) Not a hospital working day?
-  //   const day = getDay(start);
-  //   if (!hospitalHours.workingDays.includes(day)) return true;
+    // 1) Check if it's a working day
+    if (!hospitalHours.workingDays.includes(dayOfWeek)) {
+      return "Hospital is closed on this day";
+    }
 
-  //   // 2) Outside 10:00–19:00?
-  //   if (!isSlotWithinHospitalHours(start, end)) return true;
+    // 2) Check hospital hours
+    const openH = parseInt(hospitalHours.open.slice(0, 2), 10);
+    const closeH = parseInt(hospitalHours.close.slice(0, 2), 10);
+    const s = parseInt(format(start, "HH"), 10);
+    const e = parseInt(format(end, "HH"), 10);
 
-  //   // 3) During lunch?
-  //   if (isSlotDuringLunch(start, end)) return true;
+    if (s < openH || e > closeH) {
+      return "Please choose a time within hospital working hours";
+    }
 
-  //   // 4) During doctor’s personal unavailableslots time?
-  //   if (blockedLeave && isSlotInsideBlockedTime(start, end, blockedLeave))
-  //     return true;
+    // 3) Check lunch hours
+    const lunchStart = parseInt(hospitalHours.lunch.start.slice(0, 2), 10);
+    const lunchEnd = parseInt(hospitalHours.lunch.end.slice(0, 2), 10);
 
-  //   return false;
-  // }
+    if (s < lunchEnd && lunchStart < e) {
+      return "Cannot book during lunch hours";
+    }
 
-  // const handleEventDrop = async ({ event, start, end }) => {
-  //   // find doctor‐blocked leave for that date
-  //   const iso = format(start, "yyyy-MM-dd");
-  //   const blockedLeave = selectedDoctor.unavailableslots.find(
-  //     (s) => s.date === iso
-  //   );
+    // 4) Check doctor's blocked time
+    if (todayBlock) {
+      const bs = parseInt(todayBlock.start.slice(0, 2), 10);
+      const be = parseInt(todayBlock.end.slice(0, 2), 10);
 
-  //   // find confirmed appointments that day
-  //   const dayAppointments = currentUser.appointments.filter(
-  //     (a) => a.slot.date === iso && a.status === "Confirmed"
-  //   );
+      if (s < be && bs < e) {
+        return "Doctor is unavailable at this time";
+      }
+    }
 
-  //   if (isDnDBlocked(start, end, dayAppointments)) {
-  //     return toast.error("That time slot is already booked.");
-  //   }
+    return null;
+  };
 
-  //   if (isDnDSlotUnavailable(start, end, blockedLeave)) {
-  //     return toast.info(
-  //       "That time is outside hospital hours or during leave/lunch."
-  //     );
-  //   }
+  const handleEventDrop = async ({ event, start, end }) => {
+    const iso = format(start, "yyyy-MM-dd");
 
-  //   // …proceed with update…
-  // };
+    // A) conflict with other confirmed appointments
+    const dayAppts = currentUser.appointments.filter(
+      (a) => a.slot.date === iso && a.status === "Confirmed"
+    );
+    const conflict = dayAppts.some((a) => {
+      const bs = +a.slot.start.slice(0, 2),
+        be = +a.slot.end.slice(0, 2);
+      const sH = +format(start, "HH"),
+        eH = +format(end, "HH");
+      return sH < be && bs < eH;
+    });
+    if (conflict) {
+      return toast.error("Slot is already booked");
+    }
 
-  // -------------------  dnd and form logic -----------------------------------
-  // const selectedDoctorslot = selectedDoctor?.availableslots?.find(
-  //   (slots) => slots.date === format(selectedDate, "yyyy-MM-dd")
-  // );
+    // B) apply the unified rules
+    const todayBlock = (selectedDoctor?.unavailableslots || [])?.find(
+      (s) => s.date === iso
+    );
 
-  // Function to check if requested slot fits inside available slot
-  // const isSlotAvailable = (requestedSlot) => {
-  //   const availableStart = parseInt(selectedDoctorslot?.start.slice(0, 2));
-  //   const availableEnd = parseInt(selectedDoctorslot?.end.slice(0, 2));
-  //   const requestedStart = parseInt(requestedSlot?.start.slice(0, 2));
-  //   const requestedEnd = parseInt(requestedSlot?.end.slice(0, 2));
-  //   return availableStart <= requestedStart && availableEnd >= requestedEnd;
-  // };
-  // const seletcedUserSlot = currentUser?.appointments?.filter((slot) => {
-  //   return slot.slot.date === format(selectedDate, "yyyy-MM-dd");
-  // });
+    const reason = isSlotInvalid({
+      start,
+      end,
+      date: start,
+      todayBlock,
+      hospitalHours,
+    });
+    if (reason) {
+      return toast.info(reason);
+    }
 
-  // const isSlotBlock = (requestedSlot) => {
-  //   if (!seletcedUserSlot?.length) return false;
-  //   // filter   confirmed
-  //   const confirmedSlots = seletcedUserSlot?.filter(
-  //     (slot) => slot.status === "Confirmed"
-  //   );
-  //   if (confirmedSlots.length === 0) return false;
+    // C) now actually move it
+    const updatedSlot = {
+      date: iso,
+      start: format(start, "HH:mm"),
+      end: format(end, "HH:mm"),
+    };
+    const updatedAppointments = currentUser.appointments.map((appt) =>
+      appt.id === event.id ? { ...appt, slot: updatedSlot } : appt
+    );
+    const updatedUserData = {
+      ...currentUser,
+      appointments: updatedAppointments,
+    };
 
-  //   const isBlocked = confirmedSlots.some((apt) => {
-  //     // extracting the hour in numeric from
-  //     const blockedStart = parseInt(apt?.slot?.start.slice(0, 2), 10);
-  //     const blockedEnd = parseInt(apt.slot.end.slice(0, 2), 10);
+    try {
+      await updateUser(currentUser.id, updatedUserData);
+      dispatch(fetchUsers());
+      setEvents((evts) =>
+        evts.map((e) => (e.id === event.id ? { ...e, start, end } : e))
+      );
+      toast.success("Appointment moved");
+    } catch (err) {
+      console.error(err);
+      toast.error("Could not move appointment");
+    }
+  };
+  const handleEventResize = async ({ event, start, end }) => {
+    const iso = format(start, "yyyy-MM-dd");
 
-  //     const reqStart = parseInt(requestedSlot?.start.slice(0, 2), 10);
-  //     const reqEnd = parseInt(requestedSlot.end.slice(0, 2), 10);
+    // 1) Check for conflicts with other confirmed appointments
+    const dayAppts = currentUser.appointments.filter(
+      (a) => a.slot.date === iso && a.status === "Confirmed"
+    );
+    const conflict = dayAppts.some((a) => {
+      const bs = +a.slot.start.slice(0, 2),
+        be = +a.slot.end.slice(0, 2);
+      const sH = +format(start, "HH"),
+        eH = +format(end, "HH");
+      return sH < be && bs < eH;
+    });
+    if (conflict) {
+      return toast.error("Resizing would conflict with another appointment");
+    }
 
-  //     return reqStart < blockedEnd && blockedStart < reqEnd;
-  //   });
-  //   return isBlocked;
-  // };
+    // 2) Apply validation rules
+    const todayBlock = (selectedDoctor?.unavailableslots || [])?.find(
+      (s) => s.date === iso
+    );
 
-  // dnd
-  // const isDnDBlocked = (start, end, confirmedSlots) => {
-  //   if (!confirmedSlots?.length) return false;
+    const reason = isSlotInvalid({
+      start,
+      end,
+      date: start,
+      todayBlock,
+      hospitalHours,
+    });
+    if (reason) {
+      return toast.info(reason);
+    }
 
-  //   const reqStartHour = parseInt(format(start, "HH"), 10);
-  //   const reqEndHour = parseInt(format(end, "HH"), 10);
-  //   return confirmedSlots.some((apt) => {
-  //     const blockedStart = parseInt(apt?.slot?.start.slice(0, 2), 10);
-  //     const blockedEnd = parseInt(apt?.slot?.end.slice(0, 2), 10);
+    // 3) Update the appointment
+    const updatedSlot = {
+      date: iso,
+      start: format(start, "HH:mm"),
+      end: format(end, "HH:mm"),
+    };
+    const updatedAppointments = currentUser.appointments.map((appt) =>
+      appt.id === event.id ? { ...appt, slot: updatedSlot } : appt
+    );
+    const updatedUserData = {
+      ...currentUser,
+      appointments: updatedAppointments,
+    };
 
-  //     return reqStartHour < blockedEnd && blockedStart < reqEndHour;
-  //   });
-  // };
-
-  // const isDnDSlotUnavailable = (start, end, doctorslot) => {
-  //   if (!doctorslot) {
-  //     // no availability record = unavailable
-  //     return true;
-  //   }
-
-  //   const blockedStart = parseInt(doctorslot.start.slice(0, 2), 10);
-  //   const blockedEnd = parseInt(doctorslot.end.slice(0, 2), 10);
-
-  //   const reqStart = parseInt(format(start, "HH"), 10);
-  //   const reqEnd = parseInt(format(end, "HH"), 10);
-
-  //   // return true if the requested interval lies outside the availability window
-  //   return reqStart < blockedEnd && blockedStart < reqEnd;
-  //   // requestedStart < blockedEnd && blockedStart < requestedEnd;
-  // };
-
-  // const handleEventDrop = async ({ event, start, end }) => {
-  //   const doctorslot = selectedDoctor?.unavailableslots?.find(
-  //     (s) => s.date === isoDate
-  //   );
-
-  //   // conflict with other appointments?
-  //   const slotsForDay = currentUser?.appointments?.filter(
-  //     (slot) => slot.slot.date === format(start, "yyyy-MM-dd")
-  //   );
-  //   const confirmedSlots = slotsForDay?.filter(
-  //     (slot) => slot.status === "Confirmed"
-  //   );
-
-  //   if (isDnDBlocked(start, end, confirmedSlots)) {
-  //     toast.error("Slot is already booked");
-  //     return;
-  //   }
-
-  //   // outside doctor's available window
-  //   if (isDnDSlotUnavailable(start, end, doctorslot)) {
-  //     toast.info("Doctor is not available at that time");
-  //     return;
-  //   }
-  //   if (!isWithinAllowedHours(start, end)) {
-  //     alert("You can only book between 10:00 AM and 7:00 PM");
-  //     return;
-  //   }
-
-  //   const updatedSlot = {
-  //     date: format(start, "yyyy-MM-dd"),
-  //     start: format(start, "HH:mm"),
-  //     end: format(end, "HH:mm"),
-  //   };
-
-  //   const updatedAppointments = currentUser.appointments.map((appt) =>
-  //     appt.id === event.id ? { ...appt, slot: updatedSlot } : appt
-  //   );
-
-  //   const updatedUserData = {
-  //     ...currentUser,
-  //     appointments: updatedAppointments,
-  //   };
-
-  //   try {
-  //     await updateUser(currentUser.id, updatedUserData);
-  //     dispatch(fetchUsers());
-  //     // Update UI
-  //     setEvents((prev) =>
-  //       prev.map((evt) => (evt.id === event.id ? { ...evt, start, end } : evt))
-  //     );
-  //     toast.success("Appointment moved");
-  //   } catch (error) {
-  //     console.error("Drag update failed", error);
-  //     toast.error("Could not move appointment");
-  //   }
-  // };
-
-  // const handleEventResize = async ({ event, start, end }) => {
-  //   const dropDate = format(start, "yyyy-MM-dd");
-  //   const doctorslot = selectedDoctor?.availableslots?.find(
-  //     (s) => s.date === dropDate
-  //   );
-
-  //   // conflict with other appointments?
-  //   const slotsForDay = currentUser?.appointments?.filter(
-  //     (slot) => slot.slot.date === format(start, "yyyy-MM-dd")
-  //   );
-  //   const confirmedSlots = slotsForDay?.filter(
-  //     (slot) => slot.status === "Confirmed"
-  //   );
-
-  //   if (isDnDBlocked(start, end, confirmedSlots)) {
-  //     toast.error("Slot is already booked");
-  //     return;
-  //   }
-  //   // outside doctor's available window
-  //   if (isDnDSlotUnavailable(start, end, doctorslot)) {
-  //     toast.info("Doctor is not available at that time");
-  //     return;
-  //   }
-
-  //   if (!isWithinAllowedHours(start, end)) {
-  //     alert("You can only book between 10:00 AM and 7:00 PM");
-  //     return;
-  //   }
-
-  //   // find the original appointment so we can keep its original date
-  //   const originalAppt = currentUser.appointments.find(
-  //     (a) => a.id === event.id
-  //   );
-  //   const updatedSlot = {
-  //     date: originalAppt.slot.date, //  preserve original date
-  //     start: format(start, "HH:mm"),
-  //     end: format(end, "HH:mm"),
-  //   };
-
-  //   const updatedAppointments = currentUser.appointments.map((appt) =>
-  //     appt.id === event.id ? { ...appt, slot: updatedSlot } : appt
-  //   );
-
-  //   const updatedUserData = {
-  //     ...currentUser,
-  //     appointments: updatedAppointments,
-  //   };
-
-  //   try {
-  //     await updateUser(currentUser.id, updatedUserData);
-  //     dispatch(fetchUsers());
-
-  //     // Update UI
-  //     const updated = events.map((evt) =>
-  //       evt.id === event.id ? { ...evt, start, end } : evt
-  //     );
-  //     onEventsChange(updated);
-  //     toast.success("Appointment resized");
-  //   } catch (error) {
-  //     console.error("Resize update failed", err);
-  //     toast.error("Could not resize appointment");
-  //   }
-  // };
+    try {
+      await updateUser(currentUser.id, updatedUserData);
+      dispatch(fetchUsers());
+      setEvents((evts) =>
+        evts.map((e) => (e.id === event.id ? { ...e, start, end } : e))
+      );
+      toast.success("Appointment resized successfully");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to resize appointment");
+    }
+  };
 
   const onSubmit = async (formdata) => {
     const newAppointment = {
@@ -570,7 +507,7 @@ const MyCalendar = () => {
     const isInHospitalTime = isSlotWithinHospitalHours(start, end);
     const isDuringLunchBreak = isSlotDuringLunch(start, end);
     const isBlocked =
-      unavailableslots && isSlotInsideBlockedTime(start, end, unavailableslots);
+      todayBlock && isSlotInsideBlockedTime(start, end, todayBlock);
 
     const updatedAppointments = [
       ...(currentUser.appointments || []),
@@ -626,15 +563,16 @@ const MyCalendar = () => {
         events={events}
         eventPropGetter={eventStyleGetter}
         dayPropGetter={dayPropGetter}
-        draggableAccessor={isDraggable}
+        // draggableAccessor={isDraggable}
+        draggableAccessor={(event) => event.status === "Pending"} // Only allow dragging pending appointments
         min={new Date(0, 0, 0, 10, 0)}
         max={new Date(0, 0, 0, 19, 0)}
         step={60}
         timeslots={1}
         dayLayoutAlgorithm="no-overlap"
-        // onEventDrop={handleEventDrop}
+        onEventDrop={handleEventDrop}
         // onEventResize={handleEventResize}
-        resizable
+        // resizable={true} // Changed to false unless you implement resize handling
         startAccessor="start"
         endAccessor="end"
         style={{ height: 600 }}
@@ -644,6 +582,15 @@ const MyCalendar = () => {
         onView={handleViewChange}
         onNavigate={(date) => setCurrentDate(date)}
         onSelectSlot={({ start }) => {
+          const today = startOfDay(new Date());
+
+          // if the slot is before the start of today, block it
+          if (isBefore(start, today)) {
+            // toast.info("Cannot book appointments in the past");
+            return;
+          }
+
+          // otherwise it's today or in the future
           setSelectedDate(start);
           setShowModal(true);
         }}
@@ -829,6 +776,7 @@ const MyCalendar = () => {
               <div className="flex justify-end gap-2">
                 <button
                   onClick={() => {
+                    setselectedDoctor("");
                     reset();
                     setShowModal(false);
                   }}

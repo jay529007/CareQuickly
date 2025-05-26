@@ -505,6 +505,18 @@
             "start": "15:00",
             "end": "15:00"
           }
+        },
+        {
+          "id": "75f54a1f-9c0c-4932-b466-a1cebe4d5c7b",
+          "service": "Dermatologist",
+          "doctor": "Dr. Aarti Sharma",
+          "status": "Pending",
+          "notes": "",
+          "slot": {
+            "date": "2025-05-26",
+            "start": "15:00",
+            "end": "16:00"
+          }
         }
       ]
     },
