@@ -366,7 +366,7 @@ const MyCalendar = () => {
 
   const handleEventDrop = async ({ event, start, end }) => {
     const iso = format(start, "yyyy-MM-dd");
-
+    const today = startOfDay(new Date());
     // A) conflict with other confirmed appointments
     const dayAppts = currentUser.appointments.filter(
       (a) => a.slot.date === iso && a.status === "Confirmed"
@@ -381,6 +381,8 @@ const MyCalendar = () => {
     if (conflict) {
       return toast.error("Slot is already booked");
     }
+
+    if (isBefore(start, today)) return;
 
     // B) apply the unified rules
     const todayBlock = (selectedDoctor?.unavailableslots || [])?.find(
