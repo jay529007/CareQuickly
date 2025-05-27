@@ -3,19 +3,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchDoctor } from "../../functions/doctorSlice";
 import { useForm } from "react-hook-form";
 import { updateDoctorSlot } from "../../functions/doctorAPI";
-import Input from "../../components/re-usablecomponets/InputFeild";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import {
+  HiPlus,
+  HiUser,
+  HiCalendar,
+  HiClock,
+  HiSearch,
+  HiFilter,
+  HiX,
+  HiStatusOnline,
+  HiPencilAlt,
+  HiTrash,
+} from "react-icons/hi";
+import { motion, AnimatePresence } from "framer-motion";
 
 const AdminHome = () => {
-  const [selectedSpecialty, setselectedSpecialty] = useState("");
-  const [selectedDocter, setselectedDocter] = useState(null);
-  // const [isOpen, setIsOpen] = useState(false);
-  // const [isSlotOpen, setIsSlotOpen] = useState(false);
-  // const [selectedSlot, setselectedSlot] = useState(null);
-  const [isAddNewSlotopen, setisAddNewSlotopen] = useState(false);
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [isSlotModalOpen, setIsSlotModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedSpecialty, setSelectedSpecialty] = useState("all");
+  const [sortConfig, setSortConfig] = useState({
+    key: "name",
+    direction: "asc",
+  });
 
-  // fetching docter data
   const dispatch = useDispatch();
   const doctors = useSelector((state) => state.doctors.doctors);
 
@@ -23,501 +36,329 @@ const AdminHome = () => {
     dispatch(fetchDoctor());
   }, [dispatch]);
 
-  const FilterdDoctersbySpecialty = doctors.filter(
-    (doctor) => doctor.specialty === selectedSpecialty
-  );
-
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
+  const today = new Date().toISOString().split("T")[0];
 
-  const handleDoctorChange = (e) => {
-    const doctor = FilterdDoctersbySpecialty.find(
-      (doctor) => doctor.name === e.target.value
-    );
-    setselectedDocter(doctor);
-  };
-  const todayFormatted = new Date().toISOString().split("T")[0];
-  // deleting Slots
-  const handleDelete = (slotToDelete) => {
-    // Creating new array
-    const updatedSlots = selectedDocter.availableslots.filter(
-      (slot) => slot.date !== slotToDelete.date
-    );
+  // Enhanced filtering and sorting
+  const processedDoctors = doctors
+    .filter((doctor) => {
+      const matchesSearch = doctor.name
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const matchesSpecialty =
+        selectedSpecialty === "all" || doctor.specialty === selectedSpecialty;
+      return matchesSearch && matchesSpecialty;
+    })
+    .sort((a, b) => {
+      if (sortConfig.key === "experience") {
+        return sortConfig.direction === "asc"
+          ? a.experience - b.experience
+          : b.experience - a.experience;
+      }
+      return sortConfig.direction === "asc"
+        ? a[sortConfig.key]?.localeCompare(b[sortConfig.key])
+        : b[sortConfig.key]?.localeCompare(a[sortConfig.key]);
+    });
 
-    const updatedDoctor = { ...selectedDocter, availableslots: updatedSlots };
-    updateDoctorSlot(updatedDoctor.id, updatedDoctor);
-    dispatch(fetchDoctor());
-  };
+  const specialties = [...new Set(doctors.map((d) => d.specialty))];
 
-  // console.log(selectedDocter);
-
-  const onSubmit = async (formdata) => {
+  const handleSlotSubmit = async (data) => {
     try {
-      const newSlot = {
-        date: formdata.availableslots.date,
-        start: formdata.availableslots.start,
-        end: formdata.availableslots.end,
+      const newSlot = { date: data.date, start: data.start, end: data.end };
+      const updatedDoctor = {
+        ...selectedDoctor,
+        availableslots: [...(selectedDoctor.availableslots || []), newSlot],
       };
 
-      const updatedDoctor = { ...selectedDocter };
-      const existingSlots = [...(updatedDoctor.availableslots || [])];
-      // if slotalrady available it'l have -1 index
-      const index = existingSlots.findIndex(
-        (slot) => slot.date === newSlot.date
-      );
-
-      if (index !== -1) {
-        existingSlots[index] = newSlot;
-      } else {
-        existingSlots.push(newSlot);
-      }
-
-      updatedDoctor.availableslots = existingSlots;
-
-      await updateDoctorSlot(updatedDoctor.id, updatedDoctor);
-      // setIsSlotOpen(false);
-      setisAddNewSlotopen(false);
-      toast.success("Slot updated successfully");
+      await updateDoctorSlot(selectedDoctor.id, updatedDoctor);
+      toast.success("Slot added successfully");
       reset();
       dispatch(fetchDoctor());
-      // window.location.reload();
-      // setTimeout(() => window.location.reload(), 100);
+      setIsSlotModalOpen(false);
     } catch (error) {
-      console.error("Slot update failed:", error);
-      toast.error("Something went wrong while updating the slot.");
-      reset();
+      toast.error("Failed to add slot");
     }
   };
 
+  const SortIndicator = ({ column }) => (
+    <span className="ml-2">
+      {sortConfig.key === column &&
+        (sortConfig.direction === "asc" ? "↑" : "↓")}
+    </span>
+  );
+
   return (
-    <div className="mx-[10%] 2xl:mx-[21%] py-10 flex flex-col justify-between">
-      {/* add new appointment */}
-      <div className="self-end">
-        <button
-          className="bg-green-500 mr-4 text-white px-5 py-2 rounded hover:bg-green-600"
-          onClick={() => setisAddNewSlotopen(true)}
-        >
-          + Add New Slot
-        </button>
-        <Link to="/admin/doctors/new">
-          <button className="bg-green-500 text-white px-5 py-2 rounded hover:bg-green-600">
-            + Add New Doctor
-          </button>
-        </Link>
-      </div>
-
-      {/* Docter Details */}
-      <div className="p-8">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">
-          Doctor Details
-        </h2>
-
-        <div className="overflow-x-auto  shadow rounded-lg">
-          <table className="min-w-full bg-white">
-            <thead className="bg-sky-200 text-gray-700">
-              <tr>
-                <th className="py-3 px-6 ">Name</th>
-                <th className="py-3 px-6 ">Specialty</th>
-                <th className="py-3 px-6 ">Experience</th>
-                <th className="py-3 px-6 ">Status</th>
-                <th className="py-3 px-6 ">Details</th>
-              </tr>
-            </thead>
-            <tbody className="text-gray-600 text-center">
-              {doctors.map((slot) => (
-                <tr key={slot.id} className="border-b">
-                  <td className="py-3 px-6">{slot.name || "N/A"}</td>
-                  <td className="py-3 px-6">{slot.specialty || "N/A"}</td>
-                  <td className="py-3 px-6">{slot.experience || "N/A"}</td>
-                  <td className="py-3 px-6">
-                    {slot.unavailableslots?.some(
-                      (s) => s.date === todayFormatted
-                    ) ? (
-                      <span className="text-red-500 font-semibold">
-                        Unavailable
-                      </span>
-                    ) : (
-                      <span className="text-green-500 font-semibold">
-                        Available
-                      </span>
-                    )}
-                  </td>
-                  <td className="py-3 px-6 flex justify-center space-x-2">
-                    <Link
-                      to={`/admin/doctors/${slot.id}`}
-                      className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                      // onClick={() => {
-                      //   setselectedDocter(slot);
-                      //   setIsOpen(true);
-                      // }}
-                    >
-                      View
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+    <div className="min-h-screen bg-gray-50">
+      {/* Admin Header */}
+      <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white p-6 shadow-xl">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <div>
+            <h1 className="text-2xl font-bold">Doctor Management</h1>
+            <p className="text-gray-300 mt-1">
+              {doctors.length} registered professionals
+            </p>
+          </div>
+          <div className="flex gap-4">
+            {/* <button
+              onClick={() => setIsSlotModalOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition"
+            >
+              <HiPlus className="text-xl" />
+              Add Slot
+            </button> */}
+            <Link
+              to="/admin/doctors/new"
+              className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg transition"
+            >
+              <HiPlus className="text-xl" />
+              New Doctor
+            </Link>
+          </div>
         </div>
       </div>
-      {/* Add New Slot */}
-      {isAddNewSlotopen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-xl">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-2xl font-semibold text-gray-800">
-                Add New Appointment
-              </h3>
-              <button
-                onClick={() => setisAddNewSlotopen(false)}
-                className="text-gray-500 hover:text-red-500 transition"
-              >
-                ✕
-              </button>
-            </div>
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="my-3 border border-gray-300 bg-white p-4 rounded shadow-sm"
-            >
-              {/*  filter */}
-              <div className="flex gap-4">
-                {/* Doctor Specialty filter */}
-                <div className="flex-1">
-                  <select
-                    className="w-full my-4 py-3 px-4 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    onChange={(e) => setselectedSpecialty(e.target.value)}
-                  >
-                    <option value="">All Specialist</option>
-                    <option value="Dentist">Dentist</option>
-                    <option value="Dermatologist">Dermatologist</option>
-                    <option value="General Physician">General Physician</option>
-                    <option value="Cardiologist">Cardiologist</option>
-                    <option value="Surgeons">Surgeons</option>
-                    <option value="Neurologists">Neurologists</option>
-                  </select>
-                </div>
-                {/* Doctor filter */}
-                <div className="flex-1">
-                  <select
-                    className="w-full my-4 py-3 px-4 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 defocus:ring-blue-400"
-                    disabled={!selectedSpecialty}
-                    onChange={handleDoctorChange}
-                  >
-                    <option hidden value="">
-                      All doctors
-                    </option>
 
-                    {FilterdDoctersbySpecialty.map((doctor) => (
-                      <option key={doctor.id}>{doctor.name || "N/A"}</option>
+      {/* Control Bar */}
+      <div className="max-w-7xl mx-auto p-6">
+        <div className="bg-white rounded-xl shadow-sm p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="relative">
+            <HiSearch className="absolute left-3 top-3 text-gray-400 text-xl" />
+            <input
+              type="text"
+              placeholder="Search doctors..."
+              className="pl-10 pr-4 py-2 w-full border border-gray-200 rounded-lg"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          <div className="relative">
+            <HiFilter className="absolute left-3 top-3 text-gray-400 text-xl" />
+            <select
+              className="pl-10 pr-4 py-2 w-full border border-gray-200 rounded-lg bg-white"
+              value={selectedSpecialty}
+              onChange={(e) => setSelectedSpecialty(e.target.value)}
+            >
+              <option value="all">All Specialties</option>
+              {specialties.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-gray-600">Sort by:</span>
+            <select
+              className="px-3 py-2 border border-gray-200 rounded-lg bg-white"
+              value={`${sortConfig.key}-${sortConfig.direction}`}
+              onChange={(e) => {
+                const [key, direction] = e.target.value.split("-");
+                setSortConfig({ key, direction });
+              }}
+            >
+              <option value="name-asc">Name (A-Z)</option>
+              <option value="name-desc">Name (Z-A)</option>
+              <option value="experience-asc">Experience (Low-High)</option>
+              <option value="experience-desc">Experience (High-Low)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Doctors Grid */}
+      <div className="max-w-7xl mx-auto p-6">
+        {processedDoctors.length > 0 ? (
+          <motion.div
+            layout
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
+            <AnimatePresence>
+              {processedDoctors.map((doctor) => (
+                <motion.div
+                  key={doctor.id}
+                  layout
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all border border-gray-100"
+                >
+                  <div className="p-4 border-b border-gray-100 flex justify-between items-center">
+                    <div>
+                      <h3 className="text-lg font-semibold">{doctor.name}</h3>
+                      <p className="text-gray-500 text-sm">
+                        {doctor.specialty}
+                      </p>
+                    </div>
+                    <span
+                      className={`px-2 py-1 rounded-full text-sm ${
+                        doctor.unavailableslots?.some((s) => s.date === today)
+                          ? "bg-red-100 text-red-700"
+                          : "bg-green-100 text-green-700"
+                      }`}
+                    >
+                      {doctor.unavailableslots?.some((s) => s.date === today)
+                        ? "Busy"
+                        : "Available"}
+                    </span>
+                  </div>
+
+                  <div className="p-4 space-y-3">
+                    <div className="flex justify-between items-center text-sm">
+                      <div className="flex items-center gap-2 text-gray-500">
+                        <HiCalendar className="text-blue-500" />
+                        <span>{doctor.availableslots?.length || 0} slots</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-500">
+                        <HiStatusOnline className="text-green-500" />
+                        <span>{doctor.experience} yrs exp</span>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Link
+                        to={`/admin/doctors/${doctor.id}`}
+                        className="flex-1 flex items-center gap-2 justify-center px-3 py-2 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg transition"
+                      >
+                        <HiPencilAlt />
+                        View
+                      </Link>
+                      <button className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition">
+                        <HiTrash />
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        ) : (
+          <div className="bg-white rounded-xl shadow-sm p-8 text-center">
+            <div className="text-6xl text-gray-200 mb-4 flex justify-center">
+              <HiUser className="w-24 h-24" />
+            </div>
+            <h3 className="text-xl font-medium text-gray-800 mb-2">
+              No doctors found
+            </h3>
+            <p className="text-gray-500">Try adjusting your search filters</p>
+          </div>
+        )}
+      </div>
+
+      {/* Add Slot Modal */}
+      <AnimatePresence>
+        {isSlotModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          >
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -20, opacity: 0 }}
+              className="bg-white rounded-2xl shadow-xl w-full max-w-md"
+            >
+              <div className="p-4 border-b border-gray-100 flex justify-between items-center">
+                <h3 className="text-lg font-semibold">Add Time Slot</h3>
+                <button
+                  onClick={() => setIsSlotModalOpen(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <HiX className="text-xl" />
+                </button>
+              </div>
+
+              <form
+                onSubmit={handleSubmit(handleSlotSubmit)}
+                className="p-4 space-y-4"
+              >
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Doctor
+                  </label>
+                  <select
+                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) =>
+                      setSelectedDoctor(
+                        doctors.find((d) => d.id === e.target.value)
+                      )
+                    }
+                    required
+                  >
+                    <option value="">Select Doctor</option>
+                    {doctors.map((doctor) => (
+                      <option key={doctor.id} value={doctor.id}>
+                        {doctor.name} ({doctor.specialty})
+                      </option>
                     ))}
                   </select>
                 </div>
-              </div>
-              {/* date picker */}
-              <div>
-                <Input
-                  className="w-full my-4 py-3 px-4 border border-gray-300 shadow-sm bg-white"
-                  placeholder="Select a date"
-                  disabled={!selectedDocter}
-                  type="date"
-                  {...register("availableslots.date", {
-                    required: "Select the Date",
-                  })}
-                />
-                {errors.availableslots?.date && (
-                  <p className="text-red-500">
-                    {errors.availableslots?.date.message}
-                  </p>
-                )}
-              </div>
-              {/* Time Selection */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                {/* Starting Time */}
-                <div className="flex-1">
-                  <label className="block text-md font-sm text-black ">
-                    Select Starting Time
-                  </label>
-                  <select
-                    disabled={!selectedDocter}
-                    className="mt-2.5 block w-full bg-white p-2 border border-gray-300 rounded-md"
-                    {...register("availableslots.start", {
-                      required: "Select the Time",
-                    })}
-                  >
-                    <option hidden value="">
-                      Select Time
-                    </option>
-                    <option value="10:00">10:00 AM</option>
-                    <option value="11:00">11:00 AM</option>
-                    <option value="12:00">12:00 AM</option>
-                    <option value="13:00">01:00 PM</option>
-                    <option value="14:00">02:00 PM</option>
-                    <option value="15:00">03:00 PM</option>
-                    <option value="16:00">04:00 PM</option>
-                    <option value="17:00">05:00 PM</option>
-                    <option value="18:00">06:00 PM</option>
-                  </select>
-                  {errors.availableslots?.start && (
-                    <p className="text-red-500">
-                      {errors.availableslots?.start.message}
-                    </p>
-                  )}
-                </div>
 
-                {/* Ending Time */}
-                <div className="flex-1">
-                  <label className="block text-md font-sm text-black">
-                    Select Ending Time
-                  </label>
-                  <select
-                    disabled={!selectedDocter}
-                    className="mt-2.5 block w-full bg-white p-2 border border-gray-300 rounded-md"
-                    {...register("availableslots.end", {
-                      required: "Select the Time",
-                    })}
-                  >
-                    <option hidden value="">
-                      Select Time
-                    </option>
-                    <option value="11:00">11:00 AM</option>
-                    <option value="12:00">12:00 AM</option>
-                    <option value="13:00">01:00 PM</option>
-                    <option value="14:00">02:00 PM</option>
-                    <option value="15:00">03:00 PM</option>
-                    <option value="16:00">04:00 PM</option>
-                    <option value="17:00">05:00 PM</option>
-                    <option value="18:00">06:00 PM</option>
-                    <option value="19:00">07:00 PM</option>
-                  </select>
-                  {errors.availableslots?.end && (
-                    <p className="text-red-500">
-                      {errors.availableslots?.end.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="bg-blue-500 text-white px-3 py-1 rounded mt-4 sm:mt-6"
-              >
-                Add
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* no more in use */}
-      {/* Selected Doctor Details
-      {isOpen && (
-        <div className="  flex items-center justify-center  ">
-          <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-4xl">
-            <div className="flex justify-between items-center mb-8">
-              <h3 className="text-3xl font-semibold text-gray-800">
-                Doctor Details
-              </h3>
-              <button
-                onClick={() => {
-                  setIsOpen(false);
-                  setselectedDocter(null);
-                }}
-                className="text-gray-500 hover:text-red-500 transition"
-              >
-                ✕
-              </button>
-            </div>
-
-            
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center space-x-4">
-                <img
-                  src={selectedDocter.image}
-                  alt={selectedDocter.name}
-                  className="w-32 h-32 object-cover rounded-full shadow-lg"
-                />
-                <div>
-                  <h3 className="text-2xl font-semibold text-gray-800">
-                    {selectedDocter.name || "N/A"}
-                  </h3>
-                  <p className="text-md text-gray-500">
-                    {selectedDocter.specialty || "N/A"}
-                  </p>
-                  <p className="text-md text-gray-600">
-                    {selectedDocter.experience || "N/A"} years of experience
-                  </p>
-                </div>
-              </div>
-            </div>
-
-           
-            <div className="mt-6">
-              <h4 className="text-xl font-medium text-gray-800 mb-4">
-                Available Slots
-              </h4>
-              <table className="min-w-full bg-gray-50 border-collapse shadow-md rounded-lg overflow-hidden">
-                <thead>
-                  <tr className=" bg-gray-200 text-gray-700">
-                    <th className="px-6 py-3 text-sm font-semibold">Date</th>
-                    <th className="px-6 py-3 text-sm font-semibold">Time</th>
-                    <th className="px-6 py-3 text-sm font-semibold">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {selectedDocter.availableslots.map((slot, index) => (
-                    <tr
-                      key={index}
-                      className="border-t text-center border-b text-sm text-gray-600"
-                    >
-                      <td className="px-6 py-4">{slot.date || "N/A"}</td>
-                      <td className="px-6 py-4">
-                        {slot.start || "N/A"} - {slot.end || "N/A"}
-                      </td>
-                      <td className="justify-center my-3 items-center flex gap-3">
-                        <button
-                          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
-                          onClick={() => {
-                            setselectedSlot(slot);
-                            setIsSlotOpen(true);
-                          }}
-                        >
-                          Update
-                        </button>
-                        <button
-                          className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition disabled:opacity-50"
-                          disabled={slot.date === todayFormatted}
-                          onClick={() => handleDelete(slot)}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-           
-            {isSlotOpen && (
-              <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-[100]">
-                <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-lg">
-                
-                  <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-2xl font-bold text-gray-800">
-                      Slot Details
-                    </h3>
-                    <button
-                      onClick={() => setIsSlotOpen(false)}
-                      className="text-gray-400 hover:text-red-500 transition text-2xl"
-                    >
-                      ✕
-                    </button>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Date
+                    </label>
+                    <div className="relative">
+                      <HiCalendar className="absolute left-3 top-3 text-gray-400" />
+                      <input
+                        type="date"
+                        className="pl-10 w-full px-4 py-2 border border-gray-200 rounded-lg"
+                        {...register("date", { required: "Date is required" })}
+                      />
+                    </div>
                   </div>
 
-                  <div className="overflow-x-auto mb-6">
-                    <table className="min-w-full text-sm text-gray-700">
-                      <thead>
-                        <tr className="bg-gray-100 text-gray-600 uppercase text-xs leading-normal">
-                          <th className="py-3 px-6 text-left">Date</th>
-                          <th className="py-3 px-6 text-left">Time</th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white">
-                        <tr className="border-b hover:bg-gray-50">
-                          <td className="py-4 px-6">{selectedSlot.date}</td>
-                          <td className="py-4 px-6">
-                            {selectedSlot.start} - {selectedSlot.end}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <div className="mb-6">
-                    <form
-                      onSubmit={handleSubmit(onSubmit)}
-                      className="space-y-4"
-                    >
-                      <div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Time Range
+                    </label>
+                    <div className="flex gap-2">
+                      <div className="relative flex-1">
+                        <HiClock className="absolute left-3 top-3 text-gray-400" />
                         <input
-                          type="hidden"
-                          value={selectedSlot.date}
-                          {...register("availableslots.date", {})}
+                          type="time"
+                          className="pl-10 w-full px-4 py-2 border border-gray-200 rounded-lg"
+                          {...register("start", {
+                            required: "Start time required",
+                          })}
                         />
                       </div>
-                      <div className="flex gap-4">
-                        <div className="flex-1">
-                          <label className="block text-gray-600 mb-1 text-sm">
-                            Start Time
-                          </label>
-                          <select
-                            className="w-full p-2.5 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                            {...register("availableslots.start", {})}
-                          >
-                            <option hidden value={selectedSlot.start}>
-                              {selectedSlot.start}
-                            </option>
-                            <option value="10:00">10:00 AM</option>
-                            <option value="11:00">11:00 AM</option>
-                            <option value="12:00">12:00 AM</option>
-                            <option value="13:00">01:00 PM</option>
-                            <option value="14:00">02:00 PM</option>
-                            <option value="15:00">03:00 PM</option>
-                            <option value="16:00">04:00 PM</option>
-                            <option value="17:00">05:00 PM</option>
-                            <option value="18:00">06:00 PM</option>
-                          </select>
-                        </div>
-                        <div className="flex-1">
-                          <label className="block text-gray-600 mb-1 text-sm">
-                            End Time
-                          </label>
-                          <select
-                            className="w-full p-2.5 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                            {...register("availableslots.end", {})}
-                          >
-                            <option hidden value={selectedSlot.end}>
-                              {selectedSlot.end}
-                            </option>
-                            <option value="11:00">11:00 AM</option>
-                            <option value="12:00">12:00 AM</option>
-                            <option value="13:00">01:00 PM</option>
-                            <option value="14:00">02:00 PM</option>
-                            <option value="15:00">03:00 PM</option>
-                            <option value="16:00">04:00 PM</option>
-                            <option value="17:00">05:00 PM</option>
-                            <option value="18:00">06:00 PM</option>
-                            <option value="19:00">07:00 PM</option>
-                          </select>
-                        </div>
+                      <div className="relative flex-1">
+                        <HiClock className="absolute left-3 top-3 text-gray-400" />
+                        <input
+                          type="time"
+                          className="pl-10 w-full px-4 py-2 border border-gray-200 rounded-lg"
+                          {...register("end", {
+                            required: "End time required",
+                          })}
+                        />
                       </div>
-                  
-                      <div className="flex justify-end gap-4">
-                        <button
-                          type="submit"
-                          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-lg shadow transition"
-                        >
-                          Update
-                        </button>
-                        <button
-                          onClick={() => setIsSlotOpen(false)}
-                          className="bg-red-500 hover:bg-red-600 text-white font-semibold px-5 py-2 rounded-lg shadow transition disabled:opacity-50"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </form>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )} */}
+
+                <div className="pt-4">
+                  <button
+                    type="submit"
+                    className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-medium flex items-center justify-center gap-2"
+                  >
+                    <HiPlus className="text-lg" />
+                    Confirm Slot
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
