@@ -84,7 +84,7 @@ const Navbar = () => {
                     <span className={animatenavbar} />
                   </NavLink>
                 )}
-                <NavLink to="/" className={Linkclass}>
+                <NavLink to="/contact" className={Linkclass}>
                   Contact
                   <span className={animatenavbar} />
                 </NavLink>

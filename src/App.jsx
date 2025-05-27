@@ -24,6 +24,7 @@ import AllDoctorDisplaypage from "./pages/user/AllDoctorDisplaypage";
 import AllServices from "./pages/user/AllServices";
 import Nouserfound from "./pages/error/no-userfound";
 import DoctorLeave from "./pages/doctor/DoctorLeave";
+import Contact from "./pages/user/Contact";
 
 const router = createBrowserRouter([
   // ── Public ─────────────────────────────────────────────────────
@@ -49,6 +50,7 @@ const router = createBrowserRouter([
           { path: "/appointment/details", element: <UserDashboard /> },
           { path: "/appointment/calendar", element: <Appointment /> },
           { path: "/account/change-password", element: <PasswordChange /> },
+          { path: "/contact", element: <Contact /> },
         ],
       },
 
