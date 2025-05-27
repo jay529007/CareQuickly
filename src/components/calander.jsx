@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Calendar } from "react-big-calendar";
-import Input from "../components/re-usablecomponets/InputFeild";
+
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-
+import "../calendar.css";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { loadState } from "../store/localstorage";
@@ -17,6 +17,8 @@ import { enIN } from "date-fns/locale";
 import { toast } from "react-toastify";
 import { isAfter, startOfDay, isBefore, isSameDay } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import CustomToolbar from "./calendar-components/CustomToolbar";
+import CalendarModel from "./calendar-components/CalendarModel";
 
 const locales = { "en-IN": enIN };
 
@@ -56,8 +58,10 @@ const MyCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [events, setEvents] = useState([]);
   const [selectedSpecialty, setselectedSpecialty] = useState("");
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [selectedDoctor, setselectedDoctor] = useState(null);
   const navigate = useNavigate();
+  const today = startOfDay(new Date());
   // fetching currentusers  Appointments
   const authdata = loadState();
   const id = authdata.id;
@@ -70,8 +74,6 @@ const MyCalendar = () => {
   const allAppointments = currentUser?.appointments;
   format(new Date(), "P", { locale: locales["en-IN"] });
   const {
-    register,
-    handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
@@ -93,6 +95,7 @@ const MyCalendar = () => {
       const formatted = allAppointments.map((appt, index) => {
         const dateStr = appt.slot.date;
         const status = appt.status;
+
         const [startHour, startMin] = appt.slot.start.split(":").map(Number);
         const [endHour, endMin] = appt.slot.end.split(":").map(Number);
 
@@ -114,64 +117,14 @@ const MyCalendar = () => {
       setEvents(formatted);
     }
   }, [allAppointments]);
-
-  // toolbar
-  const CustomToolbar = ({ label, onNavigate, onView }) => (
-    <div className="flex justify-between items-center mb-3">
-      <div className="flex gap-2  items-center">
-        <>
-          <button
-            className="px-3 py-2 bg-white border border-gray-300 hover:bg-gray-100 rounded cursor-pointer"
-            onClick={() => onNavigate("PREV")}
-          >
-            {/* < */}
-            &lt;
-            {/* Back */}
-          </button>
-          <h3 className="px-3 py-2 bg-gray-100 border border-gray-300 rounded">
-            {label}
-          </h3>
-          <button
-            className="px-3 py-2 bg-white border border-gray-300 hover:bg-gray-100 rounded cursor-pointer"
-            onClick={() => onNavigate("NEXT")}
-          >
-            {/* > */}
-            &gt;
-            {/* Next */}
-          </button>
-        </>
-      </div>
-
-      <div className="space-x-2">
-        <button
-          onClick={() => onView("month")}
-          className="py-2 px-3 bg-white border border-gray-300 hover:bg-gray-100 rounded-md cursor-pointer"
-        >
-          Month
-        </button>
-        <button
-          onClick={() => onView("week")}
-          className="py-2 px-3 bg-white border border-gray-300 hover:bg-gray-100 rounded cursor-pointer"
-        >
-          Weeks
-        </button>
-        <button
-          onClick={() => onView("day")}
-          className="py-2 px-3 bg-white border border-gray-300 hover:bg-gray-100 rounded cursor-pointer"
-        >
-          Day
-        </button>
-      </div>
-    </div>
-  );
-  // --------------------------- disable clicks according days -------------------------
+  //  ----------------------- disable clicks according days -------------------------
   const isDraggable = (event) => {
     const now = startOfDay(new Date());
     return isAfter(event.start, now);
   };
 
   function dayPropGetter(date) {
-    const today = startOfDay(new Date());
+    // const today = startOfDay(new Date());
     const isPast = isBefore(date, today);
     const dow = getDay(date);
     const isToday = isSameDay(date, today);
@@ -220,8 +173,6 @@ const MyCalendar = () => {
       },
     };
   };
-  const errorClass =
-    "text-red-500 text-sm w-fit p-1 font-medium uppercase mt-2 bg-gray-200/50";
 
   const doctors = useSelector((state) => state.doctors.doctors);
 
@@ -231,6 +182,22 @@ const MyCalendar = () => {
   const FilterdDoctersbySpecialty = doctors.filter(
     (doctor) => doctor.specialty === selectedSpecialty
   );
+
+  // --------------------------- Update appoitment -------------------------
+  const handleEventClick = (event) => {
+    // 'event' contains full info: id, title, start, end, status, etc.
+    const selectedAppt = currentUser.appointments.find(
+      (appt) => appt.id === event.id
+    );
+
+    if (!selectedAppt) {
+      toast.error("Appointment not found.");
+      return;
+    }
+    setShowModal(true);
+    setSelectedAppointment(selectedAppt); // for modal
+    reset();
+  };
 
   // --------------------------- disable time -------------------------
   const dayOfWeek = getDay(selectedDate);
@@ -366,7 +333,7 @@ const MyCalendar = () => {
 
   const handleEventDrop = async ({ event, start, end }) => {
     const iso = format(start, "yyyy-MM-dd");
-    const today = startOfDay(new Date());
+    // const today = startOfDay(new Date());
     // A) conflict with other confirmed appointments
     const dayAppts = currentUser.appointments.filter(
       (a) => a.slot.date === iso && a.status === "Confirmed"
@@ -495,11 +462,14 @@ const MyCalendar = () => {
       status: "Pending",
       notes: formdata.appointments.notes,
       slot: {
-        date: format(selectedDate, "yyyy-MM-dd"),
+        date: selectedAppointment
+          ? format(selectedAppointment.slot.date, "yyyy-MM-dd")
+          : format(selectedDate, "yyyy-MM-dd"),
         start: formdata.appointments.slot?.start,
         end: formdata.appointments.slot.end,
       },
     };
+
     const start = parse(formdata.appointments.slot.start, "HH:mm", new Date());
     const end = parse(formdata.appointments.slot.end, "HH:mm", new Date());
 
@@ -511,10 +481,24 @@ const MyCalendar = () => {
     const isBlocked =
       todayBlock && isSlotInsideBlockedTime(start, end, todayBlock);
 
-    const updatedAppointments = [
+    let updatedAppointments = [
       ...(currentUser.appointments || []),
       newAppointment,
     ];
+    // ------------------- remove logic -------------------
+    if (selectedAppointment) {
+      const selectedappt = updatedAppointments.find(
+        (appt) => selectedAppointment?.id === appt.id
+      );
+      // console.log(selectedappt);
+      const updatedappotinewithnewtime = {
+        ...selectedappt,
+        slot: newAppointment.slot,
+      };
+      updatedAppointments = updatedAppointments.filter(
+        (oldappt) => oldappt.id !== updatedappotinewithnewtime.id
+      );
+    }
 
     const updatedUserData = {
       ...currentUser,
@@ -560,242 +544,74 @@ const MyCalendar = () => {
   return (
     <div className="">
       {/* Displaying the Calendar */}
-      <DragAndDropCalendar
-        localizer={localizer}
-        events={events}
-        eventPropGetter={eventStyleGetter}
-        dayPropGetter={dayPropGetter}
-        // draggableAccessor={isDraggable}
-        draggableAccessor={(event) => event.status === "Pending"} // Only allow dragging pending appointments
-        min={new Date(0, 0, 0, 10, 0)}
-        max={new Date(0, 0, 0, 19, 0)}
-        step={60}
-        timeslots={1}
-        dayLayoutAlgorithm="no-overlap"
-        onEventDrop={handleEventDrop}
-        // onEventResize={handleEventResize}
-        // resizable={true} // Changed to false unless you implement resize handling
-        startAccessor="start"
-        endAccessor="end"
-        style={{ height: 600 }}
-        date={currentDate}
-        view={currentView}
-        views={["month", "week", "day"]}
-        onView={handleViewChange}
-        onNavigate={(date) => setCurrentDate(date)}
-        onSelectSlot={({ start }) => {
-          const today = startOfDay(new Date());
-
-          // if the slot is before the start of today, block it
-          if (isBefore(start, today)) {
-            // toast.info("Cannot book appointments in the past");
-            return;
+      <div className="rbc-calendar-wrapper overflow-hidden">
+        <DragAndDropCalendar
+          localizer={localizer}
+          events={events}
+          onSelectEvent={handleEventClick}
+          eventPropGetter={eventStyleGetter}
+          dayPropGetter={dayPropGetter}
+          // draggableAccessor={isDraggable}
+          draggableAccessor={(event) =>
+            event.status === "Pending" && !isBefore(event.start, today)
           }
+          pending
+          appointments
+          min={new Date(0, 0, 0, 10, 0)}
+          max={new Date(0, 0, 0, 19, 0)}
+          step={60}
+          timeslots={1}
+          // selectedDate={setSelectedDate}
+          dayLayoutAlgorithm="no-overlap"
+          onEventDrop={handleEventDrop}
+          // onEventResize={handleEventResize}
+          // resizable={true} // Changed to false unless you implement resize handling
+          startAccessor="start"
+          endAccessor="end"
+          style={{ height: 600 }}
+          date={currentDate}
+          components={{
+            toolbar: (props) => <CustomToolbar {...props} />,
+          }}
+          view={currentView}
+          views={["month", "week", "day"]}
+          onView={handleViewChange}
+          onNavigate={(date) => setCurrentDate(date)}
+          onSelectSlot={({ start }) => {
+            // const today = startOfDay(new Date());
 
-          // otherwise it's today or in the future
-          setSelectedDate(start);
-          setShowModal(true);
-        }}
-        selectable={true}
-        components={{ toolbar: (props) => <CustomToolbar {...props} /> }}
-      />
+            // if the slot is before the start of today, block it
+            if (isBefore(start, today)) {
+              // toast.info("Cannot book appointments in the past");
+              return;
+            }
+
+            // otherwise it's today or in the future
+            setSelectedDate(start);
+            setShowModal(true);
+          }}
+          selectable={true}
+          // components={{ toolbar: (props) => <CustomToolbar {...props} /> }}
+        />
+      </div>
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-          <div className="bg-white p-4 rounded-xl shadow w-[50%]">
-            <h3 className="text-xl font-bold mb-2">New Appointment</h3>
-            <p className="text-sm mb-1">Date: {format(selectedDate, "PPP")}</p>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              {/* name */}
-              <div>
-                <Input
-                  label="Name: "
-                  type="text"
-                  value={currentUser?.name}
-                  disabled
-                  className="border w-full p-1 mb-2"
-                  placeholder="User"
-                />
-              </div>
-              {/* email */}
-              <div>
-                <Input
-                  label="Email: "
-                  type="text"
-                  disabled
-                  value={currentUser?.email}
-                  className="border w-full p-1 mb-2"
-                  placeholder="Useremail"
-                />
-              </div>
-
-              {/* filter */}
-              <div className="flex gap-4">
-                {/* Doctor Specialty filter */}
-                <div className="flex-1">
-                  <select
-                    className="w-full my-3 py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    {...register("appointments.service", {
-                      required: "Select the Service",
-                      onChange: (e) => {
-                        setselectedSpecialty(e.target.value),
-                          setselectedDoctor("");
-                      },
-                    })}
-                  >
-                    <option hidden value="">
-                      Select Specialist
-                    </option>
-                    <option value="Dermatologist">Dermatologist</option>
-                    <option value="Dentist">Dentist</option>
-                    <option value="General Physician">General Physician</option>
-                    <option value="Cardiologist">Cardiologist</option>
-                    <option value="Neurologists">Neurologists</option>
-                    <option value="Surgeons">Surgeons</option>
-                  </select>
-                  {errors.appointments?.service && (
-                    <p className={errorClass}>
-                      {errors.appointments?.service.message}
-                    </p>
-                  )}
-                </div>
-                {/* Doctors Filter */}
-                <div className="flex-1">
-                  <select
-                    className="w-full my-3 py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    disabled={!selectedSpecialty}
-                    // onChange={handleDoctorChange}
-                    {...register("appointments.doctor", {
-                      required: "Select the Doctor",
-                      onChange: handleDoctorChange,
-                    })}
-                  >
-                    <option hidden value="">
-                      All doctors
-                    </option>
-                    {FilterdDoctersbySpecialty.map((doctor, index) => (
-                      <option key={index} value={doctor.name}>
-                        {doctor.name}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.appointments?.doctor && (
-                    <p className={errorClass}>
-                      {errors.appointments?.doctor.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {/* Notes */}
-              <div>
-                <label className="inline-block mb-1 text-black pl-1">
-                  Notes:
-                </label>
-                <textarea
-                  placeholder="Notes"
-                  rows="2"
-                  className="w-full bg-slate-50 px-4 py-2 mt-1 border border-gray-300 rounded resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  {...register("appointments.notes", {})}
-                />
-              </div>
-              {/* time */}
-              <div className="flex gap-3">
-                {/* Stating Time */}
-                <div className="flex-1">
-                  <label className="block text-md font-sm text-black">
-                    Select Stating Time
-                  </label>
-                  <select
-                    disabled={!selectedDoctor}
-                    className="mt-2.5 block  bg-white w-full p-2  border rounded-md"
-                    {...register("appointments.slot.start", {
-                      required: "Select the Time",
-                    })}
-                  >
-                    <option hidden value="">
-                      Select Time
-                    </option>
-                    {AvailableslotValue.map((value, i) => {
-                      // i is the index into both arrays
-                      const display = Availableslot[i];
-                      return (
-                        <option key={value} value={value}>
-                          {display}
-                        </option>
-                      );
-                    })}
-                  </select>
-                  {errors.appointments?.slot.start && (
-                    <p className={errorClass}>
-                      {errors.appointments?.slot.start.message}
-                    </p>
-                  )}
-                </div>
-                {/* Ending Time */}
-                <div className="flex-1">
-                  <label className="block text-md font-sm text-black">
-                    Select Ending Time
-                  </label>
-                  <select
-                    disabled={!selectedDoctor}
-                    className="mt-2.5 block  bg-white w-full p-2  border rounded-md"
-                    {...register("appointments.slot.end", {
-                      required: "Select the time",
-                    })}
-                  >
-                    <option hidden value="">
-                      Select Time
-                    </option>
-                    {AvailableslotValue.map((value, i) => {
-                      // i is the index into both arrays
-                      const display = Availableslot[i];
-                      return (
-                        <option key={value} value={value}>
-                          {display}
-                        </option>
-                      );
-                    })}
-                    {/* 
-                    <option value="11:00">11:00 AM</option>
-                    <option value="12:00">12:00 AM</option>
-                    <option value="13:00">01:00 PM</option>
-                    <option value="14:00">02:00 PM</option>
-                    <option value="15:00">03:00 PM</option>
-                    <option value="16:00">04:00 PM</option>
-                    <option value="17:00">05:00 PM</option>
-                    <option value="18:00">06:00 PM</option>
-                    <option value="19:00">07:00 PM</option> */}
-                  </select>
-                  {errors.appointments?.slot.end && (
-                    <p className={errorClass}>
-                      {errors.appointments?.slot.end.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-              <br />
-              {/* buttons */}
-              <div className="flex justify-end gap-2">
-                <button
-                  onClick={() => {
-                    setselectedDoctor("");
-                    reset();
-                    setShowModal(false);
-                  }}
-                  className="bg-gray-300 px-3 py-1 rounded"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-blue-500 text-white px-3 py-1 rounded"
-                >
-                  Add
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <CalendarModel
+          setShowModal={setShowModal}
+          currentUser={currentUser}
+          onSubmit={onSubmit}
+          format={format}
+          selectedDate={selectedDate}
+          handleDoctorChange={handleDoctorChange}
+          FilterdDoctersbySpecialty={FilterdDoctersbySpecialty}
+          selectedDoctor={selectedDoctor}
+          AvailableslotValue={AvailableslotValue}
+          Availableslot={Availableslot}
+          setselectedDoctor={setselectedDoctor}
+          selectedSpecialty={selectedSpecialty}
+          setselectedSpecialty={setselectedSpecialty}
+          selectedAppointment={selectedAppointment}
+          setSelectedAppointment={setSelectedAppointment}
+        />
       )}
     </div>
   );

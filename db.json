@@ -182,6 +182,30 @@
       "availableslots": [],
       "unavailableslots": [],
       "image": "https://doctor-apoinment-system.vercel.app/docter6.png"
+    },
+    {
+      "id": "bc3b",
+      "name": "Trivedi yash",
+      "email": "yash@doctor.com",
+      "phone": "6626541133",
+      "specialty": "Neurologists",
+      "experience": "10",
+      "education": "NIMHANS, Bangalore",
+      "qualifications": [
+        "MBBS",
+        "MS Orthopedics"
+      ],
+      "languages": [
+        "English",
+        "Hindi",
+        "French",
+        "Spanish"
+      ],
+      "dateOfBirth": "2000-01-01",
+      "gender": "Male",
+      "about": "Neurologist with a keen interest in neurodegenerative disorders.",
+      "image": "https://doctor-apoinment-system.vercel.app/trivedi.png",
+      "password": "$2b$10$.dMHstnf3v2Y6RJU.8ob8ucFt7FipiPojJwCwpcNeNYB8weCMIEnK"
     }
   ],
   "users": [
@@ -435,15 +459,15 @@
       "medical_history": "",
       "appointments": [
         {
-          "id": "6e644c5b-bdb7-4535-9e15-50039a1ae388",
-          "service": "Cardiologist",
-          "doctor": "Dr. Arvind Nair",
-          "status": "Confirmed",
-          "notes": "Occasional chest discomfort when climbing stairs.",
+          "id": "88a019c2-4403-4f55-831b-8ebcdd2fd030",
+          "service": "General Physician",
+          "doctor": "Dr. Sneha Patil",
+          "status": "Pending",
+          "notes": "",
           "slot": {
-            "date": "2025-04-25",
-            "start": "10:00",
-            "end": "13:00"
+            "date": "2025-05-27",
+            "start": "15:00",
+            "end": "16:00"
           }
         },
         {
@@ -517,6 +541,42 @@
             "start": "15:00",
             "end": "16:00"
           }
+        },
+        {
+          "id": "b3b994b6-a160-4e4e-a4bc-2e529254c8a9",
+          "service": "Dermatologist",
+          "doctor": "Dr. Aarti Sharma",
+          "status": "Pending",
+          "notes": "",
+          "slot": {
+            "date": "2025-05-27",
+            "start": "15:00",
+            "end": "15:00"
+          }
+        },
+        {
+          "id": "88a019c2-4403-4f55-831b-8ebcdd2fd030",
+          "service": "General Physician",
+          "doctor": "Dr. Sneha Patil",
+          "status": "Pending",
+          "notes": "",
+          "slot": {
+            "date": "2025-05-27",
+            "start": "15:00",
+            "end": "16:00"
+          }
+        },
+        {
+          "id": "505ef75d-31cb-4556-a792-6347febd98bc",
+          "service": "Dermatologist",
+          "doctor": "Dr. Aarti Sharma",
+          "status": "Pending",
+          "notes": "i have skill allergy ",
+          "slot": {
+            "date": "2025-05-28",
+            "start": "15:00",
+            "end": "16:00"
+          }
         }
       ]
     },
@@ -548,6 +608,41 @@
           }
         }
       ]
+    },
+    {
+      "id": "e0c2",
+      "name": "Trivedi Yash",
+      "email": "yash@test.com",
+      "number": "6626541133",
+      "password": "$2b$10$V1.xFQiZgLMMXFxWwgGFuOQ6OHCtSjGwvgl/HcAJG.uJsP/LJBLKe",
+      "dob": "2000-01-01",
+      "gender": "Male",
+      "emergency_contact?": {
+        "name": "admin"
+      },
+      "emergency_contact": {
+        "phone": "9033008001"
+      },
+      "address": "",
+      "medical_history": ""
+    },
+    {
+      "id": "3fae",
+      "name": "Trivedi Yash",
+      "email": "yash@admin.com",
+      "number": "8755492222",
+      "role": "admin",
+      "password": "$2b$10$VBqQHNquiBDA0irxFr.Vhe57TUlNzv1Eukld5DnbT.gSLnRrnYhwO",
+      "dob": "2000-01-01",
+      "gender": "Male",
+      "emergency_contact?": {
+        "name": "yash"
+      },
+      "emergency_contact": {
+        "phone": "7475464823"
+      },
+      "address": "",
+      "medical_history": ""
     }
   ]
 }
