@@ -210,8 +210,8 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-gray-800 mb-2">Phone</h3>
-                    <p className="text-gray-600">+1 (123) 456-7890</p>
-                    <p className="text-gray-600">+1 (234) 567-8901 (Emergency)</p>
+                    <p className="text-gray-600">+91 95120 07149</p>
+                    <p className="text-gray-600">+91 98989 87878 (Emergency)</p>
                   </div>
                 </div>
 
@@ -242,18 +242,18 @@ const Contact = () => {
             {/* Office Hours */}
             <div className="bg-white rounded-xl shadow-lg p-8">
               <h2 className="text-3xl font-bold text-gray-800 mb-6">
-                Office <span className="text-blue-600">Hours</span>
+                Hospital <span className="text-blue-600">Hours</span>
               </h2>
 
               <div className="space-y-4">
                 <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                  <span className="text-gray-700 font-medium">Monday - Friday</span>
-                  <span className="text-gray-600">8:00 AM - 6:00 PM</span>
+                  <span className="text-gray-700 font-medium">Monday - Saturday</span>
+                  <span className="text-gray-600">10:00 AM - 7:00 PM</span>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                {/* <div className="flex justify-between items-center py-2 border-b border-gray-100">
                   <span className="text-gray-700 font-medium">Saturday</span>
                   <span className="text-gray-600">9:00 AM - 3:00 PM</span>
-                </div>
+                </div> */}
                 <div className="flex justify-between items-center py-2">
                   <span className="text-gray-700 font-medium">Sunday</span>
                   <span className="text-gray-600">Emergency Only</span>
@@ -268,7 +268,7 @@ const Contact = () => {
                 <div>
                   <h3 className="text-lg font-semibold text-red-800">Emergency Notice</h3>
                   <p className="text-red-700 mt-1">
-                    For medical emergencies, please call 911 or visit the nearest emergency room immediately.
+                    For medical emergencies, please call 108 or visit the nearest emergency room immediately.
                   </p>
                 </div>
               </div>
