@@ -42,9 +42,9 @@ const router = createBrowserRouter([
       { path: "/doctor/Profile/:id", element: <DoctorProfile /> },
       { path: "/contact", element: <Contact /> },
 
-      // ── Authenticated ──────────────────────────────────────────────
+// ──────────────────────────────────── Authenticated ────────────────────────────────────
 
-      // ── User + Doctor + Admin ─────────────────────────
+  //    ─────────────────────────── User + Doctor + Admin ───────────────────────────
       {
         element: <ProtectedRoutes allowedRoles={["user", "admin"]} />,
         children: [
@@ -54,7 +54,7 @@ const router = createBrowserRouter([
         ],
       },
 
-      // ── Doctor + Admin ─────────────────────────
+  //     ───────────────────────────── Doctor + Admin ─────────────────────────
       {
         element: <ProtectedRoutes allowedRoles={["doctor", "admin"]} />,
         children: [
