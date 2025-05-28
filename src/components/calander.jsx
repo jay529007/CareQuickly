@@ -123,7 +123,7 @@ const MyCalendar = () => {
     return isAfter(event.start, now);
   };
 
-  function dayPropGetter(date) {
+  const dayPropGetter = (date) => {
     // const today = startOfDay(new Date());
     const isPast = isBefore(date, today);
     const dow = getDay(date);
@@ -142,7 +142,7 @@ const MyCalendar = () => {
     if (onLeave) style.backgroundColor = "#fde8e8"; // pale red
 
     return { style };
-  }
+  };
 
   // changeing color events
   const eventStyleGetter = (event) => {
@@ -189,7 +189,17 @@ const MyCalendar = () => {
     const selectedAppt = currentUser.appointments.find(
       (appt) => appt.id === event.id
     );
-
+    if (isBefore(event.start, today)) {
+      toast.error("Can't edit Past Appointments.");
+      return;
+    }
+    if (
+      selectedAppt.status === "Confirmed" ||
+      selectedAppt.status === "Cancelled"
+    ) {
+      toast.error("Can't edit Cancelled Appointments.");
+      return;
+    }
     if (!selectedAppt) {
       toast.error("Appointment not found.");
       return;
@@ -571,14 +581,16 @@ const MyCalendar = () => {
           dayLayoutAlgorithm="no-overlap"
           onEventDrop={handleEventDrop}
           // onEventResize={handleEventResize}
-          // resizable={true} // Changed to false unless you implement resize handling
+          resizable={false} // Changed to false unless you implement resize handling
           startAccessor="start"
           endAccessor="end"
           style={{ height: 600 }}
           date={currentDate}
-          components={{
-            toolbar: (props) => <CustomToolbar {...props} />,
-          }}
+          components={
+            {
+              // toolbar: (props) => <CustomToolbar {...props} />,
+            }
+          }
           view={currentView}
           views={["month", "week", "day"]}
           onView={handleViewChange}
