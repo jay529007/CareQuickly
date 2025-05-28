@@ -132,7 +132,7 @@ const Contact = () => {
                     Phone Number
                   </label>
                   <input
-                    type="tel"
+                    type="number"
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import Input from "../components/re-usablecomponets/InputFeild";
 import { Link } from "react-router-dom";
 import bcrypt from "bcryptjs";
 import { addUser } from "../functions/userAPI";
@@ -307,7 +306,7 @@ const Register = () => {
                   <div className="relative">
                     <input
                       type="text"
-                      {...register("emergency_contact?.name")}
+                      {...register("emergency_contact.name")}
                       className="w-full px-4 py-3 pl-11 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 placeholder-gray-400"
                       // placeholder=""
                     />

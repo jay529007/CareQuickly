@@ -16,27 +16,6 @@ header {
   padding: 0 20px;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 15px;
-}
-
-.logo i {
-  font-size: 32px;
-  color: #0d8bf2;
-}
-
-.logo h1 {
-  font-size: 32px;
-  font-weight: 700;
-  background: linear-gradient(135deg, #0d8bf2 0%, #0a6ebd 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 .tagline {
   font-size: 18px;
   color: #5a6b82;
@@ -45,18 +24,11 @@ header {
   line-height: 1.6;
 }
 
-.calendar-container {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 10px 40px rgba(13, 139, 242, 0.15);
-  overflow: hidden;
-  margin-bottom: 30px;
-}
 
 /* Main calendar container - Medical Professional Style */
 .rbc-calendar {
   font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #ffffff;
+  /* background: #ffffff; */
   border-radius: 16px;
   overflow: hidden;
 }
@@ -164,7 +136,7 @@ header {
   left: 0;
   width: 100%;
   height: 4px;
-  background: linear-gradient(to right, #0d8bf2, #4db3ff);
+  /* background: linear-gradient(to right, #0d8bf2, #4db3ff); */
 }
 
 /* Time gutter - Clean and modern */

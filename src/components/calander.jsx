@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Calendar } from "react-big-calendar";
-
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "../calendar.css";
@@ -17,7 +16,6 @@ import { enIN } from "date-fns/locale";
 import { toast } from "react-toastify";
 import { isAfter, startOfDay, isBefore, isSameDay } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import CustomToolbar from "./calendar-components/CustomToolbar";
 import CalendarModel from "./calendar-components/CalendarModel";
 
 const locales = { "en-IN": enIN };
@@ -67,25 +65,28 @@ const MyCalendar = () => {
   const id = authdata.id;
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users?.users);
+  const doctors = useSelector((state) => state.doctors.doctors);
   useEffect(() => {
     dispatch(fetchUsers());
+    dispatch(fetchDoctor());
   }, []);
+  const FilterdDoctersbySpecialty = doctors.filter(
+    (doctor) => doctor.specialty === selectedSpecialty
+  );
+
   const currentUser = users?.find((user) => user.id === id);
   const allAppointments = currentUser?.appointments;
   format(new Date(), "P", { locale: locales["en-IN"] });
-  const {
-    reset,
-    formState: { errors },
-  } = useForm();
+  const { reset } = useForm();
   // for navigating in toolbar
   const handleViewChange = (view) => setCurrentView(view);
 
   //Restriction in hours
-  const isWithinAllowedHours = (start, end) => {
-    const startHour = start.getHours();
-    const endHour = end.getHours();
-    return startHour >= 10 && endHour <= 19;
-  };
+  // const isWithinAllowedHours = (start, end) => {
+  //   const startHour = start.getHours();
+  //   const endHour = end.getHours();
+  //   return startHour >= 10 && endHour <= 19;
+  // };
 
   const isoDate = format(selectedDate, "yyyy-MM-dd");
 
@@ -198,15 +199,6 @@ const MyCalendar = () => {
       },
     };
   };
-
-  const doctors = useSelector((state) => state.doctors.doctors);
-
-  useEffect(() => {
-    dispatch(fetchDoctor());
-  }, [dispatch]);
-  const FilterdDoctersbySpecialty = doctors.filter(
-    (doctor) => doctor.specialty === selectedSpecialty
-  );
 
   // --------------------------- Update appoitment -------------------------
   const handleEventClick = (event) => {

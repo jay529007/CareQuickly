@@ -20,15 +20,16 @@ const DoctorAppointments = () => {
   //   ---------------------------- Filtering Current Doctor ----------------------------
   const authdata = loadState();
   const doctorId = authdata.id;
-
+  const users = useSelector((user) => user.users.users);
   const doctors = useSelector((doctor) => doctor.doctors.doctors);
   useEffect(() => {
+    dispatch(fetchUsers());
     dispatch(fetchDoctor());
   }, []);
   const currentDoctor = doctors?.find((doctors) => doctors.id === doctorId);
 
   //   ---------------------------- Change Appointment Status ----------------------------
-  
+
   const handleStatusChange = async (e, appointment) => {
     const newStatus = e.target.value;
 
@@ -63,11 +64,6 @@ const DoctorAppointments = () => {
     }
   };
 
-  //   ---------------------------- Filtering Appointments ----------------------------
-  const users = useSelector((user) => user.users.users);
-  useEffect(() => {
-    dispatch(fetchUsers());
-  }, []);
   //   ---------------------------- Filtering Appointments ----------------------------
   // Process and filter appointments
   const filteredAppointments = users

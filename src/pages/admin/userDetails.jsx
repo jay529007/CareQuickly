@@ -1,20 +1,15 @@
-import React, { useEffect, useMemo, useState } from "react";
+import  { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../../functions/userSlice";
 import PaginatedAppointmentTable from "../../components/pagginationtable";
 import Input from "../../components/re-usablecomponets/InputFeild";
 import { generateCSV, downloadCSV } from "../../functions/exportAppointments";
-import { updateUser } from "../../functions/userAPI";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 
 const UserDetails = () => {
   const [filter, setFilter] = useState({ user: "", date: "", status: "" });
   const [selectedBooking, setSelectedBooking] = useState(null);
-  const [userStatus, setUserStatus] = useState(selectedBooking?.status);
   const [isOpen, setIsOpen] = useState(false);
   const [sortAsc, setSortAsc] = useState(false);
-  const navigate = useNavigate();
 
   // fetching appointment
   const dispatch = useDispatch();

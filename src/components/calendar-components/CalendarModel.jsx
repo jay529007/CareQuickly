@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Input from "../re-usablecomponets/InputFeild";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -225,7 +225,6 @@ const CalendarModel = ({
                       </option>
                     );
                   })}
-                
                 </select>
                 {errors.appointments?.slot.end && (
                   <p className={errorClass}>
