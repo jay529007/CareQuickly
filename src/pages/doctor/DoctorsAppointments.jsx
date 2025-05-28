@@ -6,11 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../../functions/userSlice";
 import StatCard from "../../components/StartedCards";
 import AppointmentModal from "../../components/AppointmentModel";
+import { toast } from "react-toastify";
+import { updateUser } from "../../functions/userAPI";
 
 const DoctorAppointments = () => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [filter, setFilter] = useState("Upcoming");
   const [newNote, setNewNote] = useState("");
+  const [userStatus, setUserStatus] = useState("");
+
   const dispatch = useDispatch();
 
   //   ---------------------------- Filtering Current Doctor ----------------------------
@@ -22,6 +26,42 @@ const DoctorAppointments = () => {
     dispatch(fetchDoctor());
   }, []);
   const currentDoctor = doctors?.find((doctors) => doctors.id === doctorId);
+
+  //   ---------------------------- Change Appointment Status ----------------------------
+  
+  const handleStatusChange = async (e, appointment) => {
+    const newStatus = e.target.value;
+
+    // 1) update the local copy so the select updates instantly:
+    //    you could optimistically update your Redux store here, or...
+    setSelectedAppointment((prev) =>
+      prev && prev.id === appointment.id ? { ...prev, status: newStatus } : prev
+    );
+
+    // 2) find the user who owns this appointment
+    const patient = users.find((u) =>
+      (u.appointments || []).some((apt) => apt.id === appointment.id)
+    );
+    if (!patient) return;
+
+    // 3) create a new appointments array for that user
+    const updatedAppointments = patient.appointments.map((apt) =>
+      apt.id === appointment.id ? { ...apt, status: newStatus } : apt
+    );
+
+    // 4) push to your backend
+    try {
+      await updateUser(patient.id, {
+        ...patient,
+        appointments: updatedAppointments,
+      });
+      dispatch(fetchUsers()); // refresh Redux
+      toast.success("Appointment status updated!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Could not update status. Please retry.");
+    }
+  };
 
   //   ---------------------------- Filtering Appointments ----------------------------
   const users = useSelector((user) => user.users.users);
@@ -91,7 +131,7 @@ const DoctorAppointments = () => {
             </h1>
             <p className="text-gray-600">
               {`${filter} appointments     for ${currentDoctor?.name}`}
-            </p>  
+            </p>
           </div>
 
           <div className="flex flex-wrap gap-2 mt-4 md:mt-0">
@@ -217,7 +257,33 @@ const DoctorAppointments = () => {
                               : "bg-gray-100 text-gray-800"
                           }`}
                         >
-                          {appointment.status || "N/A"}
+                          {/* {appointment.status || "N/A"} */}
+                          <select
+                            className="py-1 "
+                            // onChange={(e) => setUserStatus(e.target.value)}
+                            onChange={(e) => handleStatusChange(e, appointment)}
+                            // value={selectedBooking.status || "N/A"}
+                            value={appointment.status || "N/A"}
+                          >
+                            <option
+                              className="px-2 border my-3 text-red-600"
+                              value="Cancelled"
+                            >
+                              Cancelled
+                            </option>
+                            <option
+                              className="px-2 border my-3 text-yellow-500"
+                              value="Pending"
+                            >
+                              Pending
+                            </option>
+                            <option
+                              className="px-2 border my-3 text-green-600"
+                              value="Confirmed"
+                            >
+                              Confirmed
+                            </option>
+                          </select>
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">

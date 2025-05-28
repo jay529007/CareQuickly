@@ -33,44 +33,6 @@ const UserDetails = () => {
       })) || []
   );
 
-  // user Appointment status
-  useEffect(() => {
-    if (selectedBooking?.status) {
-      setUserStatus(selectedBooking.status);
-    }
-  }, [selectedBooking]);
-
-  const handleStatusChange = (e) => {
-    setUserStatus(e.target.value);
-  };
-  useEffect(() => {
-    // find the full user object from Redux
-    if (!selectedBooking) return;
-    const user = users.find((u) => u.id === selectedBooking.userId);
-    if (!user) return;
-
-    // produce a brand‑new appointments array
-    const updatedAppointments = user.appointments.map((apt) =>
-      apt.id === selectedBooking.id ? { ...apt, status: userStatus } : apt
-    );
-
-    const doUpdate = async () => {
-      try {
-        await updateUser(selectedBooking.userId, {
-          ...user,
-          appointments: updatedAppointments,
-        });
-        dispatch(fetchUsers());
-        toast.success("Appointment status updated successfully!");
-      } catch (error) {
-        console.error("Failed to update user status:", error);
-        toast.error("Failed to update appointment status.");
-      }
-    };
-
-    doUpdate();
-  }, [userStatus]);
-
   // filters
   const filteredallAppointments = allAppointments.filter(
     (apt) =>
@@ -220,43 +182,8 @@ const UserDetails = () => {
                     Status
                   </p>
 
-                  <span
-                    className={`text-sm font-bold inline-block  rounded-full ${
-                      userStatus === "Confirmed"
-                        ? "bg-green-100 text-green-700"
-                        : userStatus === "Pending"
-                        ? "bg-yellow-100 text-yellow-700"
-                        : userStatus === "Cancelled"
-                        ? "bg-red-100 text-red-700"
-                        : "bg-gray-100 text-white"
-                    }`}
-                  >
-                    {/* {selectedBooking.status || "N/A"} */}
-                    <select
-                      className="px-2 py-2 "
-                      onChange={handleStatusChange}
-                      // value={selectedBooking.status || "N/A"}
-                      value={userStatus || "N/A"}
-                    >
-                      <option
-                        className="px-2 border my-3 text-red-600"
-                        value="Cancelled"
-                      >
-                        Cancelled
-                      </option>
-                      <option
-                        className="px-2 border my-3 text-yellow-500"
-                        value="Pending"
-                      >
-                        Pending
-                      </option>
-                      <option
-                        className="px-2 border my-3 text-green-600"
-                        value="Confirmed"
-                      >
-                        Confirmed
-                      </option>
-                    </select>
+                  <span className="text-sm font-bold inline-block  rounded-full">
+                    {selectedBooking.status || "N/A"}
                   </span>
                 </div>
 

@@ -165,7 +165,7 @@ const AppointmentModal = ({
           </div>
 
           {/* Action Buttons */}
-          {status === "" && (
+          {status === "Pending" && (
             <div className="mt-8 pt-6 border-t flex justify-end space-x-3">
               <button
                 onClick={onCancel}

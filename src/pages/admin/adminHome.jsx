@@ -18,10 +18,12 @@ import {
   HiTrash,
 } from "react-icons/hi";
 import { motion, AnimatePresence } from "framer-motion";
+import { fetchUsers } from "../../functions/userSlice";
+import { FaEye } from "react-icons/fa";
 
 const AdminHome = () => {
-  const [selectedDoctor, setSelectedDoctor] = useState(null);
-  const [isSlotModalOpen, setIsSlotModalOpen] = useState(false);
+  // const [selectedDoctor, setSelectedDoctor] = useState(null);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSpecialty, setSelectedSpecialty] = useState("all");
   const [sortConfig, setSortConfig] = useState({
@@ -31,17 +33,19 @@ const AdminHome = () => {
 
   const dispatch = useDispatch();
   const doctors = useSelector((state) => state.doctors.doctors);
-
+  const users = useSelector((state) => state.users.users);
   useEffect(() => {
     dispatch(fetchDoctor());
+    dispatch(fetchUsers());
   }, [dispatch]);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
+  const allAppointments = users?.flatMap((user) => user.appointments || []);
+  console.log(allAppointments);
+
+  // const currentDoctorAppointments = allAppointments?.filter(
+  // (appointment) => appointment.doctor === currentDoctor?.name
+  // );
+
   const today = new Date().toISOString().split("T")[0];
 
   // Enhanced filtering and sorting
@@ -66,31 +70,6 @@ const AdminHome = () => {
     });
 
   const specialties = [...new Set(doctors.map((d) => d.specialty))];
-
-  const handleSlotSubmit = async (data) => {
-    try {
-      const newSlot = { date: data.date, start: data.start, end: data.end };
-      const updatedDoctor = {
-        ...selectedDoctor,
-        availableslots: [...(selectedDoctor.availableslots || []), newSlot],
-      };
-
-      await updateDoctorSlot(selectedDoctor.id, updatedDoctor);
-      toast.success("Slot added successfully");
-      reset();
-      dispatch(fetchDoctor());
-      setIsSlotModalOpen(false);
-    } catch (error) {
-      toast.error("Failed to add slot");
-    }
-  };
-
-  const SortIndicator = ({ column }) => (
-    <span className="ml-2">
-      {sortConfig.key === column &&
-        (sortConfig.direction === "asc" ? "↑" : "↓")}
-    </span>
-  );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -202,9 +181,12 @@ const AdminHome = () => {
                           : "bg-green-100 text-green-700"
                       }`}
                     >
+                      {/* {doctor.unavailableslots[1]} */}
                       {doctor.unavailableslots?.some((s) => s.date === today)
                         ? "Busy"
-                        : "Available"}
+                        : // : doctor.unavailableslots?.length >= 0
+                          // ? "Unavailable"
+                          "Available"}
                     </span>
                   </div>
 
@@ -212,7 +194,14 @@ const AdminHome = () => {
                     <div className="flex justify-between items-center text-sm">
                       <div className="flex items-center gap-2 text-gray-500">
                         <HiCalendar className="text-blue-500" />
-                        <span>{doctor.availableslots?.length || 0} slots</span>
+                        <span>
+                          {
+                            allAppointments.filter(
+                              (allappt) => allappt.doctor === doctor.name
+                            ).length
+                          }{" "}
+                          slots
+                        </span>
                       </div>
                       <div className="flex items-center gap-2 text-gray-500">
                         <HiStatusOnline className="text-green-500" />
@@ -225,7 +214,7 @@ const AdminHome = () => {
                         to={`/admin/doctors/${doctor.id}`}
                         className="flex-1 flex items-center gap-2 justify-center px-3 py-2 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg transition"
                       >
-                        <HiPencilAlt />
+                        <FaEye />
                         View
                       </Link>
                       <button className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition">
@@ -249,116 +238,6 @@ const AdminHome = () => {
           </div>
         )}
       </div>
-
-      {/* Add Slot Modal */}
-      <AnimatePresence>
-        {isSlotModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-          >
-            <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -20, opacity: 0 }}
-              className="bg-white rounded-2xl shadow-xl w-full max-w-md"
-            >
-              <div className="p-4 border-b border-gray-100 flex justify-between items-center">
-                <h3 className="text-lg font-semibold">Add Time Slot</h3>
-                <button
-                  onClick={() => setIsSlotModalOpen(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <HiX className="text-xl" />
-                </button>
-              </div>
-
-              <form
-                onSubmit={handleSubmit(handleSlotSubmit)}
-                className="p-4 space-y-4"
-              >
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Doctor
-                  </label>
-                  <select
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    onChange={(e) =>
-                      setSelectedDoctor(
-                        doctors.find((d) => d.id === e.target.value)
-                      )
-                    }
-                    required
-                  >
-                    <option value="">Select Doctor</option>
-                    {doctors.map((doctor) => (
-                      <option key={doctor.id} value={doctor.id}>
-                        {doctor.name} ({doctor.specialty})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Date
-                    </label>
-                    <div className="relative">
-                      <HiCalendar className="absolute left-3 top-3 text-gray-400" />
-                      <input
-                        type="date"
-                        className="pl-10 w-full px-4 py-2 border border-gray-200 rounded-lg"
-                        {...register("date", { required: "Date is required" })}
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Time Range
-                    </label>
-                    <div className="flex gap-2">
-                      <div className="relative flex-1">
-                        <HiClock className="absolute left-3 top-3 text-gray-400" />
-                        <input
-                          type="time"
-                          className="pl-10 w-full px-4 py-2 border border-gray-200 rounded-lg"
-                          {...register("start", {
-                            required: "Start time required",
-                          })}
-                        />
-                      </div>
-                      <div className="relative flex-1">
-                        <HiClock className="absolute left-3 top-3 text-gray-400" />
-                        <input
-                          type="time"
-                          className="pl-10 w-full px-4 py-2 border border-gray-200 rounded-lg"
-                          {...register("end", {
-                            required: "End time required",
-                          })}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-4">
-                  <button
-                    type="submit"
-                    className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-medium flex items-center justify-center gap-2"
-                  >
-                    <HiPlus className="text-lg" />
-                    Confirm Slot
-                  </button>
-                </div>
-              </form>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 };
