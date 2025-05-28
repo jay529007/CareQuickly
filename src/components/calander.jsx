@@ -584,8 +584,6 @@ const MyCalendar = () => {
           onView={handleViewChange}
           onNavigate={(date) => setCurrentDate(date)}
           onSelectSlot={({ start }) => {
-            // const today = startOfDay(new Date());
-
             // if the slot is before the start of today, block it
             if (isBefore(start, today)) {
               // toast.info("Cannot book appointments in the past");
