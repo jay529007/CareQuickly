@@ -89,7 +89,8 @@ const AllServices = () => {
                 <div className="">
                   <p className="text-gray-600 mb-6">{service.description}</p>
                 </div>
-                <div className="">
+                {/* View Specialists */}
+                {/* <div className="">
                   <Link
                     to={`/doctors?specialty=${service.title.toLowerCase()}`}
                     className="inline-flex items-center text-blue-600 font-medium group-hover:text-blue-700 transition"
@@ -109,7 +110,7 @@ const AllServices = () => {
                       />
                     </svg>
                   </Link>
-                </div>
+                </div> */}
               </div>
             </div>
           ))}

@@ -146,30 +146,55 @@ const MyCalendar = () => {
 
   // changeing color events
   const eventStyleGetter = (event) => {
-    let backgroundColor;
+    // Define styles based on appointment status
+    const statusStyles = {
+      Confirmed: {
+        backgroundColor: "#10b981", // Green
+        pointerEvents: "none",
+      },
+      Pending: {
+        backgroundColor: "#f59e0b", // Amber
+        pointerEvents: "auto",
+      },
+      Cancelled: {
+        backgroundColor: "#ef4444", // Red
+        pointerEvents: "none",
+      },
+      Disabled: {
+        backgroundColor: "#9ca3af", // Gray
+        pointerEvents: "none",
+      },
+      default: {
+        backgroundColor: "#9ca3af", // Gray
+        pointerEvents: "none",
+      },
+    };
 
-    if (event.status === "Confirmed") {
-      backgroundColor = "#1fc640";
-    } else if (event.status === "Pending") {
-      backgroundColor = "#F6C23E";
-    } else if (event.status === "Cancelled") {
-      backgroundColor = "red";
-    } else {
-      backgroundColor = "gray";
-    }
-    if (!isDraggable(event)) {
-      backgroundColor = "gray";
+    // Determine if event is draggable
+    const draggable = isDraggable(event);
+
+    // Select style based on event status
+    const style = statusStyles[event.status] || statusStyles.default;
+
+    // Override to disabled style if not draggable
+    if (!draggable) {
+      style.backgroundColor = "#9ca3af"; // Gray
+      style.pointerEvents = "none";
     }
 
+    // Return the final style configuration
     return {
       style: {
-        backgroundColor,
+        backgroundColor: style.backgroundColor,
         color: "white",
-        // backgroundColor: "red",
-        pointerEvents: event.status === "Pending" ? "auto" : "none",
-        borderRadius: "5px",
+        pointerEvents: style.pointerEvents,
+        borderRadius: "8px",
         border: "none",
-        padding: "2px 5px",
+        padding: "4px 8px",
+        fontSize: "0.875rem",
+        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+        transition: "all 0.2s ease",
+        cursor: event.status === "Pending" ? "grab" : "default",
       },
     };
   };

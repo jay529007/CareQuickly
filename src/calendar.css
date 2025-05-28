@@ -1,38 +1,98 @@
-/* Main calendar container */
-.rbc-calendar {
-  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  overflow: hidden;
-  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #f0f7ff 0%, #e6f0ff 100%);
+  color: #2c3e50;
 }
 
-/* Toolbar styling */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 0 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.logo i {
+  font-size: 32px;
+  color: #0d8bf2;
+}
+
+.logo h1 {
+  font-size: 32px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #0d8bf2 0%, #0a6ebd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.tagline {
+  font-size: 18px;
+  color: #5a6b82;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.calendar-container {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(13, 139, 242, 0.15);
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+/* Main calendar container - Medical Professional Style */
+.rbc-calendar {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Toolbar - Medical Blue Theme */
 .rbc-toolbar {
-  background: linear-gradient(to right, #6db9eb, #73bff9);
-  padding: 1rem;
+  background: linear-gradient(135deg, #0d8bf2 0%, #0a6ebd 100%);
+  padding: 20px 24px;
   color: white;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
-  border-radius: 12px 12px 0 0;
+  gap: 10px;
+  margin-bottom: 0;
+}
+
+.rbc-btn-group {
+  display: flex;
+  gap: 8px;
 }
 
 .rbc-toolbar button {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.15);
   color: white;
   border: none;
   border-radius: 8px;
-  padding: 0.5rem 1rem;
+  padding: 8px 16px;
   font-weight: 500;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
+  transition: all 0.25s ease;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  cursor: pointer;
 }
 
 .rbc-toolbar button:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.25);
   transform: translateY(-2px);
 }
 
@@ -42,116 +102,296 @@
 
 .rbc-toolbar button.rbc-active {
   background: white;
-  color: #764ba2;
+  color: #0a6ebd;
   font-weight: 600;
+  box-shadow: 0 2px 8px rgba(13, 139, 242, 0.2);
 }
 
-/* Calendar header (day names) */
+.rbc-toolbar-label {
+  font-size: 1.4rem;
+  font-weight: 700;
+  flex-grow: 1;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+/* Calendar header (day names) - Clean and professional */
 .rbc-header {
-  background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
-  color: #495057;
+  background: #f8fbff;
+  color: #4a6a94;
   font-weight: 600;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #dee2e6;
+  padding: 14px 0;
+  font-size: 14px;
+  border-bottom: 1px solid #e6f0f8;
+  border-right: 1px solid #e6f0f8;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-/* Event blocks */
+.rbc-header:last-child {
+  border-right: none;
+}
+
+/* Event blocks - Medical appointment style */
 .rbc-event {
+  /* background: linear-gradient(135deg, #0d8bf2 0%, #4db3ff 100%); */
   border: none;
   border-radius: 8px;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.875rem;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 6px 8px;
+  font-size: 13px;
+  color: white;
+  font-weight: 500;
   transition: all 0.2s ease;
-  border-left: 4px solid rgba(255, 255, 255, 0.7);
+  border-left: 4px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 3px 8px rgba(13, 139, 242, 0.2);
 }
 
 .rbc-event:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 5px 15px rgba(13, 139, 242, 0.3);
 }
 
-/* Today cell highlight */
+/* Today cell highlight - Clear but not distracting */
 .rbc-today {
-  background-color: rgba(102, 126, 234, 0.1) !important;
+  background-color: rgba(13, 139, 242, 0.08) !important;
   position: relative;
 }
 
 .rbc-today::after {
-  content: '';
+  content: "";
   position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80%;
-  height: 3px;
-  background: linear-gradient(to right, #667eea, #764ba2);
-  border-radius: 3px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(to right, #0d8bf2, #4db3ff);
 }
 
-/* Time gutter */
+/* Time gutter - Clean and modern */
 .rbc-time-gutter {
-  background-color: #f8f9fa;
-  color: #6c757d;
+  background-color: #f8fbff;
+  color: #4a6a94;
   font-weight: 500;
-  padding-right: 1rem;
+  padding-right: 12px;
+  font-size: 13px;
+  border-right: 1px solid #e6f0f8;
 }
 
-/* Time slots */
+/* Time slots - Professional styling */
 .rbc-time-slot {
-  color: #6c757d;
-  font-size: 0.8rem;
+  color: #6a86a8;
+  font-size: 12px;
+  font-weight: 500;
 }
 
-/* Cell styling */
+/* Cell styling - Clean and airy */
 .rbc-time-content,
 .rbc-day-slot .rbc-time-slot {
-  border-color: #e9ecef;
+  border-color: #e6f0f8;
 }
 
 .rbc-day-slot .rbc-time-slot:nth-child(odd) {
-  background-color: rgba(248, 249, 250, 0.5);
+  background-color: rgba(248, 251, 255, 0.6);
 }
 
-/* Add some animation */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.rbc-month-view, 
-.rbc-time-view, 
-.rbc-agenda-view {
-  animation: fadeIn 0.5s ease-out;
-}
-
-/* Add some hover effects to cells */
+/* Cell hover effects */
 .rbc-month-row .rbc-row-bg .rbc-day-bg:hover,
 .rbc-time-content .rbc-time-gutter:hover {
-  background-color: rgba(102, 126, 234, 0.05);
+  background-color: rgba(13, 139, 242, 0.05);
 }
 
 /* Selected slot styling */
 .rbc-selected {
-  background-color: rgba(102, 126, 234, 0.3);
+  background-color: rgba(13, 139, 242, 0.15);
+  border-radius: 4px;
 }
 
-/* Add some responsive touches */
+/* Responsive design */
 @media (max-width: 768px) {
   .rbc-toolbar {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 12px;
+    padding: 16px;
   }
-  
+
   .rbc-toolbar-label {
     order: -1;
-    margin-bottom: 0.5rem;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
   }
-  
+
   .rbc-header {
-    font-size: 0.8rem;
-    padding: 0.5rem 0;
+    font-size: 12px;
+    padding: 10px 0;
   }
+
+  .rbc-toolbar button {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+
+  .rbc-btn-group {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* Appointment status legend */
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.legend-color {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+}
+
+.available {
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+}
+
+.booked {
+  background: linear-gradient(135deg, #0d8bf2 0%, #4db3ff 100%);
+}
+
+.urgent {
+  background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+
+.control-btn {
+  background: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(13, 139, 242, 0.15);
+  color: #0a6ebd;
+}
+
+.control-btn:hover {
+  background: #0d8bf2;
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(13, 139, 242, 0.25);
+}
+
+/* Calendar view */
+.calendar-view {
+  height: 600px;
+  background: white;
+  border-radius: 0 0 16px 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.calendar-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: #f8fbff;
+  border-bottom: 1px solid #e6f0f8;
+}
+
+.calendar-day-header {
+  padding: 15px;
+  text-align: center;
+  font-weight: 600;
+  color: #4a6a94;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 1fr;
+  height: calc(100% - 52px);
+}
+
+.calendar-cell {
+  border-right: 1px solid #e6f0f8;
+  border-bottom: 1px solid #e6f0f8;
+  padding: 8px;
+  position: relative;
+}
+
+.calendar-cell:nth-child(7n) {
+  border-right: none;
+}
+
+.calendar-cell.inactive {
+  background: #f9fbfe;
+  color: #a8c0de;
+}
+
+.calendar-cell.today {
+  background: rgba(13, 139, 242, 0.05);
+}
+
+.cell-date {
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #4a6a94;
+}
+
+.event {
+  background: linear-gradient(135deg, #0d8bf2 0%, #4db3ff 100%);
+  color: white;
+  padding: 6px 8px;
+  border-radius: 6px;
+  margin-bottom: 5px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.event.urgent {
+  background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+}
+
+.event.available {
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+}
+
+.current-time {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #ef4444;
+  z-index: 10;
+}
+
+.current-time::before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #ef4444;
+  border-radius: 50%;
+  top: -4px;
+  left: -5px;
 }
