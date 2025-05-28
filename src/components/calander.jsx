@@ -524,6 +524,12 @@ const MyCalendar = () => {
       toast.info("Doctor is unavailable at this time");
       return;
     }
+    const TrimedStart = newAppointment.slot.start.slice(0, 2);
+    const TrimedEnd = newAppointment.slot.end.slice(0, 2);
+    if (TrimedStart >= TrimedEnd) {
+      toast.error("Invalid time selection");
+      return;
+    }
 
     try {
       await updateUser(currentUser.id, updatedUserData);
